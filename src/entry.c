@@ -18,11 +18,6 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
     .revision = 0
 };
 
-static volatile struct limine_terminal_request terminal_request = {
-    .id = LIMINE_TERMINAL_REQUEST,
-    .revision = 0
-};
-
 __attribute__((used, section(".requests_start_marker")))
 static volatile LIMINE_REQUESTS_START_MARKER;
 
@@ -106,7 +101,7 @@ void _start(void) {
     framebuffer = framebuffer_request.response->framebuffers[0];
     fb_addr = framebuffer->address;
 
-    kernel_main();
+    init_kernel();
 
 
     // We're done, just hang...

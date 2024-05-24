@@ -3,20 +3,37 @@
 
 #include "../include/types.h"
 #include "../limine.h"
+#include "../lib/util.h"
+
+
+
+// framebuffer related
 
 extern struct limine_framebuffer *framebuffer;
-extern volatile uint32_t* fb_addr;
+extern volatile u32* fb_addr;
 
+#define SCREEN_WIDTH    framebuffer->width
+#define SCREEN_HEIGHT   framebuffer->height
+#define WHITE 0xffffff
+#define BLACK 0x0
 
-extern uint8_t font_dimensions[2];      // x and y size
+// text data
+extern Vector2 font_dimensions;
+extern Vector2 cursor_position;
 
+// functions
 
-uint32_t get_offset(int x, int y);
+u32 get_offset(int x, int y);
+void set_cursor(int x, int y);
+Vector2 get_cursor();
+void draw_cursor(int x, int y);
 
-void set_pixel(int x, int y, uint32_t color);
-void fill_screen(uint32_t color);
+void set_pixel(int x, int y, u32 color);
+void fill_screen(u32 color);
+void draw_cell(int x, int y, u32 color);
 
-void print_char_at(char c, size_t x, size_t y, size_t size, u32 color);
-void print_string_at(char* str, int x, int y, uint8_t size, uint32_t color);
+void print(char* str);
+void print_char_at(char c, int x, int y, u8 size, u32 color);
+void print_string_at(char* str, int x, int y, u8 size, u32 color);
 
 #endif

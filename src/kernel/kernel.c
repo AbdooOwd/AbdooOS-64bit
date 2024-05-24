@@ -1,6 +1,15 @@
 #include "kernel.h"
 #include "../drivers/screen.h"
+#include "../lib/util.h"
+
+void init_kernel() {
+
+    // put here whatever you cannot initialize outside a function
+
+    kernel_main();
+}
 
 void kernel_main() {
-    print_string_at("Hello, World!", 0, 0, 1, 0xffffff);
+    print("Hello World!\n");
+    print("Pigeons are attacking!");
 }

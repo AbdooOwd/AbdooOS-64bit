@@ -1,59 +1,102 @@
 #include "screen.h"
 #include "../include/fonts.h"
 #include <stdint.h>
-#include "../lib/util.h"
-
 
 
 struct limine_framebuffer *framebuffer;
-volatile uint32_t* fb_addr;
+volatile u32* fb_addr;
 
-uint8_t font_dimensions[2] = {8, 8};
+Vector2 font_dimensions = {8, 8};
+Vector2 cursor_position = {0, 0};
 
 
-void set_pixel(int x, int y, uint32_t color) {
-    if ((x >= 0 && (uint64_t) x < framebuffer->width) && (y >= 0 && (uint64_t) y < framebuffer->height))
+void set_pixel(int x, int y, u32 color) {
+    if ((x >= 0 && (u64) x < framebuffer->width) && (y >= 0 && (u64) y < framebuffer->height))
         fb_addr[get_offset(x, y)] = color;
 }
 
-
 // stolen from "https://github.com/lucianoforks/tetris-os/blob/master/src/font.c"
-void print_char_at(char c, size_t x, size_t y, size_t size, u32 color) {
+void print_char_at(char c, int x, int y, u8 size, u32 color) {
     const u8 *glyph = font[(size_t) c];
 
-    for (size_t yy = 0; yy < font_dimensions[1]; yy++) {
-        for (size_t xx = 0; xx < font_dimensions[0]; xx++) {
-            if (glyph[yy] & (1 << xx)) {
-                set_pixel(x + xx, y + yy, color);
-            }
+    for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
+        for (size_t xx = 0; xx < (size_t) font_dimensions.x; xx++) {
+            if (glyph[yy] & (1 << xx))
+                // Set the character's pixels
+                set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, color);
+            else 
+                // erase anything that's under the char (haha bye unwanted cursor)
+                set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, BLACK);
         }
     }
+    set_cursor(x + 1, y);
 }
 
-void print_string_at(char* str, int x, int y, uint8_t size, uint32_t color) {
+
+void print(char* str) {
+    print_string_at(str, -1, -1, 1, WHITE);
+}
+
+void print_string_at(char* str, int x, int y, u8 size, u32 color) {
+    
+    if (x < 0 || y < 0) {
+        x = get_cursor().x;
+        y = get_cursor().y;
+    }
+    
     int start_x = x;
     int start_y = y;
 
-
     while (*str) {
         if (*str == '\n') { 
-            y += font_dimensions[1] * size;
+            y += size;
             x = start_x;
             str++;
         }
         print_char_at(*str, x, y, size, color);
-        x += font_dimensions[0] * size;
+        x += size;
         str++;
     }
 }
 
+void draw_cell(int x, int y, u32 color) {
+    for (size_t yy = 0; yy < font_dimensions.y; yy++) {
+        for (size_t xx = 0; xx < font_dimensions.x; xx++) {
+            set_pixel((x * 8) + xx, (y * 8) + yy, color);
+        }
+    } 
+}
 
-void fill_screen(uint32_t color) {
-    for (size_t i = 0; i < framebuffer->width * framebuffer->height; i++) {
+void fill_screen(u32 color) {
+    for (size_t i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
         fb_addr[i] = color;
     }
 }
 
-uint32_t get_offset(int x, int y) {
-    return y * framebuffer->width + x;
+u32 get_offset(int x, int y) {
+    return y * SCREEN_WIDTH + x;
+}
+
+
+Vector2 get_cursor() {
+    return cursor_position;
+}
+
+void set_cursor(int x, int y) {
+    // remove previous cursor (WARNING: will overwrite previous char to (; )
+    // draw_cell(cursor_position.x * 8, cursor_position.y * 8, BLACK);
+
+    cursor_position.x = x; // new position
+    cursor_position.y = y;
+
+    // draw_cursor(x, y);
+}
+
+void draw_cursor(int x, int y) {
+    // Fill the bottom two lines of the cell with white
+    for (size_t line = 1; line < 3; line++) {
+        for (size_t x_pixel = 0; x_pixel < font_dimensions.x; x_pixel++) {
+            set_pixel(x * font_dimensions.x + x_pixel, y * font_dimensions.y + font_dimensions.y - line, WHITE);
+        }
+    }
 }

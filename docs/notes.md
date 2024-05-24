@@ -5,3 +5,4 @@
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
     ```
 -   I'm too dumb to remember, but I'm working with the x86-64 architecture.
+-   Limine's default resolution is 1280x800.
