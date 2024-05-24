@@ -3,3 +3,6 @@
 
 # Build
 bin/
+
+# Limine
+limine/
