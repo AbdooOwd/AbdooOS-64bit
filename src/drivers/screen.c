@@ -34,6 +34,7 @@ void print_char_at(char c, int x, int y, u8 size, u32 color) {
 
 
 void print(char* str) {
+    set_cursor(0, get_cursor().y);
     print_string_at(str, -1, -1, 1, WHITE);
 }
 
