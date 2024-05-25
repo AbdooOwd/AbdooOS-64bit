@@ -25,7 +25,7 @@ __attribute__((used, section(".requests_end_marker")))
 static volatile LIMINE_REQUESTS_END_MARKER;
 
 
-
+/*
 void *memcpy(void *dest, const void *src, size_t n) {
     uint8_t *pdest = (uint8_t *)dest;
     const uint8_t *psrc = (const uint8_t *)src;
@@ -76,6 +76,7 @@ int memcmp(const void *s1, const void *s2, size_t n) {
 
     return 0;
 }
+*/
 
 // Halt and catch fire function.
 static inline void hcf(void) {
