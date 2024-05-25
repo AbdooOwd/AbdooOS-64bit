@@ -115,3 +115,11 @@ void upper(char* str) {
         if (str[i] >= 'a' && str[i] <= 'z')
             str[i] -= 0x20;
 }
+
+bool char_islower(char c) {
+    return c >= 'a' && c <= 'z';
+}
+
+char upper_char(char c) {
+    return char_islower(c) ? (c - 'a' + 'A') : c;
+}

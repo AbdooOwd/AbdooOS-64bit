@@ -1,6 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#pragma once
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>

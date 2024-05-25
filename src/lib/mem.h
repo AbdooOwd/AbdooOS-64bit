@@ -1,6 +1,8 @@
 #ifndef MEM_H
 #define MEM_H
 
+#pragma once
+
 #include "../include/types.h"
 
 void memory_copy(u8* source, u8* dest, int no_bytes);

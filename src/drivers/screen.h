@@ -1,6 +1,8 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#pragma once
+
 #include "../include/types.h"
 #include "../limine.h"
 #include "../lib/util.h"

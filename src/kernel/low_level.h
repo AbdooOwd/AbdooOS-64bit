@@ -1,6 +1,8 @@
 #ifndef LOW_LEVEL_H
 #define LOW_LEVEL_H
 
+#pragma once
+
 #include "../include/types.h"
 
 unsigned char port_byte_in(unsigned short port);

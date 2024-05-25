@@ -3,7 +3,6 @@
 #include "../drivers/screen.h"
 
 #include "../lib/util.h"
-#include "../lib/string.h"
 
 
 

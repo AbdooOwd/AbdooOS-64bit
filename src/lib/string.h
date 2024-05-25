@@ -1,6 +1,8 @@
 #ifndef STRING_H
 #define STRING_H
 
+#pragma once
+
 #include "../include/types.h"
 
 
@@ -22,5 +24,7 @@ void append(char* str, char c);
 int count(char* str, char target);
 void lower(char* str);
 void upper(char* str);
+bool char_islower(char c);
+char upper_char(char c);
 
 #endif

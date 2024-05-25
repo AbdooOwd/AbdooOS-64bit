@@ -1,6 +1,8 @@
 #ifndef FONTS_H
 #define FONTS_H
 
+#pragma once
+
 
 // stolen from stackoverflow
 // I love monospace
