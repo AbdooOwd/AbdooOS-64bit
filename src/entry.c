@@ -78,7 +78,7 @@ int memcmp(const void *s1, const void *s2, size_t n) {
 }
 
 // Halt and catch fire function.
-static void hcf(void) {
+static inline void hcf(void) {
     asm ("cli");
     for (;;) {
         asm ("hlt");

@@ -16,7 +16,7 @@ void set_pixel(int x, int y, u32 color) {
 }
 
 // stolen from "https://github.com/lucianoforks/tetris-os/blob/master/src/font.c"
-void print_char_at(char c, int x, int y, u8 size, u32 color) {
+void print_char_at(char c, int x, int y, u32 color) {
     const u8 *glyph = font[(size_t) c];
 
     for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
@@ -32,13 +32,17 @@ void print_char_at(char c, int x, int y, u8 size, u32 color) {
     set_cursor(x + 1, y);
 }
 
+void err(char* error) {
+    set_cursor(0, get_cursor().y);
+    print_string_at(error, -1, -1, RED);
+}
 
 void print(char* str) {
     set_cursor(0, get_cursor().y);
-    print_string_at(str, -1, -1, 1, WHITE);
+    print_string_at(str, -1, -1, WHITE);
 }
 
-void print_string_at(char* str, int x, int y, u8 size, u32 color) {
+void print_string_at(char* str, int x, int y, u32 color) {
     
     if (x < 0 || y < 0) {
         x = get_cursor().x;
@@ -46,24 +50,23 @@ void print_string_at(char* str, int x, int y, u8 size, u32 color) {
     }
     
     int start_x = x;
-    int start_y = y;
+    // int start_y = y;
 
     while (*str) {
         if (*str == '\n') { 
-            y += size;
+            y += 1;
             x = start_x;
-            str++;
         }
-        print_char_at(*str, x, y, size, color);
-        x += size;
+        print_char_at(*str, x, y, color);
+        x += 1;
         str++;
     }
 }
 
 void draw_cell(int x, int y, u32 color) {
-    for (size_t yy = 0; yy < font_dimensions.y; yy++) {
-        for (size_t xx = 0; xx < font_dimensions.x; xx++) {
-            set_pixel((x * 8) + xx, (y * 8) + yy, color);
+    for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
+        for (size_t xx = 0; xx < (size_t) font_dimensions.x; xx++) {
+            set_pixel((x * font_dimensions.x) + xx, (y * font_dimensions.y) + yy, color);
         }
     } 
 }
@@ -96,7 +99,7 @@ void set_cursor(int x, int y) {
 void draw_cursor(int x, int y) {
     // Fill the bottom two lines of the cell with white
     for (size_t line = 1; line < 3; line++) {
-        for (size_t x_pixel = 0; x_pixel < font_dimensions.x; x_pixel++) {
+        for (size_t x_pixel = 0; x_pixel < (size_t) font_dimensions.x; x_pixel++) {
             set_pixel(x * font_dimensions.x + x_pixel, y * font_dimensions.y + font_dimensions.y - line, WHITE);
         }
     }

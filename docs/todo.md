@@ -11,3 +11,8 @@
 ## Text printing
 
 -   Don't print text using precise pixels, transform framebuffer into a grid []
+
+## Libraries
+
+-   Code a FAT32 Library [ ]
+-   Code `strcat` which **RETURNS** the result [ ]

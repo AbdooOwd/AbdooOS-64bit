@@ -1,6 +1,13 @@
 #include "kernel.h"
+
 #include "../drivers/screen.h"
+
 #include "../lib/util.h"
+#include "../lib/string.h"
+
+
+
+bool found_fat = false;
 
 void init_kernel() {
 
@@ -10,6 +17,13 @@ void init_kernel() {
 }
 
 void kernel_main() {
-    print("Hello World!\n");
-    print("Pigeons are attacking!");
+    print("Booted AbdooOS Successfully!\n");
+    print("Searching for FAT32...\n");
+
+    if (found_fat) {
+        print("Found FAT!\n");
+    } else {
+        err("ERROR: FAT NOT FOUND\n");
+        halt();
+    }
 }

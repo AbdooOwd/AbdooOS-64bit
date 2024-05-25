@@ -14,8 +14,11 @@ extern volatile u32* fb_addr;
 
 #define SCREEN_WIDTH    framebuffer->width
 #define SCREEN_HEIGHT   framebuffer->height
-#define WHITE 0xffffff
-#define BLACK 0x0
+
+#define WHITE   0xffffff
+#define BLACK   0x0
+#define RED     0xff0000
+
 
 // text data
 extern Vector2 font_dimensions;
@@ -32,8 +35,9 @@ void set_pixel(int x, int y, u32 color);
 void fill_screen(u32 color);
 void draw_cell(int x, int y, u32 color);
 
+void err(char* error);
 void print(char* str);
-void print_char_at(char c, int x, int y, u8 size, u32 color);
-void print_string_at(char* str, int x, int y, u8 size, u32 color);
+void print_char_at(char c, int x, int y, u32 color);
+void print_string_at(char* str, int x, int y, u32 color);
 
 #endif
