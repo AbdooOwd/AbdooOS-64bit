@@ -20,6 +20,7 @@ extern volatile u32* fb_addr;
 #define WHITE   0xffffff
 #define BLACK   0x0
 #define RED     0xff0000
+#define GREEN   0x00ff00
 
 
 // text data
@@ -38,6 +39,7 @@ void fill_screen(u32 color);
 void draw_cell(int x, int y, u32 color);
 
 void err(char* error);
+void success(char* success_msg);
 void print(char* str);
 void print_char_at(char c, int x, int y, u32 color);
 void print_string_at(char* str, int x, int y, u32 color);

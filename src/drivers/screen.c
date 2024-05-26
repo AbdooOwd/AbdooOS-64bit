@@ -32,6 +32,11 @@ void print_char_at(char c, int x, int y, u32 color) {
     set_cursor(x + 1, y);
 }
 
+void success(char* success_msg) {
+    set_cursor(0, get_cursor().y);
+    print_string_at(success_msg, -1, -1, GREEN);
+}
+
 void err(char* error) {
     set_cursor(0, get_cursor().y);
     print_string_at(error, -1, -1, RED);
