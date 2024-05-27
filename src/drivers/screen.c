@@ -65,17 +65,11 @@ void print_string_at(char* str, int x, int y, u32 color) {
     // int start_y = y;
 
     while (*str) {
-        /*  idk why x is incremented by the count of `\n`.
-            I'll hardcode the solution for now.
-            I'll find a real solution later.
-        */
-
-        // TODO: find !(hardcode) solution.
-        if (x > 0 && *str == '\n')
-            x -= count(str, '\n');
-        
         print_char_at(*str, x, y, color);
-        x += 1;
+
+        if (*str == '\n') y++;
+        else x++;
+
         str++;
     }
 }
