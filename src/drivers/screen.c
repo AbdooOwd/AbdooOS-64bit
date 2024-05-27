@@ -29,21 +29,18 @@ void print_char_at(char c, int x, int y, u32 color) {
                 set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, BLACK);
         }
     }
-    set_cursor(x + 1, y);
+    set_cursor(x, y);
 }
 
 void success(char* success_msg) {
-    set_cursor(0, get_cursor().y);
     print_string_at(success_msg, -1, -1, GREEN);
 }
 
 void err(char* error) {
-    set_cursor(0, get_cursor().y);
     print_string_at(error, -1, -1, RED);
 }
 
 void print(char* str) {
-    set_cursor(0, get_cursor().y);
     print_string_at(str, -1, -1, WHITE);
 }
 
