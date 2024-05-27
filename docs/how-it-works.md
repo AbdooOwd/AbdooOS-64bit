@@ -87,3 +87,70 @@ in particular:
 The BIOS is extremly important when booting our OS, except if you can code you own BIOS
 from scratch (: _(But if you ever plan on doing so, 
 take a look at [this](https://stackoverflow.com/a/10891215))_.
+
+
+## GDT
+
+The **GDT** or Global Descriptor Table is a binary data structure containing **entries**
+that tell the CPU about the memory **segments** _(Code and Data segment information)_.
+And this GDT is pointed to using a **"GDTR"** which has an address set to the GDT's
+address and a size which is the size of the GDT subtracted by one 
+_(because the maximum value of the size is 65535, and a GDT's size can be 65536_
+_which will make it 0, and GDT's size cannot be 0)_.
+So using the intrusction `lgdt` _(Load GDT)_ with this GDTR pointer will load 
+the GDT it is pointing to.
+
+Each entry in the GDT are 8 bytes long. The first entry is always null,
+and it is the "null-descriptor". This null-entry is the first thing in
+the GDT so it is located at: `GDT's address + 0`, knowing that the GDT's address 
+is pointed to by the GDTR. From this logic, we can understand that each entry is at
+`entry number * size of entry in bytes = offset of entry relative to GDT's offset`. 
+This means that if I want to find the address of the entry 3 in the GDT, 
+we calculate: `3 (entry number) * 8 (size of entry) = 24`. And so we can calculate 
+the general offset of the entry by calculating: 
+`GDT's offset + entry's offset relative to GDT = entry's offset`.
+Let's say that our GDT is at 0x80004220 _(this is where my GDT was located)_,
+knowing that 24 is `18` in hexadecimal, in our example, the calculations are: 
+`0x80004220 + (24 = 0x18) = 0x80004238`. This means that the entry's offset is `0x80004238`.
+
+Each entry is composed of:
+-   **A Limit:** 20-bit value. Defines the maximum addressable unit (???).
+
+-   **A Base Address:** 32-bit value. Contains the linear address of the segment's beginning
+    *(the address is distributed to multiple bases like base_high, base_mid, base low)*.
+
+-   **An Access Byte:** 8-bit value, where each bit defines the privileges of the segment.
+
+    -   **Present Bit:** Allows an entry to refer to a valid segment. 
+    Must be set 1 for any valid segment.
+
+    -   **Descriptor Privilege Level:** CPU privilege level. 
+    Like rings _(0 is the highest privilege level)_.
+
+    -   **Descriptor Type:** If 0 then it's a system segment.
+    If 1 then it's a code or data segment.
+
+    -   **Executable Bit:** If 1 this is executable _(code segment)_.
+    If 0 then this is data _(data segment)_.
+    
+    -   **Direction Bit:** Check OSDev wiki. I'm lazy (:
+
+    -   **Read or Write Bit:** For code segments it must be readable. If it's 0 then 
+    it is not readable. If 1 then it is readable.
+    For data segments, 0 means no write-access and 1 means write-access.
+
+    -   **Accessed Bit:** If 0, the CPU will set it when it accesses the segment.
+    If 1, the segment has already been accessed since last time we cleared the bit.
+
+-   **Flags:** 4-bit value. Each bit defines a flag.
+
+    -   **Granularity Flag:** If 0, the segment's limit is in bytes units.
+    If 1 then the segment's limit's unit is 4KiB.
+
+    -   **Size Flag:** If 0, then the descriptor defines a 16-bit protected mode segment.
+    If 1, the descriptor defines a 32-bit protected mode segment.
+    _(A GDT can have both 16-bit and 32-bit selectors at once)_.
+
+    -   **Long Mode Code Flag:** If 1, the descriptor defines a 64-bit code segment,
+    so the **Size Flag** should be 0. If 0, then this is another type of segment
+    _(not code nor data)_.
