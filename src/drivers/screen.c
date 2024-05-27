@@ -1,6 +1,6 @@
 #include "screen.h"
 #include "../include/fonts.h"
-#include <stdint.h>
+#include "../lib/string.h"
 
 
 struct limine_framebuffer *framebuffer;
@@ -17,18 +17,26 @@ void set_pixel(int x, int y, u32 color) {
 
 // stolen from "https://github.com/lucianoforks/tetris-os/blob/master/src/font.c"
 void print_char_at(char c, int x, int y, u32 color) {
-    const u8 *glyph = font[(size_t) c];
+    // FIXME: New line when '\n' at the end of string or alone, doesn't if not with these conditions
+    
+    if (c == '\n') {
+        y++;
+        x = 0;
+    } else {
+        const u8 *glyph = font[(size_t) c];
 
-    for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
-        for (size_t xx = 0; xx < (size_t) font_dimensions.x; xx++) {
-            if (glyph[yy] & (1 << xx))
-                // Set the character's pixels
-                set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, color);
-            else 
-                // erase anything that's under the char (haha bye unwanted cursor)
-                set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, BLACK);
+        for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
+            for (size_t xx = 0; xx < (size_t) font_dimensions.x; xx++) {
+                if (glyph[yy] & (1 << xx))
+                    // Set the character's pixels
+                    set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, color);
+                else 
+                    // erase anything that's under the char (haha bye unwanted cursor)
+                    set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, BLACK);
+            }
         }
     }
+
     set_cursor(x, y);
 }
 
@@ -45,6 +53,8 @@ void print(char* str) {
 }
 
 void print_string_at(char* str, int x, int y, u32 color) {
+
+    int original_x = x;
     
     if (x < 0 || y < 0) {
         x = get_cursor().x;
@@ -55,10 +65,15 @@ void print_string_at(char* str, int x, int y, u32 color) {
     // int start_y = y;
 
     while (*str) {
-        if (*str == '\n') { 
-            y += 1;
-            x = start_x;
-        }
+        /*  idk why x is incremented by the count of `\n`.
+            I'll hardcode the solution for now.
+            I'll find a real solution later.
+        */
+
+        // TODO: find !(hardcode) solution.
+        if (x > 0 && *str == '\n')
+            x -= count(str, '\n');
+        
         print_char_at(*str, x, y, color);
         x += 1;
         str++;
