@@ -154,3 +154,6 @@ Each entry is composed of:
     -   **Long Mode Code Flag:** If 1, the descriptor defines a 64-bit code segment,
     so the **Size Flag** should be 0. If 0, then this is another type of segment
     _(not code nor data)_.
+
+## TODO
+    -   Add IDT Section
