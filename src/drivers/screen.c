@@ -17,8 +17,6 @@ void set_pixel(int x, int y, u32 color) {
 
 // stolen from "https://github.com/lucianoforks/tetris-os/blob/master/src/font.c"
 void print_char_at(char c, int x, int y, u32 color) {
-    // FIXME: New line when '\n' at the end of string or alone, doesn't if not with these conditions
-    
     if (c == '\n') {
         y++;
         x = 0;
