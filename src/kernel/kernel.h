@@ -5,7 +5,7 @@
 
 #include "../include/types.h"
 
-void init_kernel();
+void kernel_init();
 void kernel_main();
 
 #endif

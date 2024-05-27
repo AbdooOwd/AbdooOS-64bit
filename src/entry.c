@@ -102,7 +102,7 @@ void _start(void) {
     framebuffer = framebuffer_request.response->framebuffers[0];
     fb_addr = framebuffer->address;
 
-    init_kernel();
+    kernel_init();
 
 
     // We're done, just hang...
