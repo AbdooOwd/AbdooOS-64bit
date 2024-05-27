@@ -1,8 +1,8 @@
 // Used for creating GDT segment descriptors in 64-bit integer form.
 // Thanks osdev (;
 
-#ifndef GDT_H
-#define GDT_H
+#ifndef OSDEV_GDT_H
+#define OSDEV_GDT_H
 
 #pragma once
 
