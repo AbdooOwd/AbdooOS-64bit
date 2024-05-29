@@ -24,3 +24,4 @@
 -   Code a GDT [ ]
 -   Implement Interrupts [ ]
 -   Receive Keyboard Input [ ]
+-   Implement `printf` [X]
