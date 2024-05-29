@@ -37,6 +37,7 @@ void draw_cursor(int x, int y);
 void set_pixel(int x, int y, u32 color);
 void fill_screen(u32 color);
 void draw_cell(int x, int y, u32 color);
+void clear_screen();
 
 void err(char* error);
 void success(char* success_msg);

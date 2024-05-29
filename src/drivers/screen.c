@@ -38,18 +38,6 @@ void print_char_at(char c, int x, int y, u32 color) {
     set_cursor(x, y);
 }
 
-void success(char* success_msg) {
-    print_string_at(success_msg, -1, -1, GREEN);
-}
-
-void err(char* error) {
-    print_string_at(error, -1, -1, RED);
-}
-
-void print(char* str) {
-    print_string_at(str, -1, -1, WHITE);
-}
-
 void print_string_at(char* str, int x, int y, u32 color) {
     
     if (x < 0 || y < 0) {
@@ -67,6 +55,20 @@ void print_string_at(char* str, int x, int y, u32 color) {
     }
 }
 
+void success(char* success_msg) {
+    print_string_at(success_msg, -1, -1, GREEN);
+}
+
+void err(char* error) {
+    print_string_at(error, -1, -1, RED);
+}
+
+void print(char* str) {
+    print_string_at(str, -1, -1, WHITE);
+}
+
+
+
 void draw_cell(int x, int y, u32 color) {
     for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
         for (size_t xx = 0; xx < (size_t) font_dimensions.x; xx++) {
@@ -81,9 +83,17 @@ void fill_screen(u32 color) {
     }
 }
 
+
+void clear_screen() {
+    fill_screen(BLACK);
+    set_cursor(0, 0);
+}
+
+
 u32 get_offset(int x, int y) {
     return y * SCREEN_WIDTH + x;
 }
+
 
 
 Vector2 get_cursor() {
