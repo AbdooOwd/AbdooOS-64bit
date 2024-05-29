@@ -1,40 +1,6 @@
 #include "string.h"
 #include "util.h"
 
-void int_to_ascii(int n, char* str) {
-    int i, sign;
-    if ((sign = n) < 0) n = -n;
-    i = 0;
-    do {
-        str[i++] = n % 10 + '0';
-    } while ((n /= 10) > 0);
-
-    if (sign < 0) str[i++] = '-';
-    str[i] = '\0';
-
-    reverse(str);
-}
-
-void hex_to_ascii(int n, char* str) {
-    append(str, '0');
-    append(str, 'x');
-    char zeros = 0;
-
-    int32_t tmp;
-    size_t i;
-    for (i = 28; i > 0; i -= 4) {
-        tmp = (n >> i) & 0xF;
-        if (tmp == 0 && zeros == 0) continue;
-        zeros = 1;
-        if (tmp > 0xA) append(str, tmp - 0xA + 'a');
-        else append(str, tmp + '0');
-    }
-
-    tmp = n & 0xF;
-    if (tmp >= 0xA) append(str, tmp - 0xA + 'a');
-    else append(str, tmp + '0');
-}
-
 
 void reverse(char* str) {
     size_t c, i, j;
