@@ -7,8 +7,8 @@ void memcpy(u8* source, u8* dest, int no_bytes) {
     }
 }
 
-void memset(u8* dest, u8 val, u32 len) {
-    u8* temp = (u8*)dest;
+void memset(u64* dest, u8 val, u32 len) {
+    u64* temp = (u64*)dest;
     for (; len != 0; len--) *temp++ = val;
 }
 
