@@ -12,12 +12,12 @@ void memset(u64* dest, u8 val, u32 len) {
     for (; len != 0; len--) *temp++ = val;
 }
 
-int memcmp(const void* ptr1, const void* ptr2, uint16_t num)
+int memcmp(const void* ptr1, const void* ptr2, u16 num)
 {
-    const uint8_t* u8Ptr1 = (const uint8_t *)ptr1;
-    const uint8_t* u8Ptr2 = (const uint8_t *)ptr2;
+    const u8* u8Ptr1 = (const u8 *)ptr1;
+    const u8* u8Ptr2 = (const u8 *)ptr2;
 
-    for (uint16_t i = 0; i < num; i++)
+    for (u16 i = 0; i < num; i++)
         if (u8Ptr1[i] != u8Ptr2[i])
             return 1;
 

@@ -20,7 +20,7 @@ void hex_to_ascii(int n, char* str) {
     append(str, 'x');
     char zeros = 0;
 
-    int32_t tmp;
+    i32 tmp;
     size_t i;
     for (i = 28; i > 0; i -= 4) {
         tmp = (n >> i) & 0xF;
@@ -37,16 +37,16 @@ void hex_to_ascii(int n, char* str) {
 
 
 
-void int_to_hex(uint64_t i, char* buffer) {
+void int_to_hex(u64 i, char* buffer) {
     if (i == 0) {
         buffer[0] = '0';
         return;
     }
     char     hex_chars[16] = "0123456789abcdef";
-    uint64_t num = i;
-    uint8_t  rem = 0;
+    u64 num = i;
+    u8  rem = 0;
 
-    uint64_t index = 0;
+    u64 index = 0;
 
     while (num != 0 && index < MAX_HEX_HANDLER_BUFFER_SIZE) {
         rem = num % 16;
@@ -55,8 +55,8 @@ void int_to_hex(uint64_t i, char* buffer) {
         index++;
     }
 
-    uint32_t k = 0;
-    uint32_t j = index - 1;
+    u32 k = 0;
+    u32 j = index - 1;
     while (k < j) {
         char temp = buffer[k];
         buffer[k] = buffer[j];
@@ -85,7 +85,7 @@ int format_char(int c, char buffer[], int buffer_offset) {
     return buffer_offset;
 }
 
-int format_uint(uint64_t uint, char buffer[], int buffer_offset) {
+int format_uint(u64 uint, char buffer[], int buffer_offset) {
     if (uint == 0) {
         if (buffer_offset < MAX_STRING_FORMATTER_BUFFER_SIZE) {
             buffer[buffer_offset] = '0';
@@ -93,8 +93,8 @@ int format_uint(uint64_t uint, char buffer[], int buffer_offset) {
         }
         return buffer_offset;
     }
-    uint32_t len = 0;
-    uint64_t remainder = uint;
+    u32 len = 0;
+    u64 remainder = uint;
     while (remainder != 0) {
         len++;
         remainder /= 10;
@@ -102,7 +102,7 @@ int format_uint(uint64_t uint, char buffer[], int buffer_offset) {
 
     char number[len];
 
-    for (uint32_t i = 0; i < len; i++) {
+    for (u32 i = 0; i < len; i++) {
         number[i] = (uint % 10) + '0';
         uint /= 10;
     }
@@ -119,7 +119,7 @@ int format_uint(uint64_t uint, char buffer[], int buffer_offset) {
     return buffer_offset;
 }
 
-int format_int(int64_t integer, char buffer[], int buffer_offset) {
+int format_int(i64 integer, char buffer[], int buffer_offset) {
     if (integer == 0) {
         if (buffer_offset < MAX_STRING_FORMATTER_BUFFER_SIZE) {
             buffer[buffer_offset] = '0';
@@ -127,8 +127,8 @@ int format_int(int64_t integer, char buffer[], int buffer_offset) {
         }
         return buffer_offset;
     }
-    uint32_t len = 0;
-    int64_t  remainder = integer;
+    u32 len = 0;
+    i64  remainder = integer;
     while (remainder != 0) {
         len++;
         remainder /= 10;
@@ -136,7 +136,7 @@ int format_int(int64_t integer, char buffer[], int buffer_offset) {
 
     char number[len];
 
-    for (uint32_t i = 0; i < len; i++) {
+    for (u32 i = 0; i < len; i++) {
         number[i] = (integer % 10) + '0';
         integer /= 10;
     }
@@ -153,7 +153,7 @@ int format_int(int64_t integer, char buffer[], int buffer_offset) {
     return buffer_offset;
 }
 
-int format_hex(uint64_t hex_int, char buffer[], int buffer_offset) {
+int format_hex(u64 hex_int, char buffer[], int buffer_offset) {
     char hex_string[MAX_HEX_HANDLER_BUFFER_SIZE] = {0};
     int_to_hex(hex_int, hex_string);
     return format_string(hex_string, buffer, buffer_offset);
@@ -166,13 +166,13 @@ int format_handler(char format, char buffer[], int buffer_offset,
     // digit/int
     case 'd':
     case 'i':
-        int64_t int_arg = va_arg(args, int64_t);
+        i64 int_arg = va_arg(args, i64);
         buffer_offset = format_int(int_arg, buffer, buffer_offset);
         break;
 
     // unsigned int
     case 'u':
-        uint64_t uint_arg = va_arg(args, uint64_t);
+        u64 uint_arg = va_arg(args, u64);
         buffer_offset = format_uint(uint_arg, buffer, buffer_offset);
         break;
 
@@ -189,7 +189,7 @@ int format_handler(char format, char buffer[], int buffer_offset,
             buffer[buffer_offset] = '0';
             buffer[buffer_offset + 1] = 'x';
             buffer_offset += 2;
-            uint64_t hex_arg = va_arg(args, uint64_t);
+            u64 hex_arg = va_arg(args, u64);
             buffer_offset = format_hex(hex_arg, buffer, buffer_offset);
         }
         break;
