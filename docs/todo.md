@@ -5,7 +5,7 @@
 -   Learn about [x86-64 processors](https://en.wikipedia.org/wiki/X86-64) [ ]
 -   Learn about [VFS](https://wiki.osdev.org/VFS) [ ]
 -   Learn about ELF Executables [ ]
--   Learn how to manipulate the frame buffer to print characters [ ]
+-   Learn how to manipulate the frame buffer to print characters [kinda]
 -   Learn how to implement a FAT32 File System into the OS Image [ ]
 
 ## Libraries
@@ -21,7 +21,7 @@
 
 ## To Code
 
--   Code a GDT [ ]
+-   Code a GDT on my own [ ]
 -   Implement Interrupts [ ]
 -   Receive Keyboard Input [ ]
 -   Implement `printf` [X]
