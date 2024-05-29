@@ -51,16 +51,11 @@ void print(char* str) {
 }
 
 void print_string_at(char* str, int x, int y, u32 color) {
-
-    int original_x = x;
     
     if (x < 0 || y < 0) {
         x = get_cursor().x;
         y = get_cursor().y;
     }
-    
-    int start_x = x;
-    // int start_y = y;
 
     while (*str) {
         print_char_at(*str, x, y, color);
