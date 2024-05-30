@@ -21,7 +21,7 @@
 
 ## To Code
 
--   Code a GDT on my own [ ]
+-   Code a GDT on my own [X]
 -   Implement Interrupts [ ]
 -   Receive Keyboard Input [ ]
 -   Implement `printf` [X]
