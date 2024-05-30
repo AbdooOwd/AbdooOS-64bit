@@ -7,7 +7,7 @@
 
 #define GDT_CODE_SEGMENT 0x08
 #define GDT_DATA_SEGMENT 0x10
-#define GDT_ENTRY_COUNT 3
+#define GDT_ENTRY_COUNT 5
 
 typedef struct {
     u16 limit;

@@ -45,7 +45,9 @@ void GDT_init() {
 
     GDT_setEntry(0, 0, 0, 0, 0);                // Null-Segment                 0x00
     GDT_setEntry(1, 0, 0xFFFFF, 0x9A, 0xA0);    // Kernel 64bit Code Segment    0x08
-    GDT_setEntry(2, 0, 0xFFFFF, 0x92, 0xA0);    // Kernel 64bit Data Segment    0x10
+    GDT_setEntry(2, 0, 0xFFFFF, 0x92, 0xC0);    // Kernel 64bit Data Segment    0x10
+    GDT_setEntry(3, 0, 0xFFFFF, 0xFA, 0xA0);    // User   64bit Data Segment    0x18
+    GDT_setEntry(4, 0, 0xFFFFF, 0xF2, 0xC0);    // User   64bit Data Segment    0x20
 
     GDT_load();
 }
