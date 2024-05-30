@@ -165,7 +165,7 @@ $(BUILD_DIR)/obj/%.asm.o: src/%.asm Makefile
 always:
 	mkdir -p $(BUILD_DIR)
 
-debug:
+debug: os-image
 	qemu-system-x86_64 -M smm=off -d int -no-reboot -no-shutdown -cdrom $(BUILD_DIR)/$(IMAGE_NAME)
 
 run: os-image
