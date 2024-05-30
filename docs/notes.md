@@ -8,3 +8,4 @@
 -   Limine's default resolution is 1280x800.
 -   I want something like [this](https://github.com/Rostamborn/MmdOS/tree/master).
 -   We're in **Long Mode**.
+-   Run `addr2line -e mykernel.elf 0xADDRESSOFFAULT` to get assembly of address.
