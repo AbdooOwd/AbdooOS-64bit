@@ -21,14 +21,14 @@ typedef struct {
 
 typedef struct {
     u16 limit;
-    gdt_descriptor* ptr;
+    u64 base;
 } __attribute__((packed)) gdtr;
 
 
 extern gdt_descriptor* gdt_addr;
 
 void GDT_init();
-void GDT_load(void);
+void GDT_load(gdtr le_gdt_pointer);
 void GDT_setEntry(u8 num, u32 base, u16 limit, u8 access, u8 flags);
 
 #endif

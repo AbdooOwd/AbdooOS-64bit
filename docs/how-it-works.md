@@ -155,5 +155,9 @@ Each entry is composed of:
     so the **Size Flag** should be 0. If 0, then this is another type of segment
     _(not code nor data)_.
 
+The **GDT** technically tells the memory segments where they should be. For example,
+the Code Segment must be at `0x08` which means that `cs = 0x08`.
+And the Data Segment must be at `0x10`.
+
 ## TODO
     -   Add IDT Section
