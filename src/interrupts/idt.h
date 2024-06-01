@@ -2,7 +2,7 @@
 #define IDT_H
 #pragma once
 
-#include "../include/types.h"
+#include <include/types.h>
 
 #define IDT_ENTRY_COUNT 256
 #define CODE_SEGMENT    0x08
