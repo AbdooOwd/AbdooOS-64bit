@@ -5,7 +5,9 @@
 
 #include <include/types.h>
 
+
 void panic(char* fmt, ...);
+extern void crash_me(void);
 
 static inline void halt(void) {
     asm ("cli");
