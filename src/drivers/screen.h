@@ -22,6 +22,8 @@ extern volatile u32* fb_addr;
 #define RED     0xff0000
 #define GREEN   0x00ff00
 
+#define DEBUG_E9_PORT 1
+
 
 // text data
 extern Vector2 font_dimensions;
@@ -44,5 +46,8 @@ void success(char* success_msg);
 void print(char* str);
 void print_char_at(char c, int x, int y, u32 color);
 void print_string_at(char* str, int x, int y, u32 color);
+
+void log(char* str);
+void logc(char c);
 
 #endif

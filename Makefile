@@ -166,10 +166,10 @@ always:
 	mkdir -p $(BUILD_DIR)
 
 debug: os-image
-	qemu-system-x86_64 -M smm=off -d int -no-reboot -no-shutdown -cdrom $(BUILD_DIR)/$(IMAGE_NAME)
+	qemu-system-x86_64 -debugcon stdio -M smm=off -d int -no-reboot -no-shutdown -cdrom $(BUILD_DIR)/$(IMAGE_NAME)
 
 run: os-image
-	qemu-system-x86_64 -cdrom $(BUILD_DIR)/$(IMAGE_NAME)
+	qemu-system-x86_64 -debugcon stdio -cdrom $(BUILD_DIR)/$(IMAGE_NAME)
 
 # Remove object files and the final executable.
 .PHONY: clean

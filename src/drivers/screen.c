@@ -17,6 +17,9 @@ void set_pixel(int x, int y, u32 color) {
 
 // stolen from "https://github.com/lucianoforks/tetris-os/blob/master/src/font.c"
 void print_char_at(char c, int x, int y, u32 color) {
+#if DEBUG_E9_PORT
+    logc(c);
+#endif
     if (c == '\n') {
         y++;
         x = 0;
@@ -117,4 +120,15 @@ void draw_cursor(int x, int y) {
             set_pixel(x * font_dimensions.x + x_pixel, y * font_dimensions.y + font_dimensions.y - line, WHITE);
         }
     }
+}
+
+void log(char* str) {
+    while (*str) {
+        logc(*str);
+        str++;
+    }
+}
+
+void logc(char c) {
+    port_byte_out(0xE9, c);
 }
