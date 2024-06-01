@@ -1,6 +1,5 @@
 #ifndef UTIL_H
 #define UTIL_H
-
 #pragma once
 
 #include <include/types.h>
@@ -15,6 +14,9 @@ char* int_to_str(int num);
 
 int random();
 
+
+// throw random stuff as arguments so u don't let stuff unused (foq u GCC)
+static inline void UNUSED(u64, ...) {}
 
 #define min(a,b)    ((a) < (b) ? (a) : (b))
 #define max(a,b)    ((a) > (b) ? (a) : (b))
