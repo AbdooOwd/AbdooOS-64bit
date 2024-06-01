@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../include/types.h"
+#include <include/types.h>
 
 
 void int_to_ascii(int n, char* str);

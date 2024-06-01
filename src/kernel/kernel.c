@@ -3,7 +3,7 @@
 #include "../drivers/screen.h"
 #include "../lib/util/util.h"
 #include "../lib/print.h"
-#include "../include/globals.h"
+#include <include/globals.h>
 
 
 void kernel_init() {

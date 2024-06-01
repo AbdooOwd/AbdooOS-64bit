@@ -2,7 +2,7 @@
 #define PRINT_H
 
 #include <stdarg.h>
-#include "../include/types.h"
+#include <include/types.h>
 
 // kernel printf: load args, then call virtual kernel printf (vkprintf)
 void kprintf(const char* fmt, ...);

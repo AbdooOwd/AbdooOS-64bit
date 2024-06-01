@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../include/types.h"
+#include <include/types.h>
 #include <stdarg.h>
 
 #define MAX_STRING_FORMATTER_BUFFER_SIZE 1024

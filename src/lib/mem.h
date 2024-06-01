@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../include/types.h"
+#include <include/types.h>
 
 void memcpy(u8* source, u8* dest, int no_bytes);
 void memset(u64* dest, u8 val, u32 len);

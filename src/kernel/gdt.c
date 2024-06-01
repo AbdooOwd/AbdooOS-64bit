@@ -1,6 +1,6 @@
 #include "gdt.h"
 #include "../lib/print.h"
-#include "../include/globals.h"
+#include <include/globals.h>
 
 u64 gdt_addr;
 

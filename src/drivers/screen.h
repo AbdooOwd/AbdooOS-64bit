@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../include/types.h"
+#include <include/types.h>
 #include "../limine.h"
 #include "../lib/util/util.h"
 
