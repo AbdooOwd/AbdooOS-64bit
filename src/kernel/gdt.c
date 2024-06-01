@@ -1,7 +1,8 @@
 #include "gdt.h"
 #include "../lib/print.h"
+#include "../include/globals.h"
 
-gdt_descriptor* gdt_addr;
+u64 gdt_addr;
 
 gdt   the_gdt;
 gdtr  gdt_ptr;
@@ -38,6 +39,7 @@ void GDT_load(gdtr le_gdt_pointer) {
 }
 
 void GDT_init() {
+    print("Initializing GDT...\n");
 
     gdt_ptr.limit = sizeof(the_gdt) - 1;
     gdt_ptr.base = (u64) &the_gdt;
@@ -61,6 +63,7 @@ void GDT_init() {
     the_gdt.tss.reserved = 0;
     
     GDT_load(gdt_ptr);
+    kprintf("Loaded GDT at %X\n\n", gdt_addr);
     tss_init();
 }
 
