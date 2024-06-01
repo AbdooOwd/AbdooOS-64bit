@@ -28,7 +28,6 @@ isr_common:
     push rcx
     push rdx
     push rbx
-    push rbp
     push rsi
     push rdi
     push r8
@@ -39,37 +38,11 @@ isr_common:
     push r13
     push r14
     push r15
-
-    ; Save segment registers
-    mov ax, ds
-    push rax
-    mov ax, es
-    push rax
-    mov ax, fs
-    push rax
-    mov ax, gs
-    push rax
-
-    ; Set up kernel data segments
-    mov ax, 0x10       ; Kernel data segment selector
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
+    push rbp
 
     ; Pass pointer to stack to C, so we can access all the pushed information
     mov rdi, rsp
     call ISR_handler
-
-    ; Restore segment registers
-    pop rax
-    mov gs, ax
-    pop rax
-    mov fs, ax
-    pop rax
-    mov es, ax
-    pop rax
-    mov ds, ax
 
     ; Restore general-purpose registers
     pop r15
