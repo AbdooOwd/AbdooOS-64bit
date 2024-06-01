@@ -4,8 +4,8 @@
 
 u64 gdt_addr;
 
-gdt   the_gdt;
-gdtr  gdt_ptr;
+GDT   the_gdt;
+GDTR  gdt_ptr;
 tss_t the_tss;
 
 
@@ -20,7 +20,7 @@ void GDT_setEntry(u8 num, u32 base, u16 limit, u8 access, u8 flags) {
     the_gdt.gdt_entries[num].flags = (((limit >> 16) & 0xF) | (flags & 0xF0));
 }
 
-void GDT_load(gdtr le_gdt_pointer) {
+void GDT_load(GDTR le_gdt_pointer) {
     asm volatile("lgdt %0\n\t"
                  "push $0x08\n\t"
                  "lea 1f(%%rip), %%rax\n\t"

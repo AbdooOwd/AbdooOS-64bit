@@ -16,7 +16,7 @@ typedef struct {
     u8  access_byte;
     u8  flags;
     u8  base_high;
-} __attribute__((packed)) gdt_descriptor;
+} __attribute__((packed)) GDTEntry;
 
 typedef struct {
     u16 length;
@@ -27,7 +27,7 @@ typedef struct {
     u8  base_high;
     u32 base_upper;
     u32 reserved;
-} __attribute__((packed)) tss_descriptor;
+} __attribute__((packed)) TSSEntry;
 
 typedef struct {
     u32 resereved0;
@@ -49,18 +49,18 @@ typedef struct {
 } __attribute__((packed)) tss_t;
 
 typedef struct {
-    gdt_descriptor gdt_entries[GDT_ENTRY_COUNT];
-    tss_descriptor tss;
-} __attribute__((packed)) gdt;
+    GDTEntry gdt_entries[GDT_ENTRY_COUNT];
+    TSSEntry tss;
+} __attribute__((packed)) GDT;
 
 typedef struct {
     u16 limit;
     u64 base;
-} __attribute__((packed)) gdtr;
+} __attribute__((packed)) GDTR;
 
 
 void GDT_init();
-void GDT_load(gdtr le_gdt_pointer);
+void GDT_load(GDTR le_gdt_pointer);
 void GDT_setEntry(u8 num, u32 base, u16 limit, u8 access, u8 flags);
 
 void tss_init(void);
