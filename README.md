@@ -3,7 +3,7 @@
 AbdooOS is an Operating System made for fun with love and *"sanity loss"*
 by me, a dumb 15 years old (: . The general goal is to make an all purpose OS that anybody can use.
 The **real** goal is to learn how a computer works and provide useful
-resources and examples for people who want to do like me.
+resources and examples for people who want to learn about Operating Systems and their development.
 
 # The Idea
 
