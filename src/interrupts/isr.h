@@ -34,5 +34,6 @@ typedef struct {
 
 void ISR_init();
 void ISR_handler(registers* regs);
+typedef void (*ISR_handler_t)(registers* regs);
 
 #endif

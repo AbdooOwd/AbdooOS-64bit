@@ -1,5 +1,5 @@
 #include "kernel.h"
-#include "../cpu/cpu.h"
+#include <cpu/cpu.h>
 #include "../drivers/screen.h"
 #include "../lib/util/util.h"
 #include "../lib/print.h"
@@ -20,5 +20,6 @@ void kernel_init() {
 
 void kernel_main() {
     print("Welcome to your life!\n");
+    
     halt();
 }
