@@ -1,6 +1,7 @@
 #include "print.h"
 #include "formatter.h"
 #include <drivers/screen.h>
+#include "util/util.h"
 
 void kprintf(const char* fmt, ...) {
     // loading optional parameters
@@ -33,5 +34,6 @@ void vkprintf(const char* fmt, va_list args) {
 
 u64 print_syscall(u64 frame, u64 str, u64 unused,
                        u64 unused2, u64 unused3) {
-    kprintf(str);
+    UNUSED(frame, unused, unused2, unused3);
+    kprintf((char*) str);
 }

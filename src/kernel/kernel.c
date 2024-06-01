@@ -4,6 +4,7 @@
 #include <lib/util/util.h>
 #include <lib/print.h>
 #include <include/globals.h>
+#include "hal/hal.h"
 
 
 void kernel_init() {

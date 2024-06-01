@@ -2,7 +2,7 @@
 
 void memcpy(u8* source, u8* dest, int no_bytes) {
     size_t i;
-    for (i = 0; i < no_bytes; i++) {
+    for (i = 0; (int) i < no_bytes; i++) {
         *(dest + i) = *(source + i);
     }
 }

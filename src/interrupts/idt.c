@@ -2,7 +2,7 @@
 #include <lib/util/binary.h>
 
 IDTEntry    idt[IDT_ENTRY_COUNT];
-IDTR        idtr = { sizeof(idt) - 1, &idt };
+IDTR        idtr = { sizeof(idt) - 1, (IDTEntry*) &idt };
 
 void IDT_load(IDTR idt_pointer) {
     asm volatile("lidt %0\n\t"
