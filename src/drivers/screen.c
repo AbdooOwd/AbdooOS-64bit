@@ -1,6 +1,6 @@
 #include "screen.h"
-#include "../include/fonts.h"
-#include "../lib/string.h"
+#include <include/fonts.h>
+#include <lib/string.h>
 
 
 struct limine_framebuffer *framebuffer;

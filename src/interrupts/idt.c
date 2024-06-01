@@ -1,5 +1,5 @@
 #include "idt.h"
-#include "../lib/util/binary.h"
+#include <lib/util/binary.h>
 
 IDTEntry    idt[IDT_ENTRY_COUNT];
 IDTR        idtr = { sizeof(idt) - 1, &idt };

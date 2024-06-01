@@ -1,6 +1,6 @@
 #include "print.h"
 #include "formatter.h"
-#include "../drivers/screen.h"
+#include <drivers/screen.h>
 
 void kprintf(const char* fmt, ...) {
     // loading optional parameters

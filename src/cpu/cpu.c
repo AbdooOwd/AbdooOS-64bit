@@ -1,6 +1,6 @@
 #include "cpu.h"
-#include "../lib/print.h"
-#include "../lib/formatter.h"
+#include <lib/print.h>
+#include <lib/formatter.h>
 #include <stdarg.h>
 
 void panic(char* fmt, ...) {

@@ -1,6 +1,6 @@
 #include "isr.h"
 #include "idt.h"
-#include "../lib/print.h"
+#include <lib/print.h>
 #include <cpu/cpu.h>
 
 static const char* exception_messages[] = {
