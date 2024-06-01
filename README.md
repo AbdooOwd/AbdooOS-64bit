@@ -11,6 +11,9 @@ The idea is to provide a project that can be used by devs/students and users.
 Devs could use this project as an example for learning or developing their own OS.
 It can also be used by students to learn about OS Development in one place,
 thanks to all the `*.md` files I've written to explain how the OS works.
+Users could just use it for their everyday activities. It could have 
+an Internet Browser, a text-editor, a file manager. And maybe in the future
+I'll add a GUI!
 
 # My Resources
 
