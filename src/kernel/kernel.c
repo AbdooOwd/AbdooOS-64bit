@@ -1,7 +1,7 @@
 #include "kernel.h"
 #include "../cpu/cpu.h"
 #include "../drivers/screen.h"
-#include "../lib/util.h"
+#include "../lib/util/util.h"
 #include "../lib/print.h"
 #include "../include/globals.h"
 
