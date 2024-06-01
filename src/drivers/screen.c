@@ -130,5 +130,5 @@ void log(char* str) {
 }
 
 void logc(char c) {
-    port_byte_out(0xE9, c);
+    outb(0xE9, c);
 }

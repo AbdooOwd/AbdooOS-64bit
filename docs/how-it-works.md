@@ -28,7 +28,7 @@ The browser you're using, from Android, MacOS, Windows or Linux is a program
 that the OS runs by doing quirky stuff with hardware, like the screen,
 to show you this document.
 
-For short: An OS is a software that lets you stuff with your computer.
+For short: An OS is a software that lets you do stuff with your computer.
 It manages resources like data and _<insert what else>_.
 
 > You should read [this](https://wiki.osdev.org/Introduction#What_is_an_Operating_System.3F).
@@ -63,6 +63,13 @@ By sending digital inputs _(1s & 0s)_?
 The BIOS will go look for a valid boot sector at the first sector on the disk.
 If it finds the boot signature `0xAA55` then it means that this sector's code
 can be executed _(we made sure this is a boot sector)_.
+
+## Hardware
+
+### Sectors
+
+A sector is like a slice of pizza on one of your disk's platters.
+Usually, each sector is 512 bytes or 0.5KiB large.
 
 ## Booting
 
@@ -161,3 +168,16 @@ And the Data Segment must be at `0x10`.
 
 ## TODO
     -   Add IDT Section
+
+# NOTES
+
+-   There is a big difference between MB, MiB and Mb.
+        -   **MB** with a capital "B" means Mega**Byte**, which means it is
+        `1000 * 1KB`. i.e each unit is just the number of bytes 
+        divided or multiplied by 1000.
+        -   **MiB** with an "i" bewteen the "M" and "B" means MebiByte.
+            It is the same thing as **MB** but instead of 1000, each
+            MiB is 1024 KiB long. And each KiB is 1024 bytes large.
+        -   **Mb** is mostly used by Internet providers. With a lowercase
+            "B", it means Mega**Bit**. Which means that each MegaBit has 
+            1000 Kb, and each Kb has 1000 bits and not bytes.
