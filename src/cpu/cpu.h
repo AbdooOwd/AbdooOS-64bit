@@ -5,6 +5,7 @@
 
 #include "../include/types.h"
 
+void panic(char* fmt, ...);
 
 static inline void halt(void) {
     asm ("cli");
