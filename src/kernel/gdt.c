@@ -3,19 +3,20 @@
 
 gdt_descriptor* gdt_addr;
 
-gdt_descriptor gdt[GDT_ENTRY_COUNT];
-gdtr gdt_ptr;
+gdt   the_gdt;
+gdtr  gdt_ptr;
+tss_t the_tss;
 
 
 void GDT_setEntry(u8 num, u32 base, u16 limit, u8 access, u8 flags) {
-    gdt[num].limit = (limit & 0xFFFF);
+    the_gdt.gdt_entries[num].limit = (limit & 0xFFFF);
 
-    gdt[num].base_low = (base & 0xFFFF);
-    gdt[num].base_mid = (base << 16) & 0xFF;
-    gdt[num].base_high = (base << 24) & 0xFF;
+    the_gdt.gdt_entries[num].base_low = (base & 0xFFFF);
+    the_gdt.gdt_entries[num].base_mid = (base << 16) & 0xFF;
+    the_gdt.gdt_entries[num].base_high = (base << 24) & 0xFF;
 
-    gdt[num].access_byte = access;
-    gdt[num].flags = (((limit >> 16) & 0xF) | (flags & 0xF0));
+    the_gdt.gdt_entries[num].access_byte = access;
+    the_gdt.gdt_entries[num].flags = (((limit >> 16) & 0xF) | (flags & 0xF0));
 }
 
 void GDT_load(gdtr le_gdt_pointer) {
@@ -38,8 +39,8 @@ void GDT_load(gdtr le_gdt_pointer) {
 
 void GDT_init() {
 
-    gdt_ptr.limit = sizeof(gdt) - 1;
-    gdt_ptr.base = (u64) &gdt;
+    gdt_ptr.limit = sizeof(the_gdt) - 1;
+    gdt_ptr.base = (u64) &the_gdt;
 
     gdt_addr = gdt_ptr.base;
 
@@ -48,5 +49,50 @@ void GDT_init() {
     GDT_setEntry(2, 0, 0xFFFFF, 0x92, 0xC0);    // Kernel 64bit Data Segment    0x10
     GDT_setEntry(3, 0, 0xFFFFF, 0xFA, 0xA0);    // User   64bit Data Segment    0x18
     GDT_setEntry(4, 0, 0xFFFFF, 0xF2, 0xC0);    // User   64bit Data Segment    0x20
+    
+    // TSS 0x28
+    the_gdt.tss.length = 104;
+    the_gdt.tss.base_low = (u16) (((u64) &the_tss) & 0xffff);
+    the_gdt.tss.base_mid = (u8) (((u64) &the_tss >> 16) & 0xff);
+    the_gdt.tss.flags1 = 0b10001001;
+    the_gdt.tss.flags2 = 0;
+    the_gdt.tss.base_high = (u8) (((u64) &the_tss >> 24) & 0xff);
+    the_gdt.tss.base_upper = (u32) (((u64) &the_tss >> 32) & 0xffffffff);
+    the_gdt.tss.reserved = 0;
+    
     GDT_load(gdt_ptr);
+    tss_init();
+}
+
+void tss_load(void) {
+    kprintf("Loading TSS at %X...\n", &the_gdt.tss);
+    // this must be the offset of tss
+    asm volatile("mov $0x28, %%ax\n\t"
+                 "ltr %%ax\n\t"
+                 :
+                 :
+                 : "rax", "memory");
+}
+
+void tss_set_rsp0(u64 rsp0) { the_tss.rsp0 = rsp0; }
+
+void tss_init(void) {
+    the_tss.resereved0 = 0;
+    the_tss.rsp0 = 0;
+    the_tss.rsp1 = 0;
+    the_tss.rsp2 = 0;
+    the_tss.resereved1 = 0;
+    the_tss.resereved2 = 0;
+    the_tss.ist1 = 0;
+    the_tss.ist2 = 0;
+    the_tss.ist3 = 0;
+    the_tss.ist4 = 0;
+    the_tss.ist5 = 0;
+    the_tss.ist6 = 0;
+    the_tss.ist7 = 0;
+    the_tss.resereved3 = 0;
+    the_tss.resereved4 = 0;
+    the_tss.iomap_offset = 0;
+
+    tss_load();
 }

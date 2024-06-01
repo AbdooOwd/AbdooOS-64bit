@@ -18,6 +18,40 @@ typedef struct {
     u8  base_high;
 } __attribute__((packed)) gdt_descriptor;
 
+typedef struct {
+    u16 length;
+    u16 base_low;
+    u8  base_mid;
+    u8  flags1;
+    u8  flags2;
+    u8  base_high;
+    u32 base_upper;
+    u32 reserved;
+} __attribute__((packed)) tss_descriptor;
+
+typedef struct {
+    u32 resereved0;
+    u64 rsp0;
+    u64 rsp1;
+    u64 rsp2;
+    u64 resereved1;
+    u64 resereved2;
+    u64 ist1;
+    u64 ist2;
+    u64 ist3;
+    u64 ist4;
+    u64 ist5;
+    u64 ist6;
+    u64 ist7;
+    u64 resereved3;
+    u16 resereved4;
+    u16 iomap_offset;
+} __attribute__((packed)) tss_t;
+
+typedef struct {
+    gdt_descriptor gdt_entries[GDT_ENTRY_COUNT];
+    tss_descriptor tss;
+} __attribute__((packed)) gdt;
 
 typedef struct {
     u16 limit;
@@ -30,5 +64,9 @@ extern gdt_descriptor* gdt_addr;
 void GDT_init();
 void GDT_load(gdtr le_gdt_pointer);
 void GDT_setEntry(u8 num, u32 base, u16 limit, u8 access, u8 flags);
+
+void tss_init(void);
+void tss_load();
+void tss_set_rsp0(u64 rsp0);
 
 #endif
