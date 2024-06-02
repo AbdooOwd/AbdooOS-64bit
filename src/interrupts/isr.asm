@@ -25,11 +25,11 @@ isr%1:
 isr_common:
     ; Save general-purpose registers
     push rax
+    push rbx
     push rcx
     push rdx
-    push rbx
-    push rsi
     push rdi
+    push rsi
     push r8
     push r9
     push r10
@@ -45,6 +45,7 @@ isr_common:
     call ISR_handler
 
     ; Restore general-purpose registers
+    pop rbp
     pop r15
     pop r14
     pop r13
@@ -53,12 +54,11 @@ isr_common:
     pop r10
     pop r9
     pop r8
-    pop rdi
     pop rsi
-    pop rbp
-    pop rbx
+    pop rdi
     pop rdx
     pop rcx
+    pop rbx
     pop rax
 
     add rsp, 16        ; Remove error code and interrupt number
