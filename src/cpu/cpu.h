@@ -6,6 +6,9 @@
 #include <include/types.h>
 
 
+void cli();
+void sti();
+
 void panic(char* fmt, ...);
 extern void crash_me(void);
 
