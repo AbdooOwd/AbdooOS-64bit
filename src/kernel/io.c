@@ -1,6 +1,15 @@
 #include "io.h"
 #include <include/types.h>
 
+#define UNUSED_PORT     0x80
+
+
+
+void iowait() {
+    outb(UNUSED_PORT, 0);
+}
+
+
 unsigned char inb(unsigned short port) {
     unsigned char result;
     asm volatile("in %%dx , %% al" : "=a" (result) : "d" (port));

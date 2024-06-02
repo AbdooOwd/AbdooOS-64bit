@@ -5,6 +5,8 @@
 
 #include <include/types.h>
 
+void iowait();
+
 unsigned char inb(unsigned short port);
 void outb(unsigned short port, unsigned char data);
 unsigned short inw(unsigned short port);
