@@ -6,7 +6,6 @@
 #include <include/globals.h>
 #include "hal/hal.h"
 
-
 void kernel_init() {
     kprintf("Initialization (kernel_init) at %X\n", kernel_init);
     kprintf("Start (kernel_main) at %X\n\n", kernel_main);

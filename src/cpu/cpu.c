@@ -3,13 +3,6 @@
 #include <lib/formatter.h>
 #include <stdarg.h>
 
-void cli() {
-    asm ("cli");
-}
-
-void sti() {
-    asm ("sti");
-}
 
 void panic(char* fmt, ...) {
     va_list args;
