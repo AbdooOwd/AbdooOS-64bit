@@ -74,3 +74,9 @@ void ISR_handler(registers* regs) {
         panic("\nPanic! Halting CPU");
     }
 }
+
+
+void ISR_registerHandler(int interrupt, ISR_handler_t handler) {
+    ISR_handlers[interrupt] = handler;
+    IDT_enableGate(interrupt);
+}

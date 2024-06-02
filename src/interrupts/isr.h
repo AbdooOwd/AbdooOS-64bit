@@ -32,8 +32,11 @@ typedef struct {
     u64 iret_ss;
 } __attribute__((packed)) registers;
 
+
+typedef void (*ISR_handler_t)(registers* regs);
+
 void ISR_init();
 void ISR_handler(registers* regs);
-typedef void (*ISR_handler_t)(registers* regs);
+void ISR_registerHandler(int interrupt, ISR_handler_t handler);
 
 #endif
