@@ -14,7 +14,7 @@ void kernel_init() {
     HAL_init();
 
     print("Booted AbdooOS Successfully!\n");
-    // clear_screen();
+    clear_screen();
 
     kernel_main();
 }
