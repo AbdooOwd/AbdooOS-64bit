@@ -71,7 +71,7 @@ void ISR_handler(registers* regs) {
 
         kprintf("  interrupt=%x  errorcode=%x\n", regs->int_number, regs->error_code);
 
-        panic("\nPanic! Halting CPU");
+        panic("\nPanic! Halting CPU\n");
     }
 }
 
