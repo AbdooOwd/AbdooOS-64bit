@@ -31,9 +31,3 @@ void vkprintf(const char* fmt, va_list args) {
     }
     print(buffer);
 }
-
-u64 print_syscall(u64 frame, u64 str, u64 unused,
-                       u64 unused2, u64 unused3) {
-    UNUSED(frame, unused, unused2, unused3);
-    kprintf((char*) str);
-}
