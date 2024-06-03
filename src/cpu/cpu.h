@@ -35,12 +35,12 @@ typedef struct {
     u64 rcx;
     u64 rbx;
     u64 rax;
-    u64 int_number; // this is pushed in the macro (Hopefully it's 8 bytes)
+    u64 interrupt;  // this is pushed in the macro (Hopefully it's 8 bytes)
     u64 error_code; // This is pushed by the cpu if the interrupt is an
-                         // error interrupt. If not, then we push a dummy value
-                         // of 0(in the macro)
+                    // error interrupt. If not, then we push a dummy value
+                    // of 0(in the macro)
     u64 iret_rip;   // iret prefix means that the cpu pushed this
-                         // automatically and we didn't
+                    // automatically and we didn't
     u64 iret_cs;
     u64 iret_flags;
     u64 iret_rsp;
