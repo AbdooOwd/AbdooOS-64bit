@@ -13,14 +13,7 @@ isr%1:
     jmp isr_common
 %endmacro
 
-global idt_load
-
-extern interrupt
-; extern idtr
-; 
-; idt_load:
-;     lidt [idtr]
-;     ret
+extern ISR_handler
 
 isr_common:
     push rax
@@ -41,7 +34,7 @@ isr_common:
 
     cld
     xor rbp, rbp
-    call interrupt
+    call ISR_handler
 
     pop r15
     pop r14
@@ -69,28 +62,48 @@ isrnoerror 4
 isrnoerror 5
 isrnoerror 6
 isrnoerror 7
-isrerror 8
-isrerror 10
-isrerror 11
-isrerror 12
-isrerror 13
-isrerror 14
+isrerror   8
+isrnoerror 9
+isrerror   10
+isrerror   11
+isrerror   12
+isrerror   13
+isrerror   14
+isrnoerror 15
 isrnoerror 16
-isrerror 17
+isrerror   17
 isrnoerror 18
-isrnoerror 32
-isrnoerror 33
-isrnoerror 34
-isrnoerror 35
-isrnoerror 36
-isrnoerror 37
-isrnoerror 38
-isrnoerror 39
-isrnoerror 40
-isrnoerror 41
-isrnoerror 42
-isrnoerror 43
-isrnoerror 44
-isrnoerror 45
-isrnoerror 46
-isrnoerror 47
+isrnoerror 19
+isrnoerror 20
+isrnoerror 21
+isrnoerror 22
+isrnoerror 23
+isrnoerror 24
+isrnoerror 25
+isrnoerror 26
+isrnoerror 27
+isrnoerror 28
+isrnoerror 29
+isrerror   30
+isrnoerror 31
+
+
+
+; IRQs (i hate 'em)
+
+; isrnoerror 32
+; isrnoerror 33
+; isrnoerror 34
+; isrnoerror 35
+; isrnoerror 36
+; isrnoerror 37
+; isrnoerror 38
+; isrnoerror 39
+; isrnoerror 40
+; isrnoerror 41
+; isrnoerror 42
+; isrnoerror 43
+; isrnoerror 44
+; isrnoerror 45
+; isrnoerror 46
+; isrnoerror 47
