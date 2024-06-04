@@ -1,16 +1,16 @@
-%macro interrupt_handler_noerror 1
-global interrupt_handler_%1
-interrupt_handler_%1:
+%macro isrnoerror 1
+global isr%1
+isr%1:
     push dword 0
     push %1
-    jmp common_interrupt_handler
+    jmp isr_common
 %endmacro
 
-%macro interrupt_handler_error 1
-global interrupt_handler_%1
-interrupt_handler_%1:
+%macro isrerror 1
+global isr%1
+isr%1:
     push %1
-    jmp common_interrupt_handler
+    jmp isr_common
 %endmacro
 
 global idt_load
@@ -22,7 +22,7 @@ extern interrupt
 ;     lidt [idtr]
 ;     ret
 
-common_interrupt_handler:
+isr_common:
     push rax
     push rbx
     push rcx
@@ -61,36 +61,36 @@ common_interrupt_handler:
     add rsp, 16 ; Error code and interrupt number
     iretq
 
-interrupt_handler_noerror 0
-interrupt_handler_noerror 1
-interrupt_handler_noerror 2
-interrupt_handler_noerror 3
-interrupt_handler_noerror 4
-interrupt_handler_noerror 5
-interrupt_handler_noerror 6
-interrupt_handler_noerror 7
-interrupt_handler_error 8
-interrupt_handler_error 10
-interrupt_handler_error 11
-interrupt_handler_error 12
-interrupt_handler_error 13
-interrupt_handler_error 14
-interrupt_handler_noerror 16
-interrupt_handler_error 17
-interrupt_handler_noerror 18
-interrupt_handler_noerror 32
-interrupt_handler_noerror 33
-interrupt_handler_noerror 34
-interrupt_handler_noerror 35
-interrupt_handler_noerror 36
-interrupt_handler_noerror 37
-interrupt_handler_noerror 38
-interrupt_handler_noerror 39
-interrupt_handler_noerror 40
-interrupt_handler_noerror 41
-interrupt_handler_noerror 42
-interrupt_handler_noerror 43
-interrupt_handler_noerror 44
-interrupt_handler_noerror 45
-interrupt_handler_noerror 46
-interrupt_handler_noerror 47
+isrnoerror 0
+isrnoerror 1
+isrnoerror 2
+isrnoerror 3
+isrnoerror 4
+isrnoerror 5
+isrnoerror 6
+isrnoerror 7
+isrerror 8
+isrerror 10
+isrerror 11
+isrerror 12
+isrerror 13
+isrerror 14
+isrnoerror 16
+isrerror 17
+isrnoerror 18
+isrnoerror 32
+isrnoerror 33
+isrnoerror 34
+isrnoerror 35
+isrnoerror 36
+isrnoerror 37
+isrnoerror 38
+isrnoerror 39
+isrnoerror 40
+isrnoerror 41
+isrnoerror 42
+isrnoerror 43
+isrnoerror 44
+isrnoerror 45
+isrnoerror 46
+isrnoerror 47

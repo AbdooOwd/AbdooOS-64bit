@@ -8,59 +8,59 @@
 #define IDT_ATTR_PRESENT 0x8000
 
 
-struct __attribute__((__packed__)) idtr {
+typedef struct {
     u16 limit;
     u64 base;
-};
+} __attribute__((__packed__)) IDTR;
 
-struct __attribute__((__packed__)) idt_entry {
+typedef struct {
     u16 base_low;
     u16 selector;
     u16 flags;
     u16 base_mid;
     u32 base_high;
     u32 reserved;
-};
+} __attribute((packed)) IDTEntry;
 
 void interrupts_init(void);
 
 void interrupt(execution_context regs);
 
-void idt_set_gate(int i, u64 handler, u16 cs, u16 attr);
-void idt_load(void);
+void IDT_setGate(int i, u64 handler, u16 flags);
+void IDT_load(void);
 
-extern void interrupt_handler_0();
-extern void interrupt_handler_1();
-extern void interrupt_handler_2();
-extern void interrupt_handler_3();
-extern void interrupt_handler_4();
-extern void interrupt_handler_5();
-extern void interrupt_handler_6();
-extern void interrupt_handler_7();
-extern void interrupt_handler_8();
-extern void interrupt_handler_10();
-extern void interrupt_handler_11();
-extern void interrupt_handler_12();
-extern void interrupt_handler_13();
-extern void interrupt_handler_14();
-extern void interrupt_handler_16();
-extern void interrupt_handler_17();
-extern void interrupt_handler_18();
-extern void interrupt_handler_32();
-extern void interrupt_handler_33();
-extern void interrupt_handler_34();
-extern void interrupt_handler_35();
-extern void interrupt_handler_36();
-extern void interrupt_handler_37();
-extern void interrupt_handler_38();
-extern void interrupt_handler_39();
-extern void interrupt_handler_40();
-extern void interrupt_handler_41();
-extern void interrupt_handler_42();
-extern void interrupt_handler_43();
-extern void interrupt_handler_44();
-extern void interrupt_handler_45();
-extern void interrupt_handler_46();
-extern void interrupt_handler_47();
+extern void isr0();
+extern void isr1();
+extern void isr2();
+extern void isr3();
+extern void isr4();
+extern void isr5();
+extern void isr6();
+extern void isr7();
+extern void isr8();
+extern void isr10();
+extern void isr11();
+extern void isr12();
+extern void isr13();
+extern void isr14();
+extern void isr16();
+extern void isr17();
+extern void isr18();
+extern void isr32();
+extern void isr33();
+extern void isr34();
+extern void isr35();
+extern void isr36();
+extern void isr37();
+extern void isr38();
+extern void isr39();
+extern void isr40();
+extern void isr41();
+extern void isr42();
+extern void isr43();
+extern void isr44();
+extern void isr45();
+extern void isr46();
+extern void isr47();
 
 #endif

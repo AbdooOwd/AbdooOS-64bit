@@ -2,10 +2,10 @@
 #include <cpu/cpu.h>
 #include <lib/print.h>
 
-#define IDT_DEFAULT_GATE(i) idt_set_gate(i, (uint64_t) interrupt_handler_ ## i, 0x08, IDT_ATTR_PRESENT | IDT_ATTR_INTERRUPT_GATE);
+#define IDT_DEFAULT_GATE(i) IDT_setGate(i, (u64) isr ## i, IDT_ATTR_PRESENT | IDT_ATTR_INTERRUPT_GATE);
 
-struct idtr idtr;
-struct idt_entry idt_entries[256];
+IDTR idtr;
+IDTEntry idt[256];
 
 char* exception_messages[] = {
     "Division By Zero",
@@ -44,7 +44,7 @@ char* exception_messages[] = {
 };
 
 
-void idt_load(void) {
+void IDT_load(void) {
     asm volatile("lidt %0" : : "m"(idtr) : "memory");
     asm volatile("sti");
 }
@@ -85,29 +85,29 @@ void interrupts_init(void) {
 	IDT_DEFAULT_GATE(46)
 	IDT_DEFAULT_GATE(47)
 
-    idtr.base = (uint64_t) idt_entries;
-    idtr.limit = 256 * sizeof(struct idt_entry) - 1;
+    idtr.base = (u64) idt;
+    idtr.limit = 256 * sizeof(IDTEntry) - 1;
 
-    idt_load();
+    IDT_load();
     __asm__("sti");
     kprintf("idt loaded\n");
 }
 
-void idt_set_gate(int i, u64 handler, u16 cs, u16 attr) {
-    idt_entries[i].base_low = (u16) (handler & 0xffff);
-    idt_entries[i].base_mid = (u16) (handler >> 16) & 0xffff;
-    idt_entries[i].base_high = (u32) (handler >> 32) & 0xffffffff;
-    idt_entries[i].flags = attr;
-    idt_entries[i].reserved = 0;
-    idt_entries[i].selector = cs;
+void IDT_setGate(int i, u64 handler, u16 flags) {
+    idt[i].base_low = (u16) (handler & 0xffff);
+    idt[i].base_mid = (u16) (handler >> 16) & 0xffff;
+    idt[i].base_high = (u32) (handler >> 32) & 0xffffffff;
+    idt[i].flags = flags;
+    idt[i].reserved = 0;
+    idt[i].selector = 0x08;
 }
 
 void interrupt(execution_context regs)
 {
     if (regs.interrupt <= 32) {
-        kprintf("Interrupt %x - error code: %x - rip: %x\n", regs.interrupt, regs.error_code, regs.iret_rip);
+        kprintf("Unhandled Interrupt %x - error code: %x - rip: %x\n", regs.interrupt, regs.error_code, regs.iret_rip);
 		kprintf("Exception: %s\n", exception_messages[regs.interrupt]);
-        panic("unexpected interrupt");
+        panic("\nCPU Panic");
     } else {
 		kprintf("interrupt %d\n", regs.interrupt);
     }
