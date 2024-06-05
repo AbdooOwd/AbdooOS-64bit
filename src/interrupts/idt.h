@@ -55,8 +55,6 @@ typedef struct {
 } __attribute__((packed)) InterruptRegisters;
 
 void IDT_init(void);
-InterruptRegisters ISR_handler(InterruptRegisters regs);
-
 void IDT_setGate(int i, u64 handler, u16 flags);
 void IDT_initGates();
 void IDT_load(void);

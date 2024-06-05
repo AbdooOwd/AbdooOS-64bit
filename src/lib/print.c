@@ -64,7 +64,11 @@ void vlog(const char* fmt, va_list args) {
 
 void log_print(const char* str) {
     while (*str) {
-        outb(0xE9, *str);
+        logc(*str);
         str++;
     }
+}
+
+void logc(char c) {
+    outb(0xE9, c);
 }

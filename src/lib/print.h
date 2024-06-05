@@ -13,4 +13,5 @@ void vkprintf(const char* fmt, va_list args);
 void log(const char* fmt, ...);
 void vlog(const char* fmt, va_list args);
 void log_print(const char* str);
+void logc(char c);
 #endif

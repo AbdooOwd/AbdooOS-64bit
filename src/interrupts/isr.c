@@ -37,15 +37,17 @@ char* exception_messages[] = {
     "Timer",
 };
 
-InterruptRegisters ISR_handler(InterruptRegisters regs) {
+InterruptRegisters* ISR_handler(InterruptRegisters* regs) {
 	kprintf("\n");
-    if (regs.interrupt < 32) {
-        kprintf("Unhandled Interrupt %x - error code: %x - rip: %x\n", regs.interrupt, regs.error_code, regs.iret_rip);
-		kprintf("Exception: %s\n", exception_messages[regs.interrupt]);
+    if (regs->interrupt < 32) {
+        kprintf("Unhandled Interrupt %x - error code: %x - rip: %x\n", regs->interrupt, regs->error_code, regs->iret_rip);
+		kprintf("Exception: %s\n", exception_messages[regs -> interrupt]);
         panic("\nCPU Panic");
     } else {
-		kprintf("interrupt %d\n", regs.interrupt);
+		kprintf("interrupt %d\n", regs->interrupt);
     }
 
-	return regs;
+    
+
+    return regs;
 }

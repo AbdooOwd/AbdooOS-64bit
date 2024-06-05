@@ -122,14 +122,3 @@ void draw_cursor(int x, int y) {
         }
     }
 }
-
-void log(char* str) {
-    while (*str) {
-        logc(*str);
-        str++;
-    }
-}
-
-void logc(char c) {
-    outb(0xE9, c);
-}

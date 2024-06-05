@@ -9,3 +9,5 @@
 -   I want something like [this](https://github.com/Rostamborn/MmdOS/tree/master).
 -   We're in **Long Mode**.
 -   Run `addr2line -e mykernel.elf 0xADDRESSOFFAULT` to get assembly of address.
+
+-   Interrupts between 0 and 32 are exceptions, after it are ISQs.

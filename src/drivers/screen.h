@@ -47,7 +47,4 @@ void print(char* str);
 void print_char_at(char c, int x, int y, u32 color);
 void print_string_at(char* str, int x, int y, u32 color);
 
-void log(char* str);
-void logc(char c);
-
 #endif
