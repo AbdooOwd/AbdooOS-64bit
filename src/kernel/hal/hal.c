@@ -1,9 +1,9 @@
 #include "hal.h"
 #include <kernel/gdt.h>
-#include <interrupts/interrupts.h>
+#include <interrupts/idt.h>
 #include <cpu/cpu.h>
 
 void HAL_init() {
     GDT_init();
-    interrupts_init();
+    IDT_init();
 }
