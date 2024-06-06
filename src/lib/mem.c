@@ -24,7 +24,25 @@ int memcmp(const void* ptr1, const void* ptr2, u16 num)
     return 0;
 }
 
+void *memmove(void *dest, const void *src, size_t n) {
+    // Typecast src and dest to (char *)
+    char *d = (char *)dest;
+    const char *s = (const char *)src;
 
+    // If destination address is greater than source address, we copy backwards to handle overlap
+    if (d > s) {
+        for (size_t i = n; i != 0; i--) {
+            d[i - 1] = s[i - 1];
+        }
+    } else {
+        // Copy forwards otherwise
+        for (size_t i = 0; i < n; i++) {
+            d[i] = s[i];
+        }
+    }
+
+    return dest;
+}
 
 
 u32 free_mem_addr = 0x1000;
