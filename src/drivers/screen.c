@@ -83,7 +83,7 @@ void print_char_at(char c, int x, int y, u32 color) {
     if (y + 1 >= SCREEN_HEIGHT / 8) {
         for (size_t i = 0; i < 8; i++) {
             scroll_pixel_line();
-            y = SCREEN_HEIGHT / 8 - 2;
+            y = SCREEN_HEIGHT / 8 - 2;  // another -1 cuz screen_height doesn't start from 0
             x = 0;
         }
     }
