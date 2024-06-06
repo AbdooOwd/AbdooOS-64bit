@@ -120,6 +120,22 @@ void print(char* str) {
     print_string_at(str, -1, -1, WHITE);
 }
 
+void print_backspace() {
+
+    u32 new_x = get_cursor().x - 1;
+    u32 new_y = get_cursor().y;
+
+    if (new_x <= 0) {
+        new_x = SCREEN_WIDTH - 2;
+        if (new_y != 0) new_y--;
+    }
+
+    if (new_x > 0 && new_y > 0) { 
+        print_char_at(0, new_x, new_y, WHITE);
+        set_cursor(new_x, new_y);
+    }
+}
+
 
 
 void draw_cell(int x, int y, u32 color) {

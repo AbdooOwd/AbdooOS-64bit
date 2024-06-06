@@ -1,13 +1,21 @@
 #include "keyboard.h"
+#include "screen.h"
 #include <interrupts/irq.h>
 #include <include/functions.h>
 #include <lib/print.h>
+#include <lib/string.h>
 #include <kernel/io.h>
 #include <cpu/pic.h>
 
 
-#define KBD_DATA_PORT 		0x60
-#define KBD_STATUS_PORT 	KBD_DATA_PORT + 4	// 0x64
+#define KBD_DATA_PORT 	0x60
+#define KBD_STATUS_PORT KBD_DATA_PORT + 4	// 0x64
+
+#define BACKSPACE 		0x0E
+#define ENTER 			0x1C
+#define LSHIFT 			0x2A
+
+#define SC_MAX 			57
 
 typedef enum {
     UNKNOWN = 0xFFFFFFFF,
@@ -64,15 +72,32 @@ const u64 layout[128] = {
     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN};
 
+char sc_ascii_US[] = { '?', '?', '1', '2', '3', '4', '5', '6',
+    '7', '8', '9', '0', '-', '=', '?', '?', 'q', 'w', 'e', 'r', 't', 'y',
+        'u', 'i', 'o', 'p', '[', ']', '?', '?', 'a', 's', 'd', 'f', 'g',
+        'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
+        'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' ' };
 
-static bool has_char = false;
+
+static char input_buffer[256];
 
 
 InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
 	u8 scancode = inb(KBD_DATA_PORT);
 
-	if (!(scancode & 0x80)) // if released
-		kprintf("%c", getch(scancode));
+	if (!(scancode & 0x80)) {	// if released
+
+		switch (scancode) {
+			case 0x0E:
+				backspace(input_buffer);
+				print_backspace();
+				break;
+			
+			default:
+				append(input_buffer, getch(scancode));
+				kprintf("%c", getch(scancode));
+		}
+	}
 	
 
 	return regs;
