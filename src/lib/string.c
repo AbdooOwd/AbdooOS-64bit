@@ -49,6 +49,11 @@ int strcmp(char* s1, char* s2) {
     return s1[i] - s2[i];
 }
 
+bool strsame(char* str1, char* str2) {
+    if (strcmp(str1, str2) == 0) return true;
+    return false;
+}
+
 void merge_strings(char* str1, char* str2, char* result) {
     strcpy(result, str1);
     while (*str2) 

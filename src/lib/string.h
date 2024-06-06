@@ -18,6 +18,7 @@ void backspaces(char* str, int times);
 void strcpy(char* dest, char* src);
 char* strcat(char* str1, char* str2);
 int strcmp(char* s1, char* s2);
+bool strsame(char* str1, char* str2);
 void merge_strings(char* str1, char* str2, char* result);
 void append(char* str, char c);
 
