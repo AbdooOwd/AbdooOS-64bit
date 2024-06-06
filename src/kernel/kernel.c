@@ -20,6 +20,6 @@ void kernel_init() {
 
 void kernel_main() {
     print("Welcome to your life!\n");
-    crash_me();
-    halt();
+
+    for (;;) ;
 }

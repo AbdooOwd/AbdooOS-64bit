@@ -1,6 +1,7 @@
 #include "irq.h"
 #include <cpu/pic.h>
 #include <kernel/io.h>
+#include <lib/print.h>
 
 void* IRQ_handlers[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -19,12 +20,7 @@ InterruptRegisters* IRQ_handler(InterruptRegisters* regs) {
 
 	if (handler)
 		handler(regs);
-
-	if (regs->interrupt >= 40)
-		outb(0xA0, 0x20);
-	
-	outb(0x20, 0x20);
-
+	iowait();
 	PIC_eoi(regs->interrupt - 32);
 
 	return regs;

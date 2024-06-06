@@ -4,7 +4,7 @@
 #include <include/types.h>
 #include "idt.h"
 
-typedef void (*handler_t)(InterruptRegisters* regs);
+typedef InterruptRegisters* (*handler_t)(InterruptRegisters* regs);
 
 void IRQ_installHandler(int irq, handler_t handler);
 void IRQ_uninstallHandler(int irq);

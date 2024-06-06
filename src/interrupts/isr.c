@@ -1,5 +1,6 @@
 #include "isr.h"
 #include <lib/print.h>
+#include <kernel/io.h>
 
 char* exception_messages[] = {
     "Division By Zero",
@@ -38,16 +39,14 @@ char* exception_messages[] = {
 };
 
 InterruptRegisters* ISR_handler(InterruptRegisters* regs) {
-	kprintf("\n");
     if (regs->interrupt < 32) {
         kprintf("Unhandled Interrupt %x - error code: %x - rip: %x\n", regs->interrupt, regs->error_code, regs->iret_rip);
 		kprintf("Exception: %s\n", exception_messages[regs -> interrupt]);
         panic("\nCPU Panic");
-    } else {
-		kprintf("interrupt %d\n", regs->interrupt);
+    } else if (regs->interrupt > 32) {
+		kprintf("Interrupt %d\n", regs->interrupt);
+        outb(0x60, 0);
     }
-
-    
 
     return regs;
 }

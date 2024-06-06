@@ -1,27 +1,3 @@
-%macro isrnoerror 1
-global isr%1
-isr%1:
-    push 0
-    push %1
-    jmp isr_common
-%endmacro
-
-%macro isrerror 1
-global isr%1
-isr%1:
-    push %1
-    jmp isr_common
-%endmacro
-
-
-%macro IRQ 2
-    global irq%1
-    irq%1:
-        cli
-        push 0
-        push %2
-        jmp irq_common
-%endmacro
 
 %macro PUSHALL 0
     push rax
@@ -75,9 +51,6 @@ isr_common:
 
     add rsp, 16 ; Error code and interrupt number
 
-    sti
-    call PIC_eoi
-
     iretq
 
 
@@ -96,56 +69,71 @@ irq_common:
 
     iretq
 
+%macro ISR 2
+    global isr_%1
+    isr_%1:
+        %if %2 == 0
+            push qword 0                                    ; Push 0 as error code for interrupt without error code
+        %endif
+        push qword %1                                       ; Push interrupt number
+        %if %1 >= 32
+            jmp irq_common
+        %else
+            jmp isr_common
+        %endif
+        
+%endmacro
 
-isrnoerror  0
-isrnoerror  1
-isrnoerror  2
-isrnoerror  3
-isrnoerror  4
-isrnoerror  5
-isrnoerror  6
-isrnoerror  7
-isrerror    8
-isrnoerror  9
-isrerror    10
-isrerror    11
-isrerror    12
-isrerror    13
-isrerror    14
-isrnoerror  15
-isrnoerror  16
-isrerror    17
-isrnoerror  18
-isrnoerror  19
-isrnoerror  20
-isrnoerror  21
-isrnoerror  22
-isrnoerror  23
-isrnoerror  24
-isrnoerror  25
-isrnoerror  26
-isrnoerror  27
-isrnoerror  28
-isrnoerror  29
-isrerror    30
-isrnoerror  31
+ISR 0, 0
+ISR 1, 0
+ISR 2, 0
+ISR 3, 0
+ISR 4, 0
+ISR 5, 0
+ISR 6, 0
+ISR 7, 0
+ISR 8, 1
+ISR 9, 0
+ISR 10, 1
+ISR 11, 1
+ISR 12, 1
+ISR 13, 1
+ISR 14, 1
+ISR 15, 0
+ISR 16, 0
+ISR 17, 1
+ISR 18, 0
+ISR 19, 0
+ISR 20, 0
+ISR 21, 1
+ISR 22, 0
+ISR 23, 0
+ISR 24, 1
+ISR 25, 0
+ISR 26, 0
+ISR 27, 0
+ISR 28, 1
+ISR 29, 1
+ISR 30, 1
+ISR 31, 0
 
-isrerror    128
-isrnoerror  177
+%assign i 32
+%rep 224
+    ISR i, 0
+    %assign i i+1
+%endrep
 
-IRQ         0,  32
-IRQ         1,  33
-IRQ         2,  34
-IRQ         3,  35
-IRQ         4,  36
-IRQ         5,  37
-IRQ         6,  38
-IRQ         7,  39
-IRQ         8,  40
-IRQ         9,  41
-IRQ         10, 42
-IRQ         11, 43
-IRQ         12, 44
-IRQ         13, 45
-IRQ         14, 46
-IRQ         15, 47
+; ISR stubs table
+section .data
+
+%macro ISR_ARR 1
+    dq isr_%1
+%endmacro
+
+global isr_stub_table
+isr_stub_table:
+%assign i 0
+%rep 256
+    ISR_ARR i
+    %assign i i+1
+%endrep
