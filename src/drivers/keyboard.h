@@ -5,7 +5,9 @@
 #include <include/types.h>
 #include <interrupts/idt.h>
 
+
 InterruptRegisters* keyboard_handler(InterruptRegisters* regs);
 void keyboard_init();
+char getch(u8 scancode);
 
 #endif
