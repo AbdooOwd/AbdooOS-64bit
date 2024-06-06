@@ -16,6 +16,34 @@ void set_pixel(int x, int y, u32 color) {
         fb_addr[get_offset(x, y)] = color;
 }
 
+void scroll_pixel_line() {
+    /*
+        The idea: start by 1st line, clear it, save the next line (start of real iteration)
+        then set previous line to this saved line. EZ enough.
+    */
+    for (size_t line = 0; line < SCREEN_HEIGHT; line++) {
+        for (size_t pixel = 0; pixel < SCREEN_WIDTH; pixel++) {
+
+            if (line == 0) {
+                // clear first line
+                set_pixel(pixel, line, BLACK);
+                continue;
+            }
+
+            // empty last line
+            //if (line + 1 >= SCREEN_HEIGHT) {
+            //    set_pixel(pixel, line, BLACK);
+            //    continue;
+            //}
+
+            set_pixel(pixel, line - 1, fb_addr[get_offset(pixel, line)]);
+        }
+    }
+}
+
+
+
+
 // stolen from "https://github.com/lucianoforks/tetris-os/blob/master/src/font.c"
 void print_char_at(char c, int x, int y, u32 color) {
 #if DEBUG_E9_PORT
@@ -36,6 +64,27 @@ void print_char_at(char c, int x, int y, u32 color) {
                     // erase anything that's under the char (haha bye unwanted cursor)
                     set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, BLACK);
             }
+        }
+    }
+
+
+    // handle screen's limit printing
+    if (x + 1 >= SCREEN_WIDTH / 8) {
+        x = 0;
+        y++;
+    } else if (c != '\n') x++;
+    /*  ^  ^  ^  ^  ^  ^  ^  ^
+        We put this in an else-if instead of a single if cuz
+        or else it will offset the char by one when returning 
+        on line after reaching the screen's border
+    */
+
+    // scroll handling
+    if (y + 1 >= SCREEN_HEIGHT / 8) {
+        for (size_t i = 0; i < 8; i++) {
+            scroll_pixel_line();
+            y = SCREEN_HEIGHT / 8 - 2;
+            x = 0;
         }
     }
 

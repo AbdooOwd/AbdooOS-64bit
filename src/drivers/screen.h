@@ -14,6 +14,7 @@
 extern struct limine_framebuffer *framebuffer;
 extern volatile u32* fb_addr;
 
+
 #define SCREEN_WIDTH    framebuffer->width
 #define SCREEN_HEIGHT   framebuffer->height
 
@@ -37,6 +38,8 @@ Vector2 get_cursor();
 void draw_cursor(int x, int y);
 
 void set_pixel(int x, int y, u32 color);
+void scroll_pixel_line();
+void scrollFramebuffer(u32 rows);
 void fill_screen(u32 color);
 void draw_cell(int x, int y, u32 color);
 void clear_screen();
