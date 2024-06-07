@@ -6,6 +6,7 @@
 #include <lib/string.h>
 #include <kernel/io.h>
 #include <cpu/pic.h>
+#include <cpu/cpu.h>
 
 
 #define KBD_DATA_PORT 	0x60
@@ -143,6 +144,8 @@ void keyboard_init() {
 
 void user_input(char* input) {
 
+    lower(input);
+
     if (strsame(input, "help"))
         for (size_t cmd = 0; cmd < sizeof(commands) / sizeof(command_t); cmd++)
             kprintf(" - %s: %s\n", commands[cmd].command, commands[cmd].description);
@@ -153,6 +156,11 @@ void user_input(char* input) {
             "with the goal of learning about computer science "
             "both hardware and software.\n"
         );
+    }
+
+    if (strsame(input, "exit")) {
+        kprintf("Halting CPU\n");
+        halt();
     }
 
     print("$ ");
