@@ -2,6 +2,7 @@
 #include "screen.h"
 #include <interrupts/irq.h>
 #include <include/functions.h>
+#include <include/globals.h>
 #include <lib/print.h>
 #include <lib/string.h>
 #include <kernel/io.h>
@@ -156,6 +157,11 @@ void user_input(char* input) {
             "with the goal of learning about computer science "
             "both hardware and software.\n"
         );
+    }
+
+    if (strsame(input, "chngfont")) {
+        use_moon_font = !use_moon_font;
+        kprintf("Changed font successfullly!\n");
     }
 
     if (strsame(input, "exit")) {

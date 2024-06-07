@@ -2,6 +2,7 @@
 #include <include/fonts.h>
 #include <lib/string.h>
 #include <kernel/io.h>
+#include <include/globals.h>
 
 
 struct limine_framebuffer *framebuffer;
@@ -9,6 +10,8 @@ volatile u32* fb_addr;
 
 Vector2 font_dimensions = {8, 8};
 Vector2 cursor_position = {0, 0};
+
+bool use_moon_font = false;
 
 
 void set_pixel(int x, int y, u32 color) {
@@ -53,11 +56,15 @@ void print_char_at(char c, int x, int y, u32 color) {
         y++;
         x = 0;
     } else {
-        const u8 *glyph = font[(size_t) c];
-
         for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
             for (size_t xx = 0; xx < (size_t) font_dimensions.x; xx++) {
-                if (glyph[yy] & (1 << xx))
+                bool can_draw;
+
+                // handle two fonts
+                if (use_moon_font)  can_draw = (moon_font[c * font_dimensions.y + yy]) & (1 << (7 - xx));
+                else                can_draw = (font[(size_t) c][yy]) & (1 << xx);
+
+                if (can_draw)
                     // Set the character's pixels
                     set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, color);
                 else 
@@ -65,6 +72,18 @@ void print_char_at(char c, int x, int y, u32 color) {
                     set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, BLACK);
             }
         }
+
+        /*for (int yy = 0; yy < font_dimensions.y; yy++) {
+	    	u8 selection = moon_font[c * font_dimensions.y + yy];
+	    	for (int xx = 0; xx < font_dimensions.x; xx++)
+	    	{
+	    		bool can_draw = selection & (1 << (7 - xx));
+	    		if (can_draw)
+	    			set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, WHITE);
+	    		else
+	    			set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, BLACK);
+	    	}
+	    }*/
     }
 
 
