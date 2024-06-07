@@ -25,3 +25,23 @@
 -   Implement Interrupts [ ]
 -   Receive Keyboard Input [ ]
 -   Implement `printf` [X]
+
+# File Systems
+
+-   Code memory-allocator.
+    -   Make a PMM.
+    -   Make a VMM.
+    -   Make an Allocator.
+
+## "Knowledge Map"
+
+-   Study exising OSs
+    -   [xv6](https://github.com/mit-pdos/xv6-public) 
+    (about 50 files and no folders).
+    -   Linux.
+
+## Getting Started
+
+-   Implement VFS
+    -    Check the Filesystem (get type).
+-   Implement an in-memory file system.
