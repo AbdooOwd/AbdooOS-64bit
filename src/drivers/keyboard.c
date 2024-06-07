@@ -51,7 +51,7 @@ typedef enum {
     NONE = 0xFFFFFFFF - 30,
     ALTGR = 0xFFFFFFFF - 31,
     NUMLCK = 0xFFFFFFFF - 32,
-} Special_Keys;
+} special_keys;
 
 
 const u64 layout[128] = {
@@ -72,31 +72,61 @@ const u64 layout[128] = {
     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN};
 
-char sc_ascii_US[] = { '?', '?', '1', '2', '3', '4', '5', '6',
+char ascii_US[] = { '?', '?', '1', '2', '3', '4', '5', '6',
     '7', '8', '9', '0', '-', '=', '?', '?', 'q', 'w', 'e', 'r', 't', 'y',
         'u', 'i', 'o', 'p', '[', ']', '?', '?', 'a', 's', 'd', 'f', 'g',
         'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
         'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' ' };
 
+command_t commands[] = {
+    { "help", "Helps, duh?" },
+    { "about", "Displays information about the "}
+};
 
 static char input_buffer[256];
+static bool shift_pressed;
 
 
 InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
 	u8 scancode = inb(KBD_DATA_PORT);
 
-	if (!(scancode & 0x80)) {	// if released
+    // if we press an unhandled 
+    if (scancode > SC_MAX && !(scancode == LSHIFT || scancode == (LSHIFT | 0x80))) return;
 
+
+    switch (scancode) {     // if pressed
+        case LSHIFT:
+            shift_pressed = true;
+            break;
+    }
+
+	if (scancode | 0x80) {	// if released
 		switch (scancode) {
-			case 0x0E:
-				backspace(input_buffer);
-				print_backspace();
+			case BACKSPACE:
+                if (strlen(input_buffer) > 0) {
+				    backspace(input_buffer);
+				    print_backspace();
+                }
 				break;
-			
+            
+            case ENTER:
+                print("\n");
+                user_input(input_buffer);
+                input_buffer[0] = '\0';
+                break;
+            
+            case LSHIFT | 0x80:     // we released shift
+                shift_pressed = false;
+                break;
+
 			default:
-				append(input_buffer, getch(scancode));
-				kprintf("%c", getch(scancode));
-		}
+                char c = getch(scancode);
+                if (shift_pressed) c = upper_char(c);
+                if (scancode != LSHIFT) {
+				    append(input_buffer, c);
+				    kprintf("%c", c);
+                }
+        }
 	}
 	
 
@@ -104,9 +134,26 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
 }
 
 char getch(u8 scancode) {
-	return layout[scancode];
+	return ascii_US[scancode];
 }
 
 void keyboard_init() {
 	IRQ_installHandler(1, keyboard_handler);
+}
+
+void user_input(char* input) {
+
+    if (strsame(input, "help"))
+        for (size_t cmd = 0; cmd < sizeof(commands) / sizeof(command_t); cmd++)
+            kprintf(" - %s: %s\n", commands[cmd].command, commands[cmd].description);
+
+    if (strsame(input, "about")) {
+        kprintf(
+            "AbdooOS is a hobby x86-64 operating system made for fun "
+            "with the goal of learning about computer science "
+            "both hardware and software.\n"
+        );
+    }
+
+    print("$ ");
 }

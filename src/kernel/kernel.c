@@ -1,9 +1,8 @@
 #include "kernel.h"
 #include <cpu/cpu.h>
 #include <drivers/screen.h>
-#include <lib/util/util.h>
-#include <lib/print.h>
 #include <include/globals.h>
+#include <lib/print.h>
 #include "hal/hal.h"
 
 void kernel_init() {
@@ -13,13 +12,15 @@ void kernel_init() {
     HAL_init();
 
     print("Booted AbdooOS Successfully!\n");
-    // clear_screen();
+    clear_screen();
 
     kernel_main();
 }
 
 void kernel_main() {
-    print("Welcome to your life!\n");
+    kprintf(" - - - AbdooOS %s - - -\n", ABDOOOS_VERSION);
+
+    print("\n$ ");
 
     for (;;) ;
 }

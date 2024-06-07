@@ -101,7 +101,7 @@ void print_string_at(char* str, int x, int y, u32 color) {
     while (*str) {
         print_char_at(*str, x, y, color);
 
-        if (*str == '\n') y++;
+        if (*str == '\n') { y++; x = 0; }
         else x++;
 
         str++;
