@@ -161,6 +161,24 @@ void user_input(char* input) {
 
     if (strsame(input, "chngfont")) {
         use_moon_font = !use_moon_font;
+
+        int old_font_height = font_dimensions.y;
+
+        if (use_moon_font) {
+            font_dimensions.x = 8;
+            font_dimensions.y = 16;
+        } else {
+            font_dimensions.x = 8;
+            font_dimensions.y = 8;
+        }
+
+        // Update cursor position based on new font height
+
+        set_cursor(
+            get_cursor().x,
+            (get_cursor().y * old_font_height + font_dimensions.y) / font_dimensions.y
+        );
+
         kprintf("Changed font successfullly!\n");
     }
 

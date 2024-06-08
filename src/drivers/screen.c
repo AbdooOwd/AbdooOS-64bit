@@ -61,7 +61,7 @@ void print_char_at(char c, int x, int y, u32 color) {
                 bool can_draw;
 
                 // handle two fonts
-                if (use_moon_font)  can_draw = (moon_font[c * font_dimensions.y + yy]) & (1 << (7 - xx));
+                if (use_moon_font)  can_draw = (ibm_pgc[c * font_dimensions.y + yy]) & (1 << (7 - xx));
                 else                can_draw = (font[(size_t) c][yy]) & (1 << xx);
 
                 if (can_draw)
@@ -88,7 +88,7 @@ void print_char_at(char c, int x, int y, u32 color) {
 
 
     // handle screen's limit printing
-    if (x + 1 >= SCREEN_WIDTH / 8) {
+    if (x + 1 >= SCREEN_WIDTH / font_dimensions.x) {
         x = 0;
         y++;
     } else if (c != '\n') x++;
@@ -99,10 +99,10 @@ void print_char_at(char c, int x, int y, u32 color) {
     */
 
     // scroll handling
-    if (y + 1 >= SCREEN_HEIGHT / 8) {
-        for (size_t i = 0; i < 8; i++) {
+    if (y + 1 >= SCREEN_HEIGHT / font_dimensions.y) {
+        for (size_t i = 0; i < font_dimensions.y; i++) {
             scroll_pixel_line();
-            y = SCREEN_HEIGHT / 8 - 2;  // another -1 cuz screen_height doesn't start from 0
+            y = SCREEN_HEIGHT / font_dimensions.y - 2;  // another -1 cuz screen_height doesn't start from 0
             x = 0;
         }
     }

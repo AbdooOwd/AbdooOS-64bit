@@ -32,10 +32,10 @@ extern Vector2 cursor_position;
 
 // functions
 
-u32 get_offset(int x, int y);
-void set_cursor(int x, int y);
+u32 	get_offset(int x, int y);
+void 	set_cursor(int x, int y);
 Vector2 get_cursor();
-void draw_cursor(int x, int y);
+void 	draw_cursor(int x, int y);
 
 void set_pixel(int x, int y, u32 color);
 void scroll_pixel_line();
