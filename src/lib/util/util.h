@@ -4,11 +4,6 @@
 
 #include <include/types.h>
 
-typedef struct {
-    int x;
-    int y;
-} Vector2;
-
 void array_copy(unsigned char* source, unsigned char* dest);
 char* int_to_str(int num);
 
