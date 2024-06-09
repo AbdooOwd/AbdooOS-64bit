@@ -82,7 +82,9 @@ char ascii_US[] = { '?', '?', '1', '2', '3', '4', '5', '6',
 
 command_t commands[] = {
     { "help", "Helps, duh?" },
-    { "about", "Displays information about the "}
+    { "about", "Displays information about the OS."},
+    { "chngfont", "Changes the font."},
+    { "exit", "Halts the CPU, resulting in stopping all of its processing."}
 };
 
 static char input_buffer[256];
