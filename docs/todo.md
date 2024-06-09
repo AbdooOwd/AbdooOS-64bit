@@ -28,6 +28,7 @@
 
 # File Systems
 
+-   Code paging.
 -   Code memory-allocator.
     -   Make a PMM.
     -   Make a VMM.
