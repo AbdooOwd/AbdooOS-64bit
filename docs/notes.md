@@ -11,3 +11,12 @@
 -   Run `addr2line -e mykernel.elf 0xADDRESSOFFAULT` to get assembly of address.
 
 -   Interrupts between 0 and 32 are exceptions, after it are ISQs.
+
+-   Requests for Limine: 
+    ```c
+    __attribute__((used, section(".requests")))
+    static struct limine_xxxxx_request xxxxx_request = {
+        .id = LIMINE_XXXXXX_REQUEST,
+        .revision = 0
+    };
+    ```
