@@ -1,9 +1,10 @@
 #ifndef FONTS_H
 #define FONTS_H
-
 #pragma once
 
-// TODO: Add some kind of way to choose a font by its stringname
+#include "types.h"
+
+// TODO: Add some kind of way to choose a font by its stringname (dictionary)
 
 
 // stolen from stackoverflow
