@@ -485,13 +485,10 @@
 //
 // ----------------------------------------------------------------------------
 
-//#include <stddef.h>
-//#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
+#include <lib/string.h>
+#include <lib/mem.h>
+#include <include/functions.h>
 #include "malloc.h"
-
 #include "malloc_cfg.h"   //-- user-dependent
 
 #ifndef UMM_MALLOC_CFG__DONT_BUILD
@@ -576,6 +573,8 @@ UMM_HEAP_INFO heapInfo;
 
 void *umm_info( void *ptr, int force ) {
 
+   UNUSED(force);
+
    unsigned short int blockNo = 0;
 
    // Protect the critical section...
@@ -585,7 +584,7 @@ void *umm_info( void *ptr, int force ) {
    // Clear out all of the entries in the heapInfo structure before doing
    // any calculations..
    //
-   memset( &heapInfo, 0, sizeof( heapInfo ) );
+   memset( (u64*) &heapInfo, 0, sizeof( heapInfo ) );
 
    // Now loop through the block lists, and keep track of the number and size
    // of used and free blocks. The terminating condition is an nb pointer with
@@ -895,7 +894,7 @@ void *umm_malloc( size_t size ) {
 
       UMM_NFREE(UMM_PFREE(cf)) = cf+blocks;
 
-      memcpy( &UMM_BLOCK(cf+blocks), &UMM_BLOCK(cf), sizeof(umm_block) );
+      memcpy( (u64*) &UMM_BLOCK(cf+blocks), (u64*) &UMM_BLOCK(cf), sizeof(umm_block) );
 
       UMM_NBLOCK(cf)           = cf+blocks;
       UMM_PBLOCK(cf+blocks)    = cf;

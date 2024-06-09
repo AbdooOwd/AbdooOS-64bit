@@ -1,17 +1,14 @@
 #include "mem.h"
-#include <mm/wmalloc.h>
 #include <mm/malloc.h>
 #include <cpu/cpu.h>
 
 bool alloc_test() {
-    kprintf("Allocating 8 bytes\n");
     void* mem_test = umm_malloc(8);
-    kprintf("Free'ing 8 bytes\n");
     umm_free(mem_test);
     return mem_test != NULL;
 }
 
-void memcpy(u8* source, u8* dest, int no_bytes) {
+void memcpy(u64* source, u64* dest, int no_bytes) {
     size_t i;
     for (i = 0; (int) i < no_bytes; i++) {
         *(dest + i) = *(source + i);

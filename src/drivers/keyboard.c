@@ -96,7 +96,7 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
 	u8 scancode = inb(KBD_DATA_PORT);
 
     // if we press an unhandled 
-    if (scancode > SC_MAX && !(scancode == LSHIFT || scancode == (LSHIFT | 0x80))) return;
+    if (scancode > SC_MAX && !(scancode == LSHIFT || scancode == (LSHIFT | 0x80))) return regs;
 
 
     switch (scancode) {     // if pressed

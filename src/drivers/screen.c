@@ -1,8 +1,9 @@
 #include "screen.h"
 #include <include/fonts.h>
-#include <lib/string.h>
-#include <kernel/io.h>
 #include <include/globals.h>
+#include <lib/string.h>
+#include <lib/print.h>
+#include <kernel/io.h>
 
 
 struct limine_framebuffer *framebuffer;
@@ -88,7 +89,7 @@ void print_char_at(char c, int x, int y, u32 color) {
 
 
     // handle screen's limit printing
-    if (x + 1 >= SCREEN_WIDTH / font_dimensions.x) {
+    if (x + 1 >= (int) SCREEN_WIDTH / font_dimensions.x) {
         x = 0;
         y++;
     } else if (c != '\n') x++;
@@ -99,8 +100,8 @@ void print_char_at(char c, int x, int y, u32 color) {
     */
 
     // scroll handling
-    if (y + 1 >= SCREEN_HEIGHT / font_dimensions.y) {
-        for (size_t i = 0; i < font_dimensions.y; i++) {
+    if (y + 1 >= (int) (SCREEN_HEIGHT / font_dimensions.y)) {
+        for (size_t i = 0; i < (size_t) font_dimensions.y; i++) {
             scroll_pixel_line();
             y = SCREEN_HEIGHT / font_dimensions.y - 2;  // another -1 cuz screen_height doesn't start from 0
             x = 0;
