@@ -189,6 +189,10 @@ void user_input(char* input) {
         run_tests();
     }
 
+    if (strsame(input, "crashme")) {
+        crash_me();
+    }
+
     if (strsame(input, "exit")) {
         kprintf("Halting CPU\n");
         halt();

@@ -20,12 +20,12 @@ void kernel_init() {
     HAL_init();
 
     print("Booted AbdooOS Successfully!\n");
-    clear_screen();
 
     kernel_main();
 }
 
 void kernel_main() {
+    clear_screen();
     kprintf(" - - - AbdooOS %s - - -\n", ABDOOOS_VERSION);
 
     print("\n$ ");
