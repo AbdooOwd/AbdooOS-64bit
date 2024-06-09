@@ -1,5 +1,6 @@
 #include "keyboard.h"
 #include "screen.h"
+#include "tester.h"
 #include <interrupts/irq.h>
 #include <include/functions.h>
 #include <include/globals.h>
@@ -182,6 +183,10 @@ void user_input(char* input) {
         );
 
         kprintf("Changed font successfullly!\n");
+    }
+
+    if (strsame(input, "runtests")) {
+        run_tests();
     }
 
     if (strsame(input, "exit")) {
