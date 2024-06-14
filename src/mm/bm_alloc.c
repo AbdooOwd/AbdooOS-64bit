@@ -1,0 +1,31 @@
+#include "bm_alloc.h"
+
+void* bitmap_malloc(size_t size) {
+    if (size > BLOCK_SIZE) {
+        // Requested size is too large for a single block
+        return NULL;
+    }
+
+    // Find a free block
+    for (size_t i = 0; i < NUM_BLOCKS; i++) {
+        if (!BIT_CHECK(bitmap, i)) {
+            // Mark the block as used
+            BIT_SET(bitmap, i);
+            // Return the pointer to the memory block
+            return &memory[i * BLOCK_SIZE];
+        }
+    }
+
+    // No free block found
+    return NULL;
+}
+
+void bitmap_free(void* ptr) {
+    // Calculate the block index from the pointer
+    size_t block_index = ((u8*)ptr - memory) / BLOCK_SIZE;
+
+    if (block_index < NUM_BLOCKS) {
+        // Mark the block as free
+        BIT_CLEAR(bitmap, block_index);
+    }
+}

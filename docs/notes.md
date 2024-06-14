@@ -20,3 +20,10 @@
         .revision = 0
     };
     ```
+
+-   When trying to get the size of a data type by doing `sizeof(datatype)`,
+    even if your variable is a pointer *(e.g `datatype* variable = ...;`)*,
+    you **MUST NOT** include the star at the end. So to get the size of the datatype
+    when we're calculating somehting for `datatype* variable;`, we take the **type's size**.
+    Not its **pointer size**.
+    
