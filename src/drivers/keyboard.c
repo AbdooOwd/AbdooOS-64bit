@@ -150,6 +150,11 @@ void user_input(char* input) {
 
     lower(input);
 
+
+    if (strsame(input, "dev")) {
+        
+    }
+
     if (strsame(input, "help"))
         for (size_t cmd = 0; cmd < sizeof(commands) / sizeof(command_t); cmd++)
             kprintf(" - %s: %s\n", commands[cmd].command, commands[cmd].description);
