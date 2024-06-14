@@ -41,6 +41,16 @@ void strcpy(char* dest, char* src) {
     *dest = '\0';
 }
 
+void strlcpy(char* dest, char* src, size_t size) {
+    if (strlen(src) > size || strlen(dest) > size)
+        return;
+
+    while (*src) {
+        *dest++ = *src++;
+    }
+    dest[size - 1] = '\0';
+}
+
 int strcmp(char* s1, char* s2) {
     size_t i;
     for (i = 0; s1[i] == s2[i]; i++) {

@@ -16,6 +16,7 @@ void backspace(char* s);
 void backspaces(char* str, int times);
 
 void strcpy(char* dest, char* src);
+void strlcpy(char* dest, char* src, size_t size);
 char* strcat(char* str1, char* str2);
 int strcmp(char* s1, char* s2);
 bool strsame(char* str1, char* str2);
