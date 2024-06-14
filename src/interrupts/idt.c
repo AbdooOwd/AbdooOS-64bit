@@ -10,7 +10,7 @@ IDTEntry idt[IDT_ENTRY_COUNT];
 extern u64 isr_stub_table[IDT_ENTRY_COUNT];
 
 void IDT_load(void) {
-    asm volatile("lidt %0" : : "m"(idtr) : "memory");
+    __asm__ volatile("lidt %0" : : "m"(idtr) : "memory");
 }
 
 void interrupts_init() {

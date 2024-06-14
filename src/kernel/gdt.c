@@ -21,7 +21,7 @@ void GDT_setEntry(u8 num, u32 base, u16 limit, u8 access, u8 flags) {
 }
 
 void GDT_load(GDTR le_gdt_pointer) {
-    asm volatile("lgdt %0\n\t"
+    __asm__ volatile("lgdt %0\n\t"
                  "push $0x08\n\t"
                  "lea 1f(%%rip), %%rax\n\t"
                  "push %%rax\n\t"
@@ -70,7 +70,7 @@ void GDT_init() {
 void tss_load(void) {
     kprintf("Loading TSS at %X...\n", &the_gdt.tss);
     // this must be the offset of tss
-    asm volatile("mov $0x28, %%ax\n\t"
+    __asm__ volatile("mov $0x28, %%ax\n\t"
                  "ltr %%ax\n\t"
                  :
                  :

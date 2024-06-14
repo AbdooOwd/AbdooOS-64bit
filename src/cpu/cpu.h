@@ -13,9 +13,9 @@ void panic(char* fmt, ...);
 extern void crash_me(void);
 
 static inline void halt(void) {
-    asm ("cli");
+    __asm__ ("cli");
     for (;;) {
-        asm ("hlt");
+        __asm__ ("hlt");
     }
 }
 
