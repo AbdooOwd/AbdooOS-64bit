@@ -488,7 +488,7 @@
 #include <lib/string.h>
 #include <lib/mem.h>
 #include <include/functions.h>
-#include "malloc.h"
+#include "umm_malloc.h"
 #include "malloc_cfg.h"   //-- user-dependent
 
 #ifndef UMM_MALLOC_CFG__DONT_BUILD

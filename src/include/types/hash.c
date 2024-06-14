@@ -1,5 +1,5 @@
 #include "hash.h"
-#include <mm/malloc.h>
+#include <mm/umm_malloc.h>
 #include <lib/string.h>
 
 

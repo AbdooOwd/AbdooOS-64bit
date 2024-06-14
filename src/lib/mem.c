@@ -1,5 +1,5 @@
 #include "mem.h"
-#include <mm/malloc.h>
+#include <mm/umm_malloc.h>
 #include <cpu/cpu.h>
 
 bool alloc_test() {
