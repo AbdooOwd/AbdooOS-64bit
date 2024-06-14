@@ -75,7 +75,7 @@ int IMFS_file_delete(IMFS* imfs, char* filename) {
 		return -1;
 	
 	FileEntry* file = IMFS_file_get(imfs, filename);
-	file = NULL;
+	if (file != NULL) file = NULL;
 	
 	return 0;
 }
