@@ -9,9 +9,9 @@
 #define free	bitmap_free
 
 
-#define MEMORY_SIZE 1024 * 1024 // Total memory managed by the allocator (1MB)
-#define BLOCK_SIZE 4096         // Size of each memory block (4KB)
-#define NUM_BLOCKS (MEMORY_SIZE / BLOCK_SIZE) // Total number of blocks
+#define MEMORY_SIZE 1024 * 1024 * 64 			// Total memory managed by the allocator (64MB)
+#define BLOCK_SIZE 	1024 * 1024         		// Size of each memory block (1MB)
+#define NUM_BLOCKS 	(MEMORY_SIZE / BLOCK_SIZE) 	// Total number of blocks
 
 // Utility macros for setting and checking bits in the bitmap
 #define BIT_SET(bitmap, n) (bitmap[(n) / 8] |= (1 << ((n) % 8)))
