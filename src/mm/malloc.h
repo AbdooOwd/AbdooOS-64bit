@@ -10,6 +10,8 @@
 // ----------------------------------------------------------------------------
 
 
+#define malloc umm_malloc
+#define free   umm_free
 
 
 typedef struct UMM_HEAP_INFO_t {
