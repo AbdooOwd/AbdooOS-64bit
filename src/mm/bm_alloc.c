@@ -1,5 +1,8 @@
 #include "bm_alloc.h"
 
+u8 memory[MEMORY_SIZE]; // The memory array
+u8 bitmap[NUM_BLOCKS / 8]; // The bitmap array
+
 void* bitmap_malloc(size_t size) {
     if (size > BLOCK_SIZE) {
         // Requested size is too large for a single block
