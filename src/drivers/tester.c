@@ -37,7 +37,7 @@ bool test_memory() {
 }
 
 int test_imfs() {
-	char* ff = "minecraft.txt";
+	char* test_filename = "minecraft.txt";
         
     kprintf("Creating IMFS...\n");
     IMFS* imfs = IMFS_create();
@@ -49,33 +49,33 @@ int test_imfs() {
 
     kprintf("Created IMFS at %x with size of %x\n", &imfs, sizeof(IMFS));
 
-    if (IMFS_file_create(imfs, ff) == 0)
-        kprintf("Creating file '%s'\n", ff);
+    if (IMFS_file_create(imfs, test_filename) == 0)
+        kprintf("Creating file '%s'\n", test_filename);
     else {
-        kprintf("Failed to create '%s'\n", ff);
+        kprintf("Failed to create '%s'\n", test_filename);
         return -2;
     }
 
-    if (IMFS_file_write(imfs, ff, "COCO MARIO HAHA DIAMONDS") == 0)
-        kprintf("Wrote 'COCO MARIO HAHA DIAMONDS' to '%s'\n", ff);
+    if (IMFS_file_write(imfs, test_filename, "COCO MARIO HAHA DIAMONDS") == 0)
+        kprintf("Wrote 'COCO MARIO HAHA DIAMONDS' to '%s'\n", test_filename);
     else {
-        kprintf("Failed to write to '%s'\n", ff);
+        kprintf("Failed to write to '%s'\n", test_filename);
         return -3;
     }
 
     char le_buffer[MAX_FILENAME_LENGTH];
-    if (IMFS_file_read(imfs, ff, le_buffer) == 0) {
-        kprintf("Read '%s':\n", ff);
+    if (IMFS_file_read(imfs, test_filename, le_buffer) == 0) {
+        kprintf("Read '%s':\n", test_filename);
         kprintf("%s\n", le_buffer);
     } else {
-        kprintf("Failed to read '%s'\n", ff);
+        kprintf("Failed to read '%s'\n", test_filename);
         return -4;
     }
 
-    if (IMFS_file_delete(imfs, ff) == 0) 
-        kprintf("Deleted '%s'\n", ff);
+    if (IMFS_file_delete(imfs, test_filename) == 0) 
+        kprintf("Deleted '%s'\n", test_filename);
     else {
-        kprintf("Failed to deleted '%s'\n", ff);
+        kprintf("Failed to deleted '%s'\n", test_filename);
 		return -5;
 	}
 
