@@ -3,7 +3,7 @@
 #include <lib/string.h>
 #include <lib/mem.h>
 #include <mm/bm_alloc.h>
-#include "imfs.h"
+#include <fs/imfs.h>
 
 
 #define TEST_COUNT	4
