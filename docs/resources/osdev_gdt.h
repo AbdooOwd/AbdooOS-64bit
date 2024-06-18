@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 // Each define here is for a specific flag in the descriptor.
 // Refer to the intel documentation for a description of what each one does.
 #define SEG_DESCTYPE(x)  ((x) << 0x04) // Descriptor type (0 for system, 1 for code/data)
@@ -49,6 +51,8 @@
                      SEG_LONG(0)     | SEG_SIZE(1) | SEG_GRAN(1) | \
                      SEG_PRIV(3)     | SEG_DATA_RDWR
 
+extern void kprintf(const char* fmt, ...);
+
 void create_descriptor(uint32_t base, uint32_t limit, uint16_t flag) {
     uint64_t descriptor;
 
@@ -65,7 +69,7 @@ void create_descriptor(uint32_t base, uint32_t limit, uint16_t flag) {
     descriptor |= base  << 16;                       // set base bits 15:0
     descriptor |= limit  & 0x0000FFFF;               // set limit bits 15:0
 
-    printf("0x%.16llX\n", descriptor);
+    kprintf("0x%.16llX\n", descriptor);
 }
 
 #endif
