@@ -21,6 +21,7 @@
 
 extern u8 memory[MEMORY_SIZE]; // The memory array
 extern u8 bitmap[NUM_BLOCKS / 8]; // The bitmap array
+extern u64 used_bits;
 
 // functions
 
