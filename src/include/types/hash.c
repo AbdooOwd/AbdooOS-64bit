@@ -31,7 +31,7 @@ HashTable* hash_create() {
 	return hash;
 }
 
-HashEntry* hash_pair(char* key, char* value) {
+HashEntry* hash_pair(void* key, void* value) {
 	HashEntry* entry = malloc(sizeof(HashEntry));
 
 	entry->key = malloc(strlen(key) + 1);
@@ -45,7 +45,7 @@ HashEntry* hash_pair(char* key, char* value) {
 	return entry;
 }
 
-void hash_set(HashTable* hash_table, char* key, char* value) {
+void hash_set(HashTable* hash_table, void* key, void* value) {
 	size_t index = hash(key);
 
 	HashEntry* entry = hash_table->hash_entries[index];
@@ -74,7 +74,7 @@ void hash_set(HashTable* hash_table, char* key, char* value) {
 	prev->next = (struct HashEntry*) hash_pair(key, value);
 }
 
-char* hash_get(HashTable* hash_table, char* key) {
+char* hash_get(HashTable* hash_table, void* key) {
 	size_t index = hash(key);
 	if (index >= HASH_MAX_CAPACITY)
 		return NULL;

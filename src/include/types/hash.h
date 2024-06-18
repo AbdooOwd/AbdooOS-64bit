@@ -19,8 +19,8 @@ typedef struct {
 
 u64 hash(const char *key);
 HashTable* hash_create();
-HashEntry* hash_pair(char* key, char* value);
-void hash_set(HashTable* hash, char* key, char* value);
-char* hash_get(HashTable* hash, char* le_key);
+HashEntry* hash_pair(void* key, void* value);
+void hash_set(HashTable* hash, void* key, void* value);
+char* hash_get(HashTable* hash, void* le_key);
 
 #endif
