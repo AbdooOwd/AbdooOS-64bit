@@ -60,8 +60,7 @@ int strcmp(char* s1, char* s2) {
 }
 
 bool strsame(char* str1, char* str2) {
-    if (strcmp(str1, str2) == 0) return true;
-    return false;
+    return strcmp(str1, str2) == 0;
 }
 
 void merge_strings(char* str1, char* str2, char* result) {
