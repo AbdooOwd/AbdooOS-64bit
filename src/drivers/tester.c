@@ -2,6 +2,7 @@
 #include <lib/print.h>
 #include <lib/string.h>
 #include <lib/mem.h>
+#include <mm/bm_alloc.h>
 #include "imfs.h"
 
 
@@ -65,7 +66,7 @@ int test_imfs() {
 
     char le_buffer[MAX_FILENAME_LENGTH];
     if (IMFS_file_read(imfs, test_filename, le_buffer) == 0) {
-        kprintf("Read '%s': \"%s\"", test_filename, le_buffer);
+        kprintf("Read '%s': \"%s\"\n", test_filename, le_buffer);
     } else {
         kprintf("Failed to read '%s'\n", test_filename);
         return -4;
@@ -77,6 +78,10 @@ int test_imfs() {
         kprintf("Failed to deleted '%s'\n", test_filename);
 		return -5;
 	}
+
+    kprintf("> IMFS Test: Successful!\n");
+
+    free(imfs);
 
     return 0;
 }
