@@ -20,13 +20,15 @@ typedef struct {
 } IMFS;
 
 
+extern IMFS* imfs;
+
 /* functions */
 
 void 		IMFS_create			();
 bool 		IMFS_file_exists	(char* filename);
 int 		IMFS_file_create	(char* filename);
-int 		IMFS_file_write		(char* filename, char* data);
-int 		IMFS_file_read		(char* filename, char* buffer);
+int 		IMFS_file_write		(char* filename, void* data, size_t size);
+int 		IMFS_file_read		(char* filename, void* buffer, size_t size);
 int 		IMFS_file_delete	(char* filename);
 FileEntry* 	IMFS_file_get		(char* filename);
 

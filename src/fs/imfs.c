@@ -43,7 +43,7 @@ int IMFS_file_create(char* filename) {
 	return 0;
 }
 
-int IMFS_file_write(char* filename, char* data) {
+int IMFS_file_write(char* filename, void* data, size_t size) {
 	if (strlen(data) > MAX_FILE_SIZE)
 		return -1;
 	
@@ -61,7 +61,7 @@ int IMFS_file_write(char* filename, char* data) {
 	return 0;
 }
 
-int IMFS_file_read(char* filename, char* buffer) {
+int IMFS_file_read(char* filename, void* buffer, size_t size) {
 	if (IMFS_file_exists(filename)) {
 		FileEntry* file = IMFS_file_get(filename);
 		strlcpy(buffer, file->data, MAX_FILE_SIZE);
