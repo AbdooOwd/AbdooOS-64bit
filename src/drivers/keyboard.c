@@ -9,6 +9,7 @@
 #include <kernel/io.h>
 #include <cpu/pic.h>
 #include <cpu/cpu.h>
+#include <mm/bm_alloc.h>
 
 
 #define KBD_DATA_PORT 	0x60
@@ -192,6 +193,13 @@ void user_input(char* input) {
 
     if (strsame(input, "runtests")) {
         run_tests();
+    }
+
+    if (strsame(input, "info")) {
+        kprintf("> MEMORY INFO\n");
+        kprintf(" - Bitmap Memory Pool Start: %x\n", &memory);
+        kprintf(" - Bitmap Memory Pool Size: %x or %d bits\n", MEMORY_SIZE, MEMORY_SIZE);
+        kprintf(" - Bitmap Memory Currently used space: bit %d or %x\n", used_bits, used_bits);
     }
 
     if (strsame(input, "crashme")) {
