@@ -22,12 +22,12 @@ typedef struct {
 
 /* functions */
 
-IMFS* 		IMFS_create			();
-bool 		IMFS_file_exists	(IMFS* imfs, char* filename);
-int 		IMFS_file_create	(IMFS* imfs, char* filename);
-int 		IMFS_file_write		(IMFS* imfs, char* filename, char* data);
-int 		IMFS_file_read		(IMFS* imfs, char* filename, char* buffer);
-int 		IMFS_file_delete	(IMFS* imfs, char* filename);
-FileEntry* 	IMFS_file_get		(IMFS* imfs, char* filename);
+void 		IMFS_create			();
+bool 		IMFS_file_exists	(char* filename);
+int 		IMFS_file_create	(char* filename);
+int 		IMFS_file_write		(char* filename, char* data);
+int 		IMFS_file_read		(char* filename, char* buffer);
+int 		IMFS_file_delete	(char* filename);
+FileEntry* 	IMFS_file_get		(char* filename);
 
 #endif

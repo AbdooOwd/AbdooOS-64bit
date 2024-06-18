@@ -5,16 +5,16 @@
 
 // TODO: Use hash tables to find files by filename
 
-IMFS* IMFS_create() {
-	IMFS* new_imfs = malloc(sizeof(IMFS));
+IMFS* imfs;
 
-	if (new_imfs)
-		new_imfs->count = 0;
+void IMFS_create() {
+	imfs = malloc(sizeof(IMFS));
 
-	return new_imfs;
+	if (imfs)
+		imfs->count = 0;
 }
 
-bool IMFS_file_exists(IMFS* imfs, char* filename) {
+bool IMFS_file_exists(char* filename) {
 	for (size_t i = 0; i < imfs->count; i++) {
 		if (strsame(imfs->files[i].filename, filename))
 			return true;
@@ -23,10 +23,10 @@ bool IMFS_file_exists(IMFS* imfs, char* filename) {
 	return false;
 }
 
-int IMFS_file_create(IMFS* imfs, char* filename) {
+int IMFS_file_create(char* filename) {
 	/* errer handling */
 	
-	if (IMFS_file_exists(imfs, filename))
+	if (IMFS_file_exists(filename))
 		return -1;
 		
 	if (strlen(filename) > MAX_FILENAME_LENGTH)
@@ -43,17 +43,17 @@ int IMFS_file_create(IMFS* imfs, char* filename) {
 	return 0;
 }
 
-int IMFS_file_write(IMFS* imfs, char* filename, char* data) {
+int IMFS_file_write(char* filename, char* data) {
 	if (strlen(data) > MAX_FILE_SIZE)
 		return -1;
 	
-	if (!IMFS_file_exists(imfs, filename))
+	if (!IMFS_file_exists(filename))
 		return -2;
 
-	// if (!IMFS_file_exists(imfs, filename))
-	// 	IMFS_file_create(imfs, filename);
+	// if (!IMFS_file_exists(filename))
+	// 	IMFS_file_create(filename);
 	
-	FileEntry* file = IMFS_file_get(imfs, filename);
+	FileEntry* file = IMFS_file_get(filename);
 
 	strlcpy(file->data, data, MAX_FILE_SIZE);
 	file->size = strlen(data);
@@ -61,26 +61,26 @@ int IMFS_file_write(IMFS* imfs, char* filename, char* data) {
 	return 0;
 }
 
-int IMFS_file_read(IMFS* imfs, char* filename, char* buffer) {
-	if (IMFS_file_exists(imfs, filename)) {
-		FileEntry* file = IMFS_file_get(imfs, filename);
+int IMFS_file_read(char* filename, char* buffer) {
+	if (IMFS_file_exists(filename)) {
+		FileEntry* file = IMFS_file_get(filename);
 		strlcpy(buffer, file->data, MAX_FILE_SIZE);
 		return 0;
 	}
 	return -1;
 }
 
-int IMFS_file_delete(IMFS* imfs, char* filename) {
-	if (!IMFS_file_exists(imfs, filename))
+int IMFS_file_delete(char* filename) {
+	if (!IMFS_file_exists(filename))
 		return -1;
 	
-	FileEntry* file = IMFS_file_get(imfs, filename);
+	FileEntry* file = IMFS_file_get(filename);
 	if (file != NULL) file = NULL;
 	
 	return 0;
 }
 
-FileEntry* IMFS_file_get(IMFS* imfs, char* filename) {
+FileEntry* IMFS_file_get(char* filename) {
 	for (size_t i = 0; i < imfs->count; i++) {
 		if (strsame(filename, imfs->files[i].filename))
 			return &imfs->files[i];
