@@ -10,7 +10,7 @@
 
 
 #define MEMORY_SIZE 1024 * 1024 * 64 			// Total memory managed by the allocator (64MB)
-#define BLOCK_SIZE 	1024 * 128         			// Size of each memory block (128KiB)
+#define BLOCK_SIZE 	1024 * 4         			// Size of each memory block (128KiB)
 #define NUM_BLOCKS 	(MEMORY_SIZE / BLOCK_SIZE) 	// Total number of blocks
 
 // Utility macros for setting and checking bits in the bitmap
@@ -27,5 +27,6 @@ extern u64 used_bits;
 
 void* bitmap_malloc(size_t size);
 void bitmap_free(void* ptr);
+void bitmap_init();
 
 #endif
