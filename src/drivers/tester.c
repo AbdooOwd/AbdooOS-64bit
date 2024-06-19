@@ -4,6 +4,7 @@
 #include <lib/mem.h>
 #include <mm/bm_alloc.h>
 #include <fs/imfs.h>
+#include <fs/vfs.h>
 
 
 #define TEST_COUNT	4
@@ -38,6 +39,8 @@ bool test_memory() {
 }
 
 int test_imfs() {
+    kprintf("] IMFS TEST\n");
+
 	char* test_filename = "minecraft.txt";
         
     kprintf("Creating IMFS...\n");
@@ -88,12 +91,52 @@ int test_imfs() {
     return 0;
 }
 
+int test_vfs() {
+
+    kprintf("] VFS TEST\n");
+
+    kprintf("Initializing VFS\n");
+    vfs_init();
+
+    char* ff = "idiot.pp";
+    char* mnt_name = "";
+    strcpy(mnt_name, vfs->mountpoints[0]->name);
+
+    if (vfs_create(mnt_name, ff) == 0)
+        kprintf("Created '%s'\n", ff);
+    else {
+        kprintf("Failed to create '%s'\n", ff);
+        return -1;
+    }
+
+    char* msg = "Hello From VFS!";
+
+    if (vfs_write(mnt_name, ff, msg, sizeof(char) * strlen(msg)) == 0)
+        kprintf("Wrote '%s' to '%s'\n", msg, ff);
+    else {
+        kprintf("Failed to write '%s' to '%s'\n", msg, ff);
+        return -2;
+    }
+
+    char* buf = malloc(sizeof(char) * 64);
+
+    if (vfs_read(mnt_name, ff, buf, sizeof(char) * 64) == 0) {
+        kprintf("Successful read from '%s'\n", ff);
+        kprintf("Data: '%s'\n", buf);
+    } else {
+        kprintf("Failed to read from '%s'\n", ff);
+        return -3;
+    }
+
+    kprintf("> VFS Test Success!\n");
+
+    return 0;
+}
+
 bool run_tests() {
-    kprintf("Running IMFS tests\n\n");
     test_imfs();
     kprintf("\n\n");
-    kprintf("Running Memory tests\n");
-	test_memory();
+    test_vfs();
 
 	return true;
 }
