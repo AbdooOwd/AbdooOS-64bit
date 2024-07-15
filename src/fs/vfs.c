@@ -1,5 +1,6 @@
 #include "vfs.h"
 #include <lib/string.h>
+#include <lib/print.h>
 #include <mm/bm_alloc.h>
 #include <fs/imfs.h>
 
@@ -8,7 +9,7 @@ vfs_t* vfs;
 void vfs_init() {
 	vfs = (vfs_t*) malloc(sizeof(vfs_t));
 	if (vfs == NULL) return;
-	vfs->mountpoints = malloc(sizeof(mountpoint_t) * MAX_MOUNTPOINT_COUNT);
+	vfs->mountpoints = malloc(sizeof(mountpoint_t*) * MAX_MOUNTPOINT_COUNT);
 	if (vfs->mountpoints == NULL) return;
 	vfs->mountpoints_count = 0;
 
@@ -18,18 +19,17 @@ void vfs_init() {
 void mount(char* name, char* type) {
 	if (vfs->mountpoints_count >= MAX_MOUNTPOINT_COUNT) return;
 
-	mountpoint_t* new_mnt;
-
+	vfs->mountpoints[vfs->mountpoints_count] = (mountpoint_t*) malloc(sizeof(mountpoint_t));
+	mountpoint_t* new_mnt = vfs->mountpoints[vfs->mountpoints_count];
+	
 	strcpy(new_mnt->name, name);
 	strcpy(new_mnt->type, type);
 	new_mnt->files = (file_t**) malloc(sizeof(file_t) * MAX_FILE_COUNT);
 
 	if (new_mnt->files == NULL) return;
 
-
 	register_operations(new_mnt);
 
-	vfs->mountpoints[vfs->mountpoints_count] = new_mnt;
 	vfs->mountpoints_count++;
 }
 
