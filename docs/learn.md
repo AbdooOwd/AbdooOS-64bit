@@ -36,3 +36,13 @@ for a different architecture.
 You could code a little driver or function to test **ALL** the drivers.
 For example, having a `test_drivers` function in a `driver_tests.c` file.
 Then use these drivers with all their available methods and "ways of use".
+
+## Memory-related
+
+### Underrated stuff (*I* Underrated them)
+
+-	Memory Maps.
+-	Paging.
+-	Virtual Memory.
+
+Memory isn't just setting an area as used (;
