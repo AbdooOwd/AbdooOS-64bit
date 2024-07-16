@@ -1,5 +1,6 @@
 #include "bm_alloc.h"
 #include <lib/mem.h>
+#include <lib/print.h>
 
 u8 memory[MEMORY_SIZE]; // The memory array
 u8 bitmap[NUM_BLOCKS / 8]; // The bitmap array
@@ -8,6 +9,7 @@ u64 last_size;
 
 void* bitmap_malloc(size_t size) {
     if (size == 0 || size > MEMORY_SIZE) {
+        kprintf("Error: Invalid size %zu\n", size);
         return NULL; // Invalid size
     }
 
@@ -35,11 +37,13 @@ void* bitmap_malloc(size_t size) {
     }
 
     // No sufficient contiguous free blocks found
+    kprintf("Error: No sufficient contiguous free blocks for size %i\n", size);
     return NULL;
 }
 
 void bitmap_free(void* ptr) {
     if (ptr == NULL || ptr < (void*)memory || ptr >= (void*)(memory + MEMORY_SIZE)) {
+        kprintf("Error: Invalid pointer %p\n", ptr);
         return; // Invalid pointer
     }
 
