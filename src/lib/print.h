@@ -4,6 +4,8 @@
 #include <stdarg.h>
 #include <include/types.h>
 
+#define p kprintf
+
 // kernel printf: load args, then call virtual kernel printf (vkprintf)
 void kprintf(const char* fmt, ...);
 
