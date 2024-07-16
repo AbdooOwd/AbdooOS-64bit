@@ -2,6 +2,21 @@
 #include <mm/umm_malloc.h>
 #include <cpu/cpu.h>
 
+
+#define POOL_SIZE (1024 * 1024) // 1 MiB for the memory pool
+static u8 mem_pool[POOL_SIZE];
+static size_t mem_pool_offset = 0;
+
+void* simple_malloc(size_t size) {
+    if (mem_pool_offset + size > POOL_SIZE) {
+        // Out of memory in the pool
+        return NULL;
+    }
+    void* ptr = &mem_pool[mem_pool_offset];
+    mem_pool_offset += size;
+    return ptr;
+}
+
 bool alloc_test() {
     void* mem_test = umm_malloc(8);
     umm_free(mem_test);
