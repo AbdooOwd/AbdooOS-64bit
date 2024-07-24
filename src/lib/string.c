@@ -1,5 +1,6 @@
 #include "string.h"
 #include "util/util.h"
+#include "mem.h"
 
 
 void reverse(char* str) {
@@ -100,6 +101,31 @@ bool char_islower(char c) {
     return c >= 'a' && c <= 'z';
 }
 
+void strclr(char* str) {
+	backspaces(str, strlen(str));
+}
+
 char upper_char(char c) {
     return char_islower(c) ? (c - 'a' + 'A') : c;
+}
+
+// TODO: Optimize this
+char** split(char* str, char target) {
+    size_t target_count = count(str, target);
+	char** splitten = malloc((sizeof(char) * 16) * 16); // we'll simulate 16 words
+	size_t split_i = 0;
+	size_t i = 0;
+	char* part = malloc(sizeof(char) * 16);
+
+	while (str[i] != 0) {
+		if (str[i] == target || str[i + 1] == 0) {
+			strcpy(splitten[split_i], part);	
+			strclr(part);
+			split_i++;
+		} else
+		append(part, str[i]);
+		i++;
+	}
+
+	return splitten;
 }

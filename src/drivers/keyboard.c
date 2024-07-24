@@ -209,5 +209,12 @@ void user_input(char* input) {
         halt();
     }
 
+    if (strsame(input, "dev")) {
+        char* test = "Abdoo Likes Women";
+        kprintf("Testing Split with string \"%s\" with ' '\n", test);
+        char** x = split(test, ' ');
+        kprintf("hardcoded result: '%s' '%s' '%s'\n", x[0], x[1], x[2]);
+    }
+
     print("$ ");
 }
