@@ -82,11 +82,15 @@ int test_imfs() {
     else {
         kprintf("Failed to deleted '%s'\n", test_filename);
 		return -5;
-	}
+    }
 
-    kprintf("> IMFS Test: Successful!\n");
+    if (free(imfs) == 0) kprintf("Free'd IMFS from Memory\n");
+    else {
+        kprintf("Failed to free IMFS from Memory\n");
+        return -6;
+    }
 
-    free(imfs);
+    kprintf("> IMFS Test Successful!\n");
 
     return 0;
 }
@@ -99,7 +103,8 @@ int test_vfs() {
     vfs_init();
 
     char* ff = "idiot.pp";
-    char* mnt_name = "";
+    char mnt_name[64];
+    
     strcpy(mnt_name, vfs->mountpoints[0]->name);
 
     if (vfs_create(mnt_name, ff) == 0)
