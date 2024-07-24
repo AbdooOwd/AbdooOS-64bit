@@ -37,7 +37,7 @@ typedef struct {
 // functions
 
 void* allocation(size_t size);
-void freebird(void* ptr);
+int freebird(void* ptr);
 
 void* bitmap_malloc(size_t size);
 void bitmap_free(void* ptr);
