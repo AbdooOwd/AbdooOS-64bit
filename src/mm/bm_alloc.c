@@ -1,23 +1,95 @@
 #include "bm_alloc.h"
 #include <lib/mem.h>
 #include <lib/print.h>
+#include <cpu/cpu.h>
+#include <limine.h>
 
-u8 memory[MEMORY_SIZE]; // The memory array
-u8 bitmap[NUM_BLOCKS / 8]; // The bitmap array
+// I request the memory map bruh
+
+static volatile struct limine_memmap_request memmap_request = {
+    .id = LIMINE_MEMMAP_REQUEST,
+    .revision = 0
+};
+
+static volatile struct limine_hhdm_request hhdm_request = {
+    .id = LIMINE_HHDM_REQUEST,
+    .revision = 0
+};
+
+
+volatile struct limine_memmap_response* memmap_response;
+volatile struct limine_hhdm_response* hhdm_response;
+
+size_t blocks_count = 0;   // blocks' count
+size_t mem_size = 0;       // memory's size
+u64* watermarks = NULL;
+mem_t memory;               // useless for now, will replace blocks and fix alignement
+// TODO: Make watermarks only store usable entries' watermarks, not include useless entries
+
+
+u8* bitmap = NULL;        // The bitmap array (size = blocks_count / 8)
 u64 used_bits = 0;
 u64 last_size;
 
+
+void* allocation(size_t size) {
+    p("Size %x / %i provided\n", size, size);
+    p("Total free size (without current allocation size): %x / %i\n", mem_size - size, mem_size - size);
+    if (size == 0 || size > mem_size) {
+        kprintf("ERROR: Invalid size %x\n", size);
+        return NULL;
+    }
+
+    for (size_t i = 0; i < memmap_response->entry_count; i++) {
+        struct limine_memmap_entry* entry = memmap_response->entries[i];
+        if (entry->type != LIMINE_MEMMAP_USABLE)
+            continue;   // not a usable memory region. Skip to next entry
+        
+        if ((u64) size > (entry->length - (entry->base - watermarks[i])) )
+            continue;   // this entry isn't big enough. Skip to next one
+
+        void* ptr = (void*)(get_hhdm() + entry->base + watermarks[i]);
+        p("Found a pointer %x in entry %i at %x with size %x, end of entry at %x\n", ptr, i, entry->base, entry->length, entry->base + entry->length);
+        p("OG WM: %x - New WM: %x\n", watermarks[i], watermarks[i] + size);
+        watermarks[i] += size;
+
+        return ptr;
+    }
+
+    kprintf("ERROR: Not enough free blocks for size %zu\n", size);
+    return NULL;
+}
+
+void freebird(void* ptr) {
+    if (
+        ptr == NULL || 
+        ptr < (void*)memmap_response->entries[0]->base || 
+        ptr > (void*)memmap_response->entries[memmap_response->entry_count - 1]->base + memmap_response->entries[memmap_response->entry_count - 1]->length
+    ) {
+        kprintf("ERROR: Invalid pointer %p\n", ptr);
+        return;
+    }
+
+    for (size_t i = 0; i < memmap_response->entry_count; i++) {
+        struct limine_memmap_entry* entry = memmap_response->entries[i];
+
+        if ((u64) ptr >= entry->base && (u64) ptr < memmap_response->entries[i + 1]->base) {
+            watermarks[i] = (u64) ptr;
+        }
+    }
+}
+/*
 void* bitmap_malloc(size_t size) {
-    if (size == 0 || size > MEMORY_SIZE) {
+    if (size == 0 || size > mem_size) {
         kprintf("Error: Invalid size %zu\n", size);
         return NULL; // Invalid size
     }
 
-    size_t blocks_needed = (size + BLOCK_SIZE - 1) / BLOCK_SIZE; // Ceiling division
+    size_t blocks_needed = (size + BLOCK_SIZE - 1) / BLOCK_SIZE; // num of blocks needed
     size_t consecutive_free_blocks = 0;
     size_t start_block = 0;
 
-    for (size_t i = 0; i < NUM_BLOCKS; i++) {
+    for (size_t i = 0; i < blocks_count; i++) {
         if (!BIT_CHECK(bitmap, i)) {
             if (consecutive_free_blocks == 0) {
                 start_block = i;
@@ -42,7 +114,7 @@ void* bitmap_malloc(size_t size) {
 }
 
 void bitmap_free(void* ptr) {
-    if (ptr == NULL || ptr < (void*)memory || ptr >= (void*)(memory + MEMORY_SIZE)) {
+    if (ptr == NULL || ptr < (void*)memory || ptr >= (void*)(memory + mem_size)) {
         kprintf("Error: Invalid pointer %p\n", ptr);
         return; // Invalid pointer
     }
@@ -50,7 +122,7 @@ void bitmap_free(void* ptr) {
     size_t block_index = ((u8*)ptr - memory) / BLOCK_SIZE;
     size_t blocks_freed = 0;
 
-    while (block_index < NUM_BLOCKS && BIT_CHECK(bitmap, block_index)) {
+    while (block_index < blocks_count && BIT_CHECK(bitmap, block_index)) {
         BIT_CLEAR(bitmap, block_index);
         blocks_freed++;
         block_index++;
@@ -58,8 +130,52 @@ void bitmap_free(void* ptr) {
 
     used_bits -= blocks_freed * BLOCK_SIZE;
 }
+*/
 
 void bitmap_init() {
-    memset((u64*) bitmap, 0, sizeof(bitmap));
-    used_bits = 0;
+    // requests' responses
+    memmap_response = memmap_request.response;
+    hhdm_response = hhdm_request.response;
+
+    if (memmap_response == NULL) {
+        panic("ERROR: Memory map response is null\n");
+        return;
+    }
+
+    kprintf("-> Total Entries: %i\n", memmap_response->entry_count);
+    
+    for (size_t i = 0; i < memmap_response->entry_count; i++) {
+        struct limine_memmap_entry* entry = memmap_response->entries[i];
+        if (entry->type == LIMINE_MEMMAP_USABLE) {
+            kprintf("Entry %i at %x with size %x\n", i, entry, entry->length);
+            mem_size += entry->length;
+        }
+    }
+
+    blocks_count = mem_size / BLOCK_SIZE;
+
+    // Allocate watermarks array dynamically
+    watermarks = (u64*)simple_malloc(memmap_response->entry_count * sizeof(u64));
+    if (watermarks == NULL) {
+        panic("ERROR: Failed to allocate watermarks\n");
+        return;
+    }
+
+    for (size_t i = 0; i < memmap_response->entry_count; i++)
+        watermarks[i] = 0x0;    // every usable entry should be empty, so free space starts at 0
+    /*
+    // Initialize bitmap array
+    bitmap = (u8*)simple_malloc(blocks_count / 8);
+    if (bitmap == NULL) {
+        panic("ERROR: Failed to allocate bitmap\n");
+        return;
+    }
+
+    // Clear bitmap
+    memset((u64*) bitmap, 0, blocks_count / 8);
+    */
+
+    kprintf("PMM Initialized!\n");
 }
+
+u64 get_hhdm() { return hhdm_response->offset; }
