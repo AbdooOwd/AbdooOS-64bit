@@ -12,7 +12,7 @@ volatile u32* fb_addr;
 Vector2 font_dimensions = {8, 8};
 Vector2 cursor_position = {0, 0};
 
-bool use_moon_font = false;
+bool use_altFont = false;
 
 
 void set_pixel(int x, int y, u32 color) {
@@ -62,7 +62,7 @@ void print_char_at(char c, int x, int y, u32 color) {
                 bool can_draw;
 
                 // handle two fonts
-                if (use_moon_font)  can_draw = (ibm_pgc[c * font_dimensions.y + yy]) & (1 << (7 - xx));
+                if (use_altFont)  can_draw = (ibm_pgc[c * font_dimensions.y + yy]) & (1 << (7 - xx));
                 else                can_draw = (font[(size_t) c][yy]) & (1 << xx);
 
                 if (can_draw)

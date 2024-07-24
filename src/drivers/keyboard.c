@@ -151,11 +151,6 @@ void user_input(char* input) {
 
     lower(input);
 
-
-    if (strsame(input, "dev")) {
-        
-    }
-
     if (strsame(input, "help"))
         for (size_t cmd = 0; cmd < sizeof(commands) / sizeof(command_t); cmd++)
             kprintf(" - %s: %s\n", commands[cmd].command, commands[cmd].description);
@@ -169,11 +164,11 @@ void user_input(char* input) {
     }
 
     if (strsame(input, "chngfont")) {
-        use_moon_font = !use_moon_font;
+        use_altFont = !use_altFont;
 
         int old_font_height = font_dimensions.y;
 
-        if (use_moon_font) {
+        if (use_altFont) {
             font_dimensions.x = 8;
             font_dimensions.y = 16;
         } else {
@@ -213,7 +208,9 @@ void user_input(char* input) {
         char* test = "Abdoo Likes Women";
         kprintf("Testing Split with string \"%s\" with ' '\n", test);
         char** x = split(test, ' ');
-        kprintf("hardcoded result: '%s' '%s' '%s'\n", x[0], x[1], x[2]);
+        for (size_t i = 0; x[i] != NULL; i++) {
+            kprintf("Elem %i: %s\n", i, x[i]);
+        }
     }
 
     print("$ ");

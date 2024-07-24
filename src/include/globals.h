@@ -6,6 +6,6 @@
 #define ABDOOOS_VERSION		"0.9.1"
 
 extern addr_t gdt_addr;
-extern bool use_moon_font;
+extern bool use_altFont;
 
 #endif

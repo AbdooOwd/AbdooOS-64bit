@@ -112,20 +112,70 @@ char upper_char(char c) {
 // TODO: Optimize this
 char** split(char* str, char target) {
     size_t target_count = count(str, target);
-	char** splitten = malloc((sizeof(char) * 16) * 16); // we'll simulate 16 words
-	size_t split_i = 0;
-	size_t i = 0;
-	char* part = malloc(sizeof(char) * 16);
+    size_t split_i = 0;
+    char** splitten = (char**)malloc((target_count + 2) * sizeof(char*));
+    if (!splitten) {
+        return NULL;
+    }
 
-	while (str[i] != 0) {
-		if (str[i] == target || str[i + 1] == 0) {
-			strcpy(splitten[split_i], part);	
-			strclr(part);
-			split_i++;
-		} else
-		append(part, str[i]);
-		i++;
-	}
+    
+    
+    splitten[split_i] = NULL;
+    
+    return splitten;
+}
 
-	return splitten;
+char** gpt_split(char* str, char target) {
+    size_t target_count = count(str, target);
+	
+    char** splitten = (char**)malloc((target_count + 2) * sizeof(char*));
+
+    if (!splitten) {
+        return NULL;
+    }
+    
+    size_t split_i = 0;
+    size_t start = 0;
+    size_t i = 0;
+    
+    // Iterate through the string
+    while (str[i] != '\0') {
+        if (str[i] == target) {
+            size_t part_len = i - start;
+            splitten[split_i] = (char*)malloc((part_len + 1) * sizeof(char));
+            if (!splitten[split_i]) {
+                // Handle allocation failure
+                for (size_t j = 0; j < split_i; j++) {
+                    free(splitten[j]);
+                }
+                free(splitten);
+                return NULL;
+            }
+            strlcpy(splitten[split_i], &str[start], part_len);
+            splitten[split_i][part_len] = '\0';
+            split_i++;
+            start = i + 1;
+        }
+        i++;
+    }
+    
+    // Handle the last part
+    size_t part_len = i - start;
+    splitten[split_i] = (char*)malloc((part_len + 1) * sizeof(char));
+    if (!splitten[split_i]) {
+        // Handle allocation failure
+        for (size_t j = 0; j < split_i; j++) {
+            free(splitten[j]);
+        }
+        free(splitten);
+        return NULL;
+    }
+    strlcpy(splitten[split_i], &str[start], part_len);
+    splitten[split_i][part_len] = '\0';
+    split_i++;
+    
+    // Mark the end of the array
+    splitten[split_i] = NULL;
+    
+    return splitten;
 }

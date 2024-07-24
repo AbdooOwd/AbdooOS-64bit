@@ -35,7 +35,8 @@ u64 last_size;
 void* allocation(size_t size) {
     // p("Size %x / %i provided\n", size, size);
     // p("Total free size (without current allocation size): %x / %i\n", mem_size - size, mem_size - size);
-    
+    log("[DEV] Allocation for size %x / %i\n", size, size);
+
     if (size == 0 || size > mem_size) {
         kprintf("ERROR: Invalid size %x\n", size);
         return NULL;
@@ -53,6 +54,7 @@ void* allocation(size_t size) {
         // p("Found a pointer %x in entry %i at %x with size %x, end of entry at %x\n", ptr, i, entry->base, entry->length, entry->base + entry->length);
         // p("OG WM: %x - New WM: %x\n", watermarks[i], watermarks[i] + size);
         watermarks[i] += size;
+        log("[DEV] Watermark N%i: %x\n", i, watermarks[i]);
 
         return ptr;
     }
@@ -62,6 +64,7 @@ void* allocation(size_t size) {
 }
 
 int freebird(void* ptr) {
+    log("[DEV] Freeing for pointer to %x\n", &ptr);
     if (
         ptr == NULL || 
         (u64) ptr < memmap_response->entries[0]->base + get_hhdm() || 
@@ -79,7 +82,8 @@ int freebird(void* ptr) {
             (u64) ptr >= entry->base + get_hhdm() && 
             (u64) ptr < memmap_response->entries[i + 1]->base + get_hhdm()
         ) {
-            watermarks[i] = (u64) ptr;
+            watermarks[i] = (u64) ptr - get_hhdm();
+            log("[DEV] Watermark N%i after free: %x\n", i, watermarks[i]);
             return 0;
         }
     }
@@ -144,6 +148,7 @@ void bitmap_init() {
     // requests' responses
     memmap_response = memmap_request.response;
     hhdm_response = hhdm_request.response;
+    log("[DEV] HHDM: %x\n", get_hhdm());
 
     if (memmap_response == NULL) {
         panic("ERROR: Memory map response is null\n");

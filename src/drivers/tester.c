@@ -133,6 +133,9 @@ int test_vfs() {
         return -3;
     }
 
+    kprintf("Cleaning up VFS...\n");
+    clean_up();
+
     kprintf("> VFS Test Success!\n");
 
     return 0;
