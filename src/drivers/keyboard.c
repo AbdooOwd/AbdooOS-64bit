@@ -191,15 +191,13 @@ void user_input(char* input) {
         kprintf("Changed font successfullly!\n");
     }
 
-    if (strsame(input, "runtests")) {
+    if (strsame(input, "runtests") || strsame(input, "test")) {
         run_tests();
     }
 
     if (strsame(input, "info")) {
         kprintf("> MEMORY INFO\n");
-        kprintf(" - Bitmap Memory Pool Start: %x\n", &memory);
-        kprintf(" - Bitmap Memory Pool Size: %x or %d bits\n", MEMORY_SIZE, MEMORY_SIZE);
-        kprintf(" - Bitmap Memory Currently used space: bit %d or %x\n", used_bits, used_bits);
+        kprintf(" - Usable Memory Size: %x\n", mem_size);
     }
 
     if (strsame(input, "crashme")) {
