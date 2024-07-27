@@ -146,9 +146,9 @@ char** gpt_split(char* str, char target) {
             if (!splitten[split_i]) {
                 // Handle allocation failure
                 for (size_t j = 0; j < split_i; j++) {
-                    free(splitten[j]);
+                    mfree(splitten[j]);
                 }
-                free(splitten);
+                mfree(splitten);
                 return NULL;
             }
             strlcpy(splitten[split_i], &str[start], part_len);
@@ -165,9 +165,9 @@ char** gpt_split(char* str, char target) {
     if (!splitten[split_i]) {
         // Handle allocation failure
         for (size_t j = 0; j < split_i; j++) {
-            free(splitten[j]);
+            mfree(splitten[j]);
         }
-        free(splitten);
+        mfree(splitten);
         return NULL;
     }
     strlcpy(splitten[split_i], &str[start], part_len);

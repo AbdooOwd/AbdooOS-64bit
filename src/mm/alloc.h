@@ -29,7 +29,7 @@ typedef struct {
 
 void alloc_init();
 void* malloc(size_t size);
-int free(void* ptr);
+int mfree(void* ptr);
 u64 get_hhdm();
 
 #endif

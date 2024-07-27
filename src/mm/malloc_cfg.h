@@ -23,10 +23,10 @@
 //
 // If you leave this define unset, then the function names are left alone as
 // umm_malloc() umm_free() and umm_realloc() so that they cannot be confused
-// with the C runtime functions malloc() free() and realloc()
+// with the C runtime functions malloc() mfree() and realloc()
 //
 // If you do set this define, then the function names become malloc()
-// free() and realloc() so that they can be used as the C runtime functions
+// mfree() and realloc() so that they can be used as the C runtime functions
 // in an embedded environment.
 //
 // -D UMM_BEST_FIT (defualt)

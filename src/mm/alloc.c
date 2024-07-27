@@ -87,7 +87,7 @@ void* malloc(size_t size) {
     return NULL;
 }
 
-int free(void* ptr) {
+int mfree(void* ptr) {
     log("[DEV] Freeing for pointer to %x\n", &ptr);
     if (
         ptr == NULL || 

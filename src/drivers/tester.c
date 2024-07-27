@@ -2,7 +2,7 @@
 #include <lib/print.h>
 #include <lib/string.h>
 #include <lib/mem.h>
-#include <mm/bm_alloc.h>
+#include <mm/alloc.h>
 #include <fs/imfs.h>
 #include <fs/vfs.h>
 
@@ -84,7 +84,7 @@ int test_imfs() {
 		return -5;
     }
 
-    if (free(imfs) == 0) kprintf("Free'd IMFS from Memory\n");
+    if (mfree(imfs) == 0) kprintf("Free'd IMFS from Memory\n");
     else {
         kprintf("Failed to free IMFS from Memory\n");
         return -6;

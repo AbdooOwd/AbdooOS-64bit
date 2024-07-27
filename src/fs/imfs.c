@@ -1,5 +1,5 @@
 #include "imfs.h"
-#include <mm/bm_alloc.h>
+#include <mm/alloc.h>
 #include <lib/string.h>
 #include <lib/print.h>
 

@@ -112,7 +112,7 @@
 //         pf is the index of the previous block in the free list
 //
 // The fact that we have forward and backward links in the block descriptors
-// means that malloc() and free() operations can be very fast. It's easy
+// means that malloc() and mfree() operations can be very fast. It's easy
 // to either allocate the whole free item to a new block or to allocate part
 // of the free item and leave the rest on the free list without traversing
 // the list from front to back first.
@@ -480,7 +480,7 @@
 //  n | ?? |  c |   ...   |            n | ?? |  s |   ...   |
 //    +----+----+----+----+              +----+----+----+----+
 //
-// Then we call free() with the adress of the data portion of the new
+// Then we call mfree() with the adress of the data portion of the new
 // block (s) which adds it to the free list.
 //
 // ----------------------------------------------------------------------------

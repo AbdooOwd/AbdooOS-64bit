@@ -18,7 +18,7 @@ void* simple_malloc(size_t size) {
 
 bool alloc_test() {
     void* mem_test = malloc(8);
-    free(mem_test);
+    mfree(mem_test);
     return mem_test != NULL;
 }
 

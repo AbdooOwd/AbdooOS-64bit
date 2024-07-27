@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include <lib/string.h>
 #include <lib/print.h>
-#include <mm/bm_alloc.h>
+#include <mm/alloc.h>
 #include <fs/imfs.h>
 
 vfs_t* vfs;
@@ -52,12 +52,12 @@ void register_operations(mountpoint_t* mnt) {
 
 void clean_up() {
 	for (size_t i = 0; i < vfs->mountpoints_count; i++) {
-		free(vfs->mountpoints[i]->operations);
-		free(vfs->mountpoints[i]->files);
+		mfree(vfs->mountpoints[i]->operations);
+		mfree(vfs->mountpoints[i]->files);
 	}
 	
-	free(vfs->mountpoints);
-	free(vfs);
+	mfree(vfs->mountpoints);
+	mfree(vfs);
 }
 
 

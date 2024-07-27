@@ -9,7 +9,7 @@
 #include <kernel/io.h>
 #include <cpu/pic.h>
 #include <cpu/cpu.h>
-#include <mm/bm_alloc.h>
+#include <mm/alloc.h>
 
 
 #define KBD_DATA_PORT 	0x60

@@ -61,7 +61,7 @@ void hash_set(HashTable* hash_table, void* key, void* value) {
 	while (entry != NULL) {
 		// found already existing key. Overwrite it
 		if (strsame(entry->key, key)) {
-			free(entry->value);
+			mfree(entry->value);
 			entry->value = malloc(strlen(value) + 1);
 			strcpy(entry->value, value);
 			return;
