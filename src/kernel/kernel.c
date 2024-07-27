@@ -4,7 +4,6 @@
 #include <include/globals.h>
 #include <lib/print.h>
 #include <lib/mem.h>
-#include <mm/bm_alloc.h>
 #include "hal/hal.h"
 
 void kernel_init() {
@@ -18,7 +17,7 @@ void kernel_init() {
         panic("Halting CPU (Allocation Test Fail)\n");
     }
 
-    bitmap_init();
+    alloc_init();
     HAL_init();
 
     print("Booted AbdooOS Successfully!\n");

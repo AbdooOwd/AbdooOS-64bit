@@ -4,7 +4,7 @@
 #pragma once
 
 #include <include/types.h>
-#include <mm/bm_alloc.h>
+#include <mm/alloc.h>
 
 void memcpy(u64* source, u64* dest, int no_bytes);
 void memset(u64* dest, u8 val, u32 len);

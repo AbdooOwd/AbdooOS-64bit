@@ -1,5 +1,4 @@
 #include "mem.h"
-#include <mm/umm_malloc.h>
 #include <cpu/cpu.h>
 
 
@@ -18,8 +17,8 @@ void* simple_malloc(size_t size) {
 }
 
 bool alloc_test() {
-    void* mem_test = umm_malloc(8);
-    umm_free(mem_test);
+    void* mem_test = malloc(8);
+    free(mem_test);
     return mem_test != NULL;
 }
 
