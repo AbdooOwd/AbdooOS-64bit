@@ -27,13 +27,6 @@ bool test_memory() {
 
 	kprintf("\nStart of Memory test...\n");
 
-	/*for (size_t i = 0; i < 1; i++) {
-		size_t allocation_size = 8 * (i + 1);
-		kprintf("Allocating %d bytes\n", allocation_size);
-		result = (umm_malloc(allocation_size)) != NULL;
-		umm_free(allocation_size);
-		if (!result) return false;
-	}*/
 	if (result) kprintf("Memory test successful!\n");
 	return result;
 }
