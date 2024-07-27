@@ -10,11 +10,13 @@ IMFS* imfs;
 void IMFS_create() {
 	imfs = malloc(sizeof(IMFS));
 
-	if (imfs)
-		imfs->count = 0;
+	if (imfs) imfs->count = 0x0;
+	else imfs = NULL;
 }
 
 bool IMFS_file_exists(char* filename) {
+	if (imfs->count <= 0) return false;
+
 	for (size_t i = 0; i < imfs->count; i++) {
 		if (strsame(imfs->files[i].filename, filename))
 			return true;
@@ -25,13 +27,13 @@ bool IMFS_file_exists(char* filename) {
 
 int IMFS_file_create(char* filename) {
 	/* errer handling */
-	
+	p("st\n");
 	if (IMFS_file_exists(filename))
 		return -1;
-		
+	p("ok\n");
 	if (strlen(filename) > MAX_FILENAME_LENGTH)
 		return -2;
-		
+	p("??\n");
 	if (imfs->count >= MAX_FILES_COUNT)
 		return -3;
 	
