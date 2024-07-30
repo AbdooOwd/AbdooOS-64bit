@@ -1,5 +1,5 @@
-#ifndef BITMAP_ALLOCATOR_H
-#define BITMAP_ALLOCATOR_H
+#ifndef PMM_H
+#define PMM_H
 #pragma once
 
 #include <include/types.h>
