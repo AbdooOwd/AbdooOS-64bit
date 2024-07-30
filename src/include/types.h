@@ -22,6 +22,8 @@ typedef int64_t     i64;
 typedef u64     	addr_t;		// cuz we're in 64bits
 typedef char*       string;
 
+typedef int         error_code;
+
 typedef struct {
     int x;
     int y;

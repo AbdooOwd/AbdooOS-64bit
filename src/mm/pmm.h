@@ -1,9 +1,12 @@
-#ifndef ALLOC_H
-#define ALLOC_H
-
+#ifndef BITMAP_ALLOCATOR_H
+#define BITMAP_ALLOCATOR_H
 #pragma once
 
 #include <include/types.h>
+
+
+#define malloc 	alloc
+#define mfree	free
 
 
 #define BLOCK_SIZE 	1024 * 4         			// Size of each memory block (4KiB)
@@ -13,23 +16,11 @@
 #define BIT_CLEAR(bitmap, n) (bitmap[(n) / 8] &= ~(1 << ((n) % 8)))
 #define BIT_CHECK(bitmap, n) (bitmap[(n) / 8] & (1 << ((n) % 8)))
 
-extern size_t mem_size;
+// functions
+void* alloc(size_t size);
+int free(void* ptr);
+void pmm_init();
 
-typedef struct {
-	u64 base;
-	size_t count;
-	struct mem_entry_t** entries;
-} mem_t;
-
-typedef struct {
-	u64 base;
-	u64 size;
-	struct mem_entry_t* next_entry;
-} mem_entry_t;
-
-void alloc_init();
-void* malloc(size_t size);
-int mfree(void* ptr);
 u64 get_hhdm();
 
 #endif

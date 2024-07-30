@@ -1,5 +1,5 @@
 #include "hash.h"
-#include <mm/alloc.h>
+#include <mm/pmm.h>
 #include <lib/string.h>
 
 

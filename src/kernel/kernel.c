@@ -10,7 +10,8 @@ void kernel_init() {
     kprintf("Initialization (kernel_init) at %X\n", kernel_init);
     kprintf("Start (kernel_main) at %X\n\n", kernel_main);
 
-    alloc_init();
+    pmm_init();
+    kprintf("\n");
     HAL_init();
 
     if (alloc_test()) {

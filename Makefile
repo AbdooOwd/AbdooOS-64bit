@@ -168,6 +168,9 @@ always:
 debug: os-image
 	qemu-system-x86_64 -debugcon stdio -M smm=off -d int -no-reboot -no-shutdown -cdrom $(BUILD_DIR)/$(IMAGE_NAME)
 
+gdb: os-image
+	qemu-system-x86_64 -debugcon stdio -s -S $(BUILD_DIR)/$(IMAGE_NAME)
+
 run: os-image
 	qemu-system-x86_64 -debugcon stdio -cdrom $(BUILD_DIR)/$(IMAGE_NAME)
 

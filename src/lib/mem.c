@@ -1,6 +1,6 @@
 #include "mem.h"
 #include <cpu/cpu.h>
-
+#include <mm/pmm.h>
 
 #define POOL_SIZE (1024 * 1024) // 1 MiB for the memory pool
 static u8 mem_pool[POOL_SIZE];

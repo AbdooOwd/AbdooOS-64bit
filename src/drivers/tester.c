@@ -2,7 +2,7 @@
 #include <lib/print.h>
 #include <lib/string.h>
 #include <lib/mem.h>
-#include <mm/alloc.h>
+#include <mm/pmm.h>
 #include <fs/imfs.h>
 #include <fs/vfs.h>
 
@@ -43,6 +43,8 @@ int test_imfs() {
         kprintf("Failed to create IMFS\n");
         return -1;
     }
+
+    p("%i  -  %x\n", imfs->count, imfs->count);
 
     kprintf("Created IMFS at %x with size of %x\n", &imfs, sizeof(IMFS));
 

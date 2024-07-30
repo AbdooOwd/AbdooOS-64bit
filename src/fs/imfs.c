@@ -1,21 +1,24 @@
 #include "imfs.h"
-#include <mm/alloc.h>
+#include <lib/mem.h>
 #include <lib/string.h>
 #include <lib/print.h>
 
 // TODO: Use hash tables to find files by filename
 
-IMFS* imfs;
+IMFS* imfs = NULL;
 
 void IMFS_create() {
-	imfs = malloc(sizeof(IMFS));
+	imfs = (IMFS*) malloc(sizeof(IMFS));
 
-	if (imfs) imfs->count = 0x0;
-	else imfs = NULL;
+	if (imfs) {
+		memset(imfs, 0, sizeof(IMFS));
+		imfs->count = 0;
+	} else 
+		imfs = NULL;
 }
 
 bool IMFS_file_exists(char* filename) {
-	if (imfs->count <= 0) return false;
+	if (imfs->count <= 0 || imfs->count > MAX_FILES_COUNT) return false;
 
 	for (size_t i = 0; i < imfs->count; i++) {
 		if (strsame(imfs->files[i].filename, filename))
@@ -27,16 +30,18 @@ bool IMFS_file_exists(char* filename) {
 
 int IMFS_file_create(char* filename) {
 	/* errer handling */
-	p("st\n");
-	if (IMFS_file_exists(filename))
+	p("1\n");
+	if (imfs->count >= MAX_FILES_COUNT)
 		return -1;
-	p("ok\n");
+	p("2\n");
+
 	if (strlen(filename) > MAX_FILENAME_LENGTH)
 		return -2;
-	p("??\n");
-	if (imfs->count >= MAX_FILES_COUNT)
-		return -3;
+	p("3\n");
 	
+	if (IMFS_file_exists(filename))
+		return -3;
+	p("4\n");
 	
 	strlcpy(imfs->files[imfs->count].filename, filename, MAX_FILENAME_LENGTH);
 	imfs->files[imfs->count].size = 0;

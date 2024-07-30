@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include <lib/string.h>
 #include <lib/print.h>
-#include <mm/alloc.h>
+#include <mm/pmm.h>
 #include <fs/imfs.h>
 
 vfs_t* vfs;

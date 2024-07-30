@@ -9,7 +9,7 @@
 #include <kernel/io.h>
 #include <cpu/pic.h>
 #include <cpu/cpu.h>
-#include <mm/alloc.h>
+#include <mm/pmm.h>
 
 
 #define KBD_DATA_PORT 	0x60
@@ -192,7 +192,7 @@ void user_input(char* input) {
 
     if (strsame(input, "info")) {
         kprintf("> MEMORY INFO\n");
-        kprintf(" - Usable Memory Size: %x\n", mem_size);
+        // kprintf(" - Usable Memory Size: %x\n", mem_size);
     }
 
     if (strsame(input, "crashme")) {
