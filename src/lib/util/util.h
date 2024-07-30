@@ -36,6 +36,7 @@
     })
 
 #define CEIL_DIV(x, y) (x + y - 1) / y
+#define FLOOR_DIV(x, y) (x - (x % y)) / y
 
 #define ALIGN_UP(x, align) (((x) + ((align) - 1)) & ~((align) - 1))
 #define ALIGN_DOWN(x, align) ((x) & ~((align) - 1))
