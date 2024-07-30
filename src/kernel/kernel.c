@@ -1,10 +1,16 @@
 #include "kernel.h"
+#include <limine.h>
 #include <cpu/cpu.h>
 #include <drivers/screen.h>
 #include <include/globals.h>
 #include <lib/print.h>
 #include <lib/mem.h>
 #include "hal/hal.h"
+
+static volatile struct limine_bootloader_info_request bootloader_info = {
+    .id = LIMINE_BOOTLOADER_INFO_REQUEST,
+    .revision = 0
+};
 
 void kernel_init() {
     kprintf("Initialization (kernel_init) at %X\n", kernel_init);
@@ -28,7 +34,8 @@ void kernel_init() {
 
 void kernel_main() {
     clear_screen();
-    kprintf(" - - - AbdooOS %s - - -\n", ABDOOOS_VERSION);
+    kprintf(" - - - AbdooOS %s | %s Bootloader Version %s - - -\n", ABDOOOS_VERSION, 
+        bootloader_info.response->name, bootloader_info.response->version);
 
     print("\n$ ");
 
