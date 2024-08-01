@@ -1,6 +1,7 @@
 #include "mem.h"
 #include <cpu/cpu.h>
 #include <mm/pmm.h>
+#include <lib/print.h>
 
 #define POOL_SIZE (1024 * 1024) // 1 MiB for the memory pool
 static u8 mem_pool[POOL_SIZE];
@@ -18,8 +19,11 @@ void* simple_malloc(size_t size) {
 
 bool alloc_test() {
     void* mem_test = malloc(8);
+    if (mem_test == NULL) return false;
+    log("Allocated 8 bytes\n");
     mfree(mem_test);
-    return mem_test != NULL;
+    log("Free'd 8 bytes\n");
+    return true;
 }
 
 void memcpy(u64* source, u64* dest, int no_bytes) {
