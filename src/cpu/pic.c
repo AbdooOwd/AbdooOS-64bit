@@ -1,5 +1,6 @@
 #include "pic.h"
 #include <kernel/io.h>
+#include <lib/print.h>
 
 #define PIC1			0x20		/* IO base address for master PIC */
 #define PIC2			0xA0		/* IO base address for slave PIC */
@@ -11,6 +12,7 @@
 
 
 void PIC_init() {
+    kprintf("[PIC] Initializing PIC...\n");
  
 	outb(PIC1_COMMAND, ICW1_INIT | ICW1_ICW4);  // starts the initialization sequence (in cascade mode)
 	// iowait();
@@ -34,11 +36,14 @@ void PIC_init() {
     // iowait();
     outb(PIC2_DATA, 0x0);
     // iowait();
+
+    kprintf("[PIC] PIC Initialized!\n");
 }
 
 void PIC_disable(void) {
     outb(PIC1_DATA, 0xff);
     outb(PIC2_DATA, 0xff);
+    log("[PIC] Disabled PIC\n");
 }
 
 void PIC_eoi(u8 irq) {
@@ -46,6 +51,7 @@ void PIC_eoi(u8 irq) {
 		outb(PIC2_COMMAND, PIC_EOI);
  
 	outb(PIC1_COMMAND, PIC_EOI);
+    log("[PIC] PIC End of Interrupt\n");
 }
 
 void IRQ_set_mask(u8 le_irq) {

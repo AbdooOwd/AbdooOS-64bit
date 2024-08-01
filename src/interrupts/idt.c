@@ -14,11 +14,15 @@ void IDT_load(void) {
 }
 
 void interrupts_init() {
-	for(size_t vector = 0; vector < sizeof(idt) / sizeof(IDTEntry); vector++)
+    kprintf("[IDT] Stubbing every IDT Gate...\n");
+	for(size_t vector = 0; vector < sizeof(idt) / sizeof(IDTEntry); vector++) {
+        log("[IDT] Stubbing IDT Gate N%i\n", vector);
         IDT_setGate(vector, isr_stub_table[vector], IDT_ATTR_PRESENT | IDT_ATTR_INTERRUPT_GATE);
+    }
 }
 
 void IDT_init(void) {
+    kprintf("[IDT] Initializing IDT...\n");
 	interrupts_init();
 
     idtr.base = (u64) idt;
@@ -27,6 +31,7 @@ void IDT_init(void) {
     PIC_init();
     IDT_load();
 	enableInterrupts(); // 'sti' instruction
+    kprintf("[IDT] IDT Initialized!\n");
 }
 
 void IDT_setGate(int i, u64 handler, u16 flags) {
@@ -36,4 +41,5 @@ void IDT_setGate(int i, u64 handler, u16 flags) {
     idt[i].flags = flags;
     idt[i].reserved = 0;
     idt[i].selector = 0x08;
+    log("[IDT] Set IDT Gate %i handler to %x with flags %i\n", i, handler, flags);
 }
