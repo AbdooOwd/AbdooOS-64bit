@@ -144,6 +144,7 @@ char getch(u8 scancode) {
 }
 
 void keyboard_init() {
+    kprintf("[KB Driver] Installing keyboard handler at %x to IRQ1...\n", &keyboard_handler);
 	IRQ_installHandler(1, keyboard_handler);
 }
 
