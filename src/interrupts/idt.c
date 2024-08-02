@@ -16,7 +16,7 @@ void IDT_load(void) {
 void interrupts_init() {
     kprintf("[IDT] Stubbing every IDT Gate...\n");
 	for(size_t vector = 0; vector < sizeof(idt) / sizeof(IDTEntry); vector++) {
-        log("[IDT] Stubbing IDT Gate N%i\n", vector);
+        // log("[IDT] Stubbing IDT Gate N%i\n", vector);
         IDT_setGate(vector, isr_stub_table[vector], IDT_ATTR_PRESENT | IDT_ATTR_INTERRUPT_GATE);
     }
 }
