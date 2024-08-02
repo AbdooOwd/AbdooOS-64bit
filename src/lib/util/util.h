@@ -53,7 +53,7 @@ int random();
 // throw random stuff as arguments so u don't let stuff unused (foq u GCC)
 static inline void UNUSED(u64, ...) {}
 
-#define min(a,b)    ((a) < (b) ? (a) : (b))
-#define max(a,b)    ((a) > (b) ? (a) : (b))
+#define MIN(a, b)    ((a) < (b) ? (a) : (b))
+#define MAX(a, b)    ((a) > (b) ? (a) : (b))
 
 #endif
