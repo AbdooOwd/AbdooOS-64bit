@@ -33,9 +33,13 @@ void memcpy(u64* source, u64* dest, int no_bytes) {
     }
 }
 
-void memset(u64* dest, u8 val, u32 len) {
-    u64* temp = (u64*)dest;
-    for (; len != 0; len--) *temp++ = val;
+void* memset(void* dest, int ch, size_t count)
+{
+    uint8_t* dst = dest;
+    for (size_t i = 0; i < count; i++)
+        dst[i] = ch;
+
+    return dest;
 }
 
 int memcmp(const void* ptr1, const void* ptr2, u16 num)

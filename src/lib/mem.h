@@ -7,7 +7,7 @@
 #include <mm/pmm.h>
 
 void memcpy(u64* source, u64* dest, int no_bytes);
-void memset(u64* dest, u8 val, u32 len);
+void* memset(void* dest, int ch, size_t count);
 int  memcmp(const void* ptr1, const void* ptr2, u16 num);
 void *memmove(void *dest, const void *src, size_t n);
 
