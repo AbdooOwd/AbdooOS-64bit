@@ -41,5 +41,5 @@ void IDT_setGate(int i, u64 handler, u16 flags) {
     idt[i].flags = flags;
     idt[i].reserved = 0;
     idt[i].selector = 0x08;
-    log("[IDT] Set IDT Gate %i handler to %x with flags %i\n", i, handler, flags);
+    // log("[IDT] Set IDT Gate %i handler to %x with flags %i\n", i, handler, flags);
 }
