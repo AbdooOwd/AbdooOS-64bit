@@ -22,12 +22,12 @@ void GDT_setEntry(u8 num, u32 base, u16 limit, u8 access, u8 flags) {
 
 void GDT_load(GDTR le_gdt_pointer) {
     __asm__ volatile("lgdt %0\n\t"
-                 "push $0x08\n\t"
+                 "push $0x48\n\t"
                  "lea 1f(%%rip), %%rax\n\t"
                  "push %%rax\n\t"
                  "lretq\n\t"
                  "1:\n\t"
-                 "mov $0x10, %%eax\n\t"
+                 "mov $0x50, %%eax\n\t"
                  "mov %%eax, %%ds\n\t"
                  "mov %%eax, %%es\n\t"
                  "mov %%eax, %%fs\n\t"
@@ -46,11 +46,22 @@ void GDT_init() {
 
     gdt_addr = gdt_ptr.base;
 
-    GDT_setEntry(0, 0, 0, 0, 0);                // Null-Segment                 0x00
-    GDT_setEntry(1, 0, (u16) 0xFFFFF, 0x9A, 0xA0);    // Kernel 64bit Code Segment    0x08
-    GDT_setEntry(2, 0, (u16) 0xFFFFF, 0x92, 0xC0);    // Kernel 64bit Data Segment    0x10
-    GDT_setEntry(3, 0, (u16) 0xFFFFF, 0xFA, 0xA0);    // User   64bit Data Segment    0x18
-    GDT_setEntry(4, 0, (u16) 0xFFFFF, 0xF2, 0xC0);    // User   64bit Data Segment    0x20
+    GDT_setEntry(0, 0, 0, 0, 0);                            // Null-Segment                 0x00
+
+    GDT_setEntry(1,  0,  (u16) 0xFFFF,      0x9A, 0xA0);    // Kernel 16bit Code Segment    0x08
+    GDT_setEntry(2,  0,  (u16) 0xFFFF,      0x92, 0xC0);    // Kernel 16bit Code Segment    0x10
+    GDT_setEntry(3,  0,  (u16) 0xFFFF,      0x9A, 0xA0);    // User 16bit Code Segment    0x18
+    GDT_setEntry(4,  0,  (u16) 0xFFFF,      0x92, 0xC0);    // User 16bit Code Segment    0x20
+
+    GDT_setEntry(5,  0,  (u16) 0xFFFFFFFF,  0x9A, 0xA0);    // Kernel 32bit Code Segment    0x28
+    GDT_setEntry(6,  0,  (u16) 0xFFFFFFFF,  0x92, 0xC0);    // Kernel 32bit Code Segment    0x30
+    GDT_setEntry(7,  0,  (u16) 0xFFFFFFFF,  0x9A, 0xA0);    // User 32bit Code Segment    0x38
+    GDT_setEntry(8,  0,  (u16) 0xFFFFFFFF,  0x92, 0xC0);    // User 32bit Code Segment    0x40
+
+    GDT_setEntry(9,  0,  (u16) 0xFFFFF,     0x9A, 0xA0);    // Kernel 64bit Code Segment    0x48
+    GDT_setEntry(10, 0, (u16) 0xFFFFF,      0x92, 0xC0);    // Kernel 64bit Data Segment    0x50
+    GDT_setEntry(11, 0, (u16) 0xFFFFF,      0xFA, 0xA0);    // User   64bit Data Segment    0x58
+    GDT_setEntry(12, 0, (u16) 0xFFFFF,      0xF2, 0xC0);    // User   64bit Data Segment    0x60
     
     // TSS 0x28
     the_gdt.tss.length = 104;
@@ -70,7 +81,7 @@ void GDT_init() {
 void tss_load(void) {
     kprintf("Loading TSS at %X...\n", &the_gdt.tss);
     // this must be the offset of tss
-    __asm__ volatile("mov $0x28, %%ax\n\t"
+    __asm__ volatile("mov $0x68, %%ax\n\t"
                  "ltr %%ax\n\t"
                  :
                  :
