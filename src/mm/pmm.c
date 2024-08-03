@@ -2,6 +2,8 @@
 #include <limine.h>
 #include <lib/mem.h>
 #include <lib/print.h>
+#include <lib/util/binary.h>
+#include <lib/util/util.h>
 #include <cpu/cpu.h>
 
 /**
@@ -11,6 +13,8 @@
  * Meaning, if I want to access the bitmap of entry i at byte x 
  * I do: bitmap[i][x]
  */
+
+// TODO: I use too much loops...
 
 /* Limine Features */
 static volatile struct limine_memmap_request memmap_req = {
@@ -59,7 +63,8 @@ void pmm_init() {
         kprintf("[PMM] This Entry's Bitmap Size: %i\n", entry->length / PAGE_SIZE);
 
         free_entry_count++;
-        full_bitmap_size += entry->length / PAGE_SIZE;  // we'll use this later
+        // TODO: Something feels off here... We're counting bits, not bytes (number of bits = number of pages)
+        full_bitmap_size += (entry->length / PAGE_SIZE) / 8;  // we get it in bytes
     }
 
     /** Whats done
@@ -103,12 +108,83 @@ void pmm_init() {
 		if (entry->type != LIMINE_MEMMAP_USABLE)
 			continue;
 
-        // Each index is a byte, and each bit is a page. So each element is 8 pages.
+        // Each index is a byte, and each bit is a page. So each element is (size of datatype * 8) pages.
         bitmap_sizes[i] = entry->length / PAGE_SIZE;
 	}
 }
 
 void* pmm_alloc(size_t size) {
+    /**
+     * # The slow way:
+     * - We iterate over each entry, then iterate over its bitmap.
+     * If the bitmap says that there isn't enough free space for our allocation
+     * (if `FLOOR_DIV(size, PAGE_SIZE) > free space`), we go to the next entry.
+     * The problem with this approach is that we have to iterate over each entry,
+     * then over each bitmap element, then over each bit in the bitmap element... etc
+     */
+
+    size_t pages_needed = CEIL_DIV(size, PAGE_SIZE);
+    bool found_space = false;
+
+    size_t continued_free_bits = 0;
+    // TODO: replace bit_start_offset with those dividing technics like used in the framebuffer (more efficient)
+    size_t bit_start_offset[2] = {0, 0};    // 1: u64 index - 2: bit offset
+    bool found_start = false;
+
+    log("[PMM] Need %i free pages\n", pages_needed);
+
+    for (size_t i = 0; i < memmap->entry_count; i++) {
+        struct limine_memmap_entry* entry = memmap->entries[i];
+
+        if (found_space) break;
+
+        if (entry->type != LIMINE_MEMMAP_USABLE)
+            continue;
+        
+        /**
+         * The idea:
+         * - We scan each bit in the bitmap, if we meet a zero,
+         * we go through another loop. The loop's condition will be that 
+         * each bit we iterate to (??? bad english) should be clear.
+         * If we meet a 1 in that loop, we break from it and search for another "free hole".
+         * The goal of that is finding a "free hole" large enough for our allocation.
+         */
+
+        /**
+         * 1. go through each u64 (first for loop 'u64_i')
+         * 2. go through each bit in the u64 (2nd loop 'b')
+         * 3. repeat (go back to  step 1)
+         */
+
+        for (size_t u64_i = 0; u64_i < bitmap_sizes[i]; u64_i++) {
+            if (continued_free_bits >= pages_needed) {
+                log("[PMM] Enough space has been found for allocation of %i pages\n", continued_free_bits);
+                found_space = true;
+                break;
+            }
+
+            for (size_t b = 0; b < sizeof(u64) * 8; b++) {
+                if (!bit_get(bitmap[i][u64_i], b)) {   //! problem here
+                    if (!found_start) {
+                        bit_start_offset[0] = u64_i;
+                        bit_start_offset[1] = b;
+                        found_start = true;
+                    }
+                    continued_free_bits++;
+                    continue;
+                } else {
+                    continued_free_bits = 0;
+                    bit_start_offset[0] = 0;
+                    bit_start_offset[1] = 1;
+                    found_start = false;
+                }
+            }
+        }
+    }
+
+    log("[PMM] Found %i free pages starting at bit %i of u64 %i\n", 
+        continued_free_bits, bit_start_offset[1], bit_start_offset[0]);
+
     return NULL;
 }
 
