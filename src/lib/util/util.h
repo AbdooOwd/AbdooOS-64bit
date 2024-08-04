@@ -3,6 +3,7 @@
 #pragma once
 
 #include <include/types.h>
+#include <interrupts/pit.h>
 
 
 #define PAGE_SIZE 4096
@@ -44,10 +45,16 @@
 #define SIZEOF_ARRAY(ARRAY) (sizeof(ARRAY) / sizeof(ARRAY[0]))
 
 
-void array_copy(unsigned char* source, unsigned char* dest);
-char* int_to_str(int num);
 
-int random();
+static int random() {
+    return (ticks ^ (ticks >> 21)) * 0x5bd1e5; // idk what i'm doing
+}
+
+static void array_copy(unsigned char* source, unsigned char* dest) {
+    for (size_t i = 0; i < sizeof(source); i++) {
+        dest[i] = source[i];
+    }
+}
 
 
 // throw random stuff as arguments so u don't let stuff unused (foq u GCC)
