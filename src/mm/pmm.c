@@ -39,6 +39,7 @@ u64 free_entry_count;
 u64 full_bitmap_size;   // measured in bytes
 
 // TODO: Optimize
+// TODO: Add Error Handling (eg: no entry big enough)
 void pmm_init() {
     if (memmap_req.response == NULL)
         panic("[PMM] Limine MemMap Request's Response is NULL");
@@ -62,23 +63,32 @@ void pmm_init() {
         kprintf("[PMM] Entry %i > Base: %x - Size: %x\n", i, entry->base, entry->length);
         kprintf("[PMM] This Entry's Bitmap Size: %i\n", entry->length / PAGE_SIZE);
 
+        full_bitmap_size += CEIL_DIV(CEIL_DIV(entry->length, PAGE_SIZE), 8);  // we get it in bytes
+        /** explanation:
+         * Each page represents a bit. When we divide entry's length
+         * by PAGE_SIZE, we get the number of pages that the entry
+         * can have. So it also means the number of bits we need.
+         * And then (number of bits) / 8 = (number of bytes)
+         */
+
         free_entry_count++;
-        // TODO: Something feels off here... We're counting bits, not bytes (number of bits = number of pages)
-        full_bitmap_size += (entry->length / PAGE_SIZE) / 8;  // we get it in bytes
     }
 
+    log ("[PMM] Full bitmap size: %i bytes\n", full_bitmap_size);
+
     /** Whats done
+     * - find how much pages each bitmap (each entry) can have
      * - find a place to store the bitmap
      */
     for (size_t i = 0; i < memmap->entry_count; i++) {
         struct limine_memmap_entry* entry = memmap->entries[i];
-        u64 bitmap_size = sizeof(u64) * free_entry_count;
+        u64 bitmap_size_size = sizeof(u64) * free_entry_count; // lol
         
         if (entry->type != LIMINE_MEMMAP_USABLE)
             continue;
 		
 		// not enough for bitmap
-		if (entry->length < full_bitmap_size + bitmap_size)
+		if (entry->length < full_bitmap_size + bitmap_size_size)
 			continue;
 		
         // place the bitmap in memory
@@ -90,9 +100,9 @@ void pmm_init() {
 
         // place bitmap sizes in memory
         bitmap_sizes = (u64*) (entry->base + get_hhdm());
-		memset(bitmap_sizes, 0, bitmap_size);
-        entry->base += bitmap_size;
-        entry->length -= bitmap_size;
+		memset(bitmap_sizes, 0, bitmap_size_size);
+        entry->base += bitmap_size_size;
+        entry->length -= bitmap_size_size;
         kprintf("[PMM] Placed Bitmap Sizes in Memory at %x\n", (u64) bitmap_sizes);
 
         kprintf("[PMM] New entry base: %x - new entry size: %x\n", entry->base, entry->length);
@@ -102,6 +112,11 @@ void pmm_init() {
     /** Whats done
      * - Set the size of each entry's bitmap
      */
+    size_t free_i = 0;
+    /**
+     * Iterating over entry count and not free entries count
+     * cuz I need the entry's length (extra un-optimized)
+     */
 	for (size_t i = 0; i < memmap->entry_count; i++) {
         struct limine_memmap_entry* entry = memmap->entries[i];
 
@@ -109,7 +124,8 @@ void pmm_init() {
 			continue;
 
         // Each index is a byte, and each bit is a page. So each element is (size of datatype * 8) pages.
-        bitmap_sizes[i] = entry->length / PAGE_SIZE;
+        bitmap_sizes[free_i] = CEIL_DIV(CEIL_DIV(entry->length, PAGE_SIZE), 8);
+        free_i++;
 	}
 }
 
@@ -123,6 +139,12 @@ void* pmm_alloc(size_t size) {
      * then over each bitmap element, then over each bit in the bitmap element... etc
      */
 
+    /**
+     * Another Idea is doing as we did with the bitmap and its sizes.
+     * You give it that base, increase that base, 
+     * and decrease the remaining "free length"
+     */
+
     size_t pages_needed = CEIL_DIV(size, PAGE_SIZE);
     bool found_space = false;
 
@@ -133,13 +155,8 @@ void* pmm_alloc(size_t size) {
 
     log("[PMM] Need %i free pages\n", pages_needed);
 
-    for (size_t i = 0; i < memmap->entry_count; i++) {
-        struct limine_memmap_entry* entry = memmap->entries[i];
-
+    for (size_t i = 0; i < free_entry_count; i++) {
         if (found_space) break;
-
-        if (entry->type != LIMINE_MEMMAP_USABLE)
-            continue;
         
         /**
          * The idea:
@@ -156,7 +173,25 @@ void* pmm_alloc(size_t size) {
          * 3. repeat (go back to  step 1)
          */
 
-        for (size_t u64_i = 0; u64_i < bitmap_sizes[i]; u64_i++) {
+        for (size_t u64_i = 0; u64_i < bitmap_sizes[i] / sizeof(u64); u64_i++) {
+            u64 cur_u64 = (u64) bitmap; // base of current u64
+
+            for (size_t j = 0; j != i; j++)
+                cur_u64 += bitmap_sizes[j]; // find cur entry base
+            
+            for (size_t pp = 0; pp < u64_i; pp++)
+                cur_u64 += sizeof(u64);
+            
+            log("[PMM] Base of current u64: %x\n", cur_u64);
+
+            /**
+             * DEVLOG
+             * - I gotta use my bitmap_sizes to find where
+             * the u64 is. As using it like a simple array
+             * won't work. There isn't a fixed size.
+             * Each entry's bitmap has a different size.
+             */
+
             if (continued_free_bits >= pages_needed) {
                 log("[PMM] Enough space has been found for allocation of %i pages\n", continued_free_bits);
                 found_space = true;
@@ -164,7 +199,9 @@ void* pmm_alloc(size_t size) {
             }
 
             for (size_t b = 0; b < sizeof(u64) * 8; b++) {
-                if (!bit_get(bitmap[i][u64_i], b)) {   //! problem here
+                // log("[PMM] Bit: %i - U64: %i - Free Entry: %i\n", b, u64_i, i);
+                
+                if (!TEST_BIT(*((u64*) cur_u64), b)) {
                     if (!found_start) {
                         bit_start_offset[0] = u64_i;
                         bit_start_offset[1] = b;
@@ -175,7 +212,7 @@ void* pmm_alloc(size_t size) {
                 } else {
                     continued_free_bits = 0;
                     bit_start_offset[0] = 0;
-                    bit_start_offset[1] = 1;
+                    bit_start_offset[1] = 0;
                     found_start = false;
                 }
             }
