@@ -10,6 +10,12 @@
 #define malloc      pmm_alloc
 #define mfree       pmm_free
 
+typedef struct {
+	size_t entry_index;
+	size_t u64_index;
+	size_t bit_offset;
+} bitmap_offset_t;
+
 /* functions */
 void pmm_init();
 void* pmm_alloc(size_t size);

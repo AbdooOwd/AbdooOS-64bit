@@ -38,6 +38,7 @@ u64* bitmap_sizes;	// measured in bytes
 u64 free_entry_count;
 u64 full_bitmap_size;   // measured in bytes
 
+// TODO: Have a data structure to store the free entry index and its actual index in the memmap (+ some info)
 // TODO: Optimize
 // TODO: Add Error Handling (eg: no entry big enough)
 void pmm_init() {
@@ -150,8 +151,11 @@ void* pmm_alloc(size_t size) {
 
     size_t continued_free_bits = 0;
     // TODO: replace bit_start_offset with those dividing technics like used in the framebuffer (more efficient)
-    size_t bit_start_offset[2] = {0, 0};    // 1: u64 index - 2: bit offset
+    // size_t bit_start_offset[3] = {0, 0,};    // 1: u64 index - 2: bit offset - 3: entry
+    bitmap_offset_t bitmap_offsets;
     bool found_start = false;
+
+    u64 cur_u64 = (u64) bitmap; // base of current u64
 
     log("[PMM] Need %i free pages\n", pages_needed);
 
@@ -174,7 +178,7 @@ void* pmm_alloc(size_t size) {
          */
 
         for (size_t u64_i = 0; u64_i < bitmap_sizes[i] / sizeof(u64); u64_i++) {
-            u64 cur_u64 = (u64) bitmap; // base of current u64
+            
 
             for (size_t j = 0; j != i; j++)
                 cur_u64 += bitmap_sizes[j]; // find cur entry base
@@ -192,37 +196,69 @@ void* pmm_alloc(size_t size) {
              * Each entry's bitmap has a different size.
              */
 
-            if (continued_free_bits >= pages_needed) {
-                log("[PMM] Enough space has been found for allocation of %i pages\n", continued_free_bits);
-                found_space = true;
-                break;
-            }
-
             for (size_t b = 0; b < sizeof(u64) * 8; b++) {
                 // log("[PMM] Bit: %i - U64: %i - Free Entry: %i\n", b, u64_i, i);
+
+                if (continued_free_bits >= pages_needed) {
+                    log("[PMM] Enough space has been found for allocation of %i pages\n", continued_free_bits);
+                    found_space = true;
+                    break;
+                }
                 
                 if (!TEST_BIT(*((u64*) cur_u64), b)) {
                     if (!found_start) {
-                        bit_start_offset[0] = u64_i;
-                        bit_start_offset[1] = b;
+                        bitmap_offsets.u64_index = u64_i;
+                        bitmap_offsets.bit_offset = b;
+                        bitmap_offsets.entry_index = i;
                         found_start = true;
                     }
                     continued_free_bits++;
                     continue;
                 } else {
                     continued_free_bits = 0;
-                    bit_start_offset[0] = 0;
-                    bit_start_offset[1] = 0;
+                    
+                    bitmap_offsets.bit_offset = 0;
+                    bitmap_offsets.u64_index = 0;
                     found_start = false;
                 }
             }
         }
     }
 
-    log("[PMM] Found %i free pages starting at bit %i of u64 %i\n", 
-        continued_free_bits, bit_start_offset[1], bit_start_offset[0]);
+    log("[PMM] Found %i free pages starting at bit %i of u64 %i in entry %i\n", 
+        continued_free_bits, bitmap_offsets.bit_offset, bitmap_offsets.u64_index, bitmap_offsets.entry_index);
 
-    return NULL;
+    if (found_start && found_space) {
+        void* ptr;
+        u64 ptr_base;
+        // step 1: set all found bits as used now
+        for (size_t b = 0; b < pages_needed; b++)
+            SET_BIT(*((u64*) cur_u64), b);
+        
+        // step 2: get the address
+        /**
+         * 1. get entry index
+         * 2. calculate the page address/position using the bitmap
+         * 3. boom, you got the base
+         */
+        size_t free_i = 0;
+        for (size_t i = 0; i < memmap->entry_count; i++) {
+            struct limine_memmap_entry* entry = memmap->entries[i];
+
+            if (entry->type != LIMINE_MEMMAP_USABLE)
+                continue;
+            
+            if (free_i == bitmap_offsets.entry_index) {
+                ptr_base = entry->base;
+                break;
+            }
+
+            free_i++;
+        }
+        ptr = (void*) (ptr_base + (u64) (((bitmap_offsets.u64_index * 8) + bitmap_offsets.bit_offset) * PAGE_SIZE) + get_hhdm());
+        log("[PMM] Returning Pointer Address: %x\n", (u64) ptr);
+        return ptr;
+    } else return NULL;
 }
 
 error_code pmm_free(void* ptr) {
