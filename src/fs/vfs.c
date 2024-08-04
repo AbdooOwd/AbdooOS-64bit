@@ -9,7 +9,7 @@ vfs_t* vfs;
 void vfs_init() {
 	vfs = (vfs_t*) malloc(sizeof(vfs_t));
 	if (vfs == NULL) return;
-	vfs->mountpoints = malloc(sizeof(mountpoint_t*) * MAX_MOUNTPOINT_COUNT);
+	vfs->mountpoints = (mountpoint_t**) malloc(sizeof(mountpoint_t) * MAX_MOUNTPOINT_COUNT);
 	if (vfs->mountpoints == NULL) return;
 	vfs->mountpoints_count = 0;
 

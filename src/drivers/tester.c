@@ -44,7 +44,7 @@ int test_imfs() {
         return -1;
     }
 
-    kprintf("Created IMFS at %x with size of %x\n", &imfs, sizeof(IMFS));
+    kprintf("Created IMFS at %x with size of %x\n", (u64) imfs, sizeof(IMFS));
 
     if (IMFS_file_create(test_filename) == 0)
         kprintf("Creating file '%s'\n", test_filename);
@@ -94,9 +94,10 @@ int test_vfs() {
 
     kprintf("Initializing VFS\n");
     vfs_init();
+    kprintf("VFS Initialized\n");
 
     char* ff = "idiot.pp";
-    char mnt_name[64];
+    char* mnt_name = (char*) malloc(sizeof(char) * 32);
     
     strcpy(mnt_name, vfs->mountpoints[0]->name);
 
