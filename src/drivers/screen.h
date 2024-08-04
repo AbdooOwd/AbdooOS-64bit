@@ -29,6 +29,7 @@ extern volatile u32* fb_addr;
 // text data
 extern Vector2 font_dimensions;
 extern Vector2 cursor_position;
+extern u8 cursor_delay;
 
 // functions
 
@@ -36,6 +37,8 @@ u32 	get_offset(int x, int y);
 void 	set_cursor(int x, int y);
 Vector2 get_cursor();
 void 	draw_cursor(int x, int y);
+void print_cursor(bool visible);
+void blink_cursor();
 
 void set_pixel(int x, int y, u32 color);
 void scroll_pixel_line();

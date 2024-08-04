@@ -1,6 +1,7 @@
 #include "pit.h"
 #include "irq.h"
 #include <kernel/io.h>
+#include <drivers/screen.h> // for cursor manipulation
 
 u64 ticks = 0;
 u64 seconds = 0;
@@ -9,6 +10,10 @@ u32 freq = 1;
 InterruptRegisters* PIT_handler(InterruptRegisters* regs) {
 	ticks++;
 	if (ticks % 87 == 0) seconds++;
+
+    if (ticks % 87 == 0 && seconds % cursor_delay == 0)
+        blink_cursor();
+
 	return regs;
 }
 

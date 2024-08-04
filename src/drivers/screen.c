@@ -9,10 +9,15 @@
 struct limine_framebuffer *framebuffer;
 volatile u32* fb_addr;
 
-Vector2 font_dimensions = {8, 8};
+Vector2 font_dimensions = {
+    .x = 8,
+    .y = 16
+};
 Vector2 cursor_position = {0, 0};
+u8 cursor_delay = 1;
+bool cursor_blinked = false;
 
-bool use_altFont = false;
+bool use_altFont = true;
 
 
 void set_pixel(int x, int y, u32 color) {
@@ -156,7 +161,10 @@ void print_backspace() {
 
     if (new_x > 0 && new_y > 0) { 
         print_char_at(0, new_x, new_y, WHITE);
+        print_char_at(0, new_x + 1, new_y, WHITE);  // remove cursor
         set_cursor(new_x, new_y);
+        iowait();
+        print_cursor(true);
     }
 }
 
@@ -194,13 +202,9 @@ Vector2 get_cursor() {
 }
 
 void set_cursor(int x, int y) {
-    // remove previous cursor (WARNING: will overwrite previous char to (; )
-    // draw_cell(cursor_position.x * 8, cursor_position.y * 8, BLACK);
 
     cursor_position.x = x; // new position
     cursor_position.y = y;
-
-    // draw_cursor(x, y);
 }
 
 void draw_cursor(int x, int y) {
@@ -210,6 +214,19 @@ void draw_cursor(int x, int y) {
             set_pixel(x * font_dimensions.x + x_pixel, y * font_dimensions.y + font_dimensions.y - line, WHITE);
         }
     }
+}
+
+void print_cursor(bool visible) {
+    if (get_cursor().x >= (SCREEN_WIDTH / font_dimensions.x) - 1) return;
+
+    if (visible) print_char_at('_', cursor_position.x, cursor_position.y, WHITE);
+    else print_char_at(' ', cursor_position.x, cursor_position.y, BLACK);
+    cursor_position.x -= 1;
+}
+
+void blink_cursor() {
+    cursor_blinked = !cursor_blinked;
+    print_cursor(cursor_blinked);
 }
 
 void print_entry() {

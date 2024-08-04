@@ -116,6 +116,7 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
 				break;
             
             case ENTER:
+                print_char_at(0, get_cursor().x, get_cursor().y, WHITE);  // remove cursor
                 print("\n");
                 user_input(input_buffer);
                 input_buffer[0] = '\0';
@@ -132,6 +133,8 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
 				    append(input_buffer, c);
 				    kprintf("%c", c);
                 }
+                iowait();
+                print_cursor(true);
         }
 	}
 	
