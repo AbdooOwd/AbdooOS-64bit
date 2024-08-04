@@ -7,6 +7,7 @@
 #include <lib/print.h>
 #include <lib/string.h>
 #include <kernel/io.h>
+#include <kernel/shell.h>
 #include <cpu/pic.h>
 #include <cpu/cpu.h>
 #include <mm/pmm.h>
@@ -82,12 +83,6 @@ char ascii_US[] = { '?', '?', '1', '2', '3', '4', '5', '6',
         'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
         'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' ' };
 
-command_t commands[] = {
-    { "help", "Helps, duh?" },
-    { "about", "Displays information about the OS."},
-    { "chngfont", "Changes the font."},
-    { "exit", "Halts the CPU, resulting in stopping all of its processing."}
-};
 
 static char input_buffer[256];
 static bool shift_pressed;
@@ -152,75 +147,6 @@ void keyboard_init() {
 }
 
 void user_input(char* input) {
-
     lower(input);
-
-    if (strsame(input, "help"))
-        for (size_t cmd = 0; cmd < sizeof(commands) / sizeof(command_t); cmd++)
-            kprintf(" - %s: %s\n", commands[cmd].command, commands[cmd].description);
-
-    if (strsame(input, "about")) {
-        kprintf(
-            "AbdooOS is a hobby x86-64 operating system made for fun "
-            "with the goal of learning about computer science "
-            "both hardware and software.\n"
-        );
-    }
-
-    if (strsame(input, "chngfont")) {
-        use_altFont = !use_altFont;
-
-        int old_font_height = font_dimensions.y;
-
-        if (use_altFont) {
-            font_dimensions.x = 8;
-            font_dimensions.y = 16;
-        } else {
-            font_dimensions.x = 8;
-            font_dimensions.y = 8;
-        }
-
-        // Update cursor position based on new font height
-
-        set_cursor(
-            get_cursor().x,
-            (get_cursor().y * old_font_height + font_dimensions.y) / font_dimensions.y
-        );
-
-        kprintf("Changed font successfullly!\n");
-    }
-
-    if (strsame(input, "runtests") || strsame(input, "test")) {
-        run_tests();
-    }
-
-    if (strsame(input, "info")) {
-        kprintf("> MEMORY INFO\n");
-        // kprintf(" - Usable Memory Size: %x\n", mem_size);
-    }
-
-    if (strsame(input, "clear")) {
-        clear_screen();
-        print_entry();
-    }
-
-    if (strsame(input, "crashme")) {
-        crash_me();
-    }
-
-    if (strsame(input, "exit")) {
-        kprintf("Halting CPU\n");
-        halt();
-    }
-
-    if (strsame(input, "dev")) {
-        char* test = "Abdoo Likes Women";
-        kprintf("Testing Split with string \"%s\" with ' '\n", test);
-        char** x = split(test, ' ');
-        for (size_t i = 0; x[i] != NULL; i++) {
-            kprintf("Elem %i: %s\n", i, x[i]);
-        }
-    }
-
-    print_color("$ ", GREEN);
+    handle_command(input);
 }

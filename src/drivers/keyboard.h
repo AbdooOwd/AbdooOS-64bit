@@ -6,11 +6,6 @@
 #include <interrupts/idt.h>
 
 
-typedef struct {
-	char* command;
-	char* description;
-} command_t;
-
 
 InterruptRegisters* keyboard_handler(InterruptRegisters* regs);
 void keyboard_init();
