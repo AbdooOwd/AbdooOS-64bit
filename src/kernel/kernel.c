@@ -7,7 +7,7 @@
 #include <lib/mem.h>
 #include "hal/hal.h"
 
-static volatile struct limine_bootloader_info_request bootloader_info = {
+volatile struct limine_bootloader_info_request bootloader_info = {
     .id = LIMINE_BOOTLOADER_INFO_REQUEST,
     .revision = 0
 };
@@ -34,10 +34,8 @@ void kernel_init() {
 
 void kernel_main() {
     clear_screen();
-    kprintf(" - - - AbdooOS %s | %s Bootloader Version %s - - -\n", ABDOOOS_VERSION, 
-        bootloader_info.response->name, bootloader_info.response->version);
-
-    print("\n$ ");
+    print_entry();
+    print_color("$ ", GREEN);
 
     for (;;) ;
 }

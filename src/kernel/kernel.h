@@ -5,6 +5,8 @@
 
 #include <include/types.h>
 
+extern volatile struct limine_bootloader_info_request bootloader_info;
+
 void kernel_init();
 void kernel_main();
 

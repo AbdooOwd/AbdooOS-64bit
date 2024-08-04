@@ -4,7 +4,7 @@
 #include <lib/string.h>
 #include <lib/print.h>
 #include <kernel/io.h>
-
+#include <kernel/kernel.h>
 
 struct limine_framebuffer *framebuffer;
 volatile u32* fb_addr;
@@ -210,4 +210,9 @@ void draw_cursor(int x, int y) {
             set_pixel(x * font_dimensions.x + x_pixel, y * font_dimensions.y + font_dimensions.y - line, WHITE);
         }
     }
+}
+
+void print_entry() {
+    kprintf(" - - - AbdooOS %s | %s Bootloader Version %s - - -\n\n", ABDOOOS_VERSION, 
+        bootloader_info.response->name, bootloader_info.response->version);
 }

@@ -196,6 +196,11 @@ void user_input(char* input) {
         // kprintf(" - Usable Memory Size: %x\n", mem_size);
     }
 
+    if (strsame(input, "clear")) {
+        clear_screen();
+        print_entry();
+    }
+
     if (strsame(input, "crashme")) {
         crash_me();
     }
@@ -214,5 +219,5 @@ void user_input(char* input) {
         }
     }
 
-    print("$ ");
+    print_color("$ ", GREEN);
 }
