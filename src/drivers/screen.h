@@ -47,6 +47,7 @@ void clear_screen();
 void err(char* error);
 void success(char* success_msg);
 void print(char* str);
+void print_color(char* str, u32 color);
 void print_char_at(char c, int x, int y, u32 color);
 void print_string_at(char* str, int x, int y, u32 color);
 void print_backspace();

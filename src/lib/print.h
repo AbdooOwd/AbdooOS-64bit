@@ -10,7 +10,7 @@
 void kprintf(const char* fmt, ...);
 
 // virtual kernel printf: format and print
-void vkprintf(const char* fmt, va_list args);
+void vkprintf(const char* fmt, u32 color, va_list args);
 
 void log(const char* fmt, ...);
 void vlog(const char* fmt, va_list args);

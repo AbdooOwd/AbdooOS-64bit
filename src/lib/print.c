@@ -4,17 +4,26 @@
 #include "util/util.h"
 #include <kernel/io.h>
 
-void kprintf(const char* fmt, ...) {
+void kprintf_color(const char* fmt, u32 color, ...) {
     // loading optional parameters
     va_list args;
-    va_start(args, fmt);
+    va_start(args, color);
 
-    vkprintf(fmt, args);
+    vkprintf(fmt, color, args);
 
     va_end(args);
 }
 
-void vkprintf(const char* fmt, va_list args) {
+void kprintf(const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+
+    vkprintf(fmt, WHITE, args);
+
+    va_end(args);
+}
+
+void vkprintf(const char* fmt, u32 color, va_list args) {
     char buffer[MAX_STRING_FORMATTER_BUFFER_SIZE] = {0};
 
     int i = 0;
@@ -30,7 +39,7 @@ void vkprintf(const char* fmt, va_list args) {
 
         fmt++;
     }
-    print(buffer);
+    print_color(buffer, color);
 }
 
 void log(const char* fmt, ...) {

@@ -136,6 +136,10 @@ void err(char* error) {
     print_string_at(error, -1, -1, RED);
 }
 
+void print_color(char* str, u32 color) {
+    print_string_at(str, -1, -1, color);
+}
+
 void print(char* str) {
     print_string_at(str, -1, -1, WHITE);
 }
