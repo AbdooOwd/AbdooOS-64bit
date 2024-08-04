@@ -11,6 +11,11 @@ command_t commands[] = {
     { "help", "Helps, duh?" },
     { "about", "Displays information about the OS."},
     { "chngfont", "Changes the font."},
+    { "test | runtests", "Run tests on the machine and OS."},
+    { "info", "Displays info about the system."},
+    { "clear", "Clears the screen."},
+    { "random", "Displays a random integer."},
+    { "crashme", "Crashes the system by trying to divide by zero (supposed to be harmless)."},
     { "exit", "Halts the CPU, resulting in stopping all of its processing."}
 };
 
