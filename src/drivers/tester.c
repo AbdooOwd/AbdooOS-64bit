@@ -44,8 +44,6 @@ int test_imfs() {
         return -1;
     }
 
-    p("%i  -  %x\n", imfs->count, imfs->count);
-
     kprintf("Created IMFS at %x with size of %x\n", &imfs, sizeof(IMFS));
 
     if (IMFS_file_create(test_filename) == 0)

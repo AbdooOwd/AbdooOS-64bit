@@ -51,7 +51,7 @@ void PIC_eoi(u8 irq) {
 		outb(PIC2_COMMAND, PIC_EOI);
  
 	outb(PIC1_COMMAND, PIC_EOI);
-    log("[PIC] PIC End of Interrupt\n");
+    // log("[PIC] PIC End of Interrupt\n");
 }
 
 void IRQ_set_mask(u8 le_irq) {
