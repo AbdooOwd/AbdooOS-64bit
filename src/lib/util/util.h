@@ -45,9 +45,19 @@
 #define SIZEOF_ARRAY(ARRAY) (sizeof(ARRAY) / sizeof(ARRAY[0]))
 
 
+#define LCG_A 1664525
+#define LCG_C 1013904223
+#define LCG_M 0xFFFFFFFF
+
 
 static int random() {
     return (ticks ^ (ticks >> 21)) * 0x5bd1e5; // idk what i'm doing
+}
+
+static u32 rand_range(u32 min_value, u32 max_value) {
+    static u32 seed = 1;
+    seed = (LCG_A * seed + LCG_C) & LCG_M;
+    return min_value + (seed % (max_value - min_value + 1));
 }
 
 static void array_copy(unsigned char* source, unsigned char* dest) {
