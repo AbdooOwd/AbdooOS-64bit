@@ -19,9 +19,12 @@
 #define BACKSPACE 		0x0E
 #define ENTER 			0x1C
 #define LSHIFT 			0x2A
+#define DOWN            0x50
+#define UP              0x48
 
-#define SC_MAX 			57
+#define SC_MAX 			80
 
+/*
 typedef enum {
     UNKNOWN = 0xFFFFFFFF,
     ESC = 0xFFFFFFFF - 1,
@@ -57,8 +60,9 @@ typedef enum {
     ALTGR = 0xFFFFFFFF - 31,
     NUMLCK = 0xFFFFFFFF - 32,
 } special_keys;
+*/
 
-
+/*
 const u64 layout[128] = {
     UNKNOWN, ESC,     '1',     '2',     '3',     '4',     '5',     '6',
     '7',     '8',     '9',     '0',     '-',     '=',     '\b',    '\t',
@@ -76,6 +80,7 @@ const u64 layout[128] = {
     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,
     UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN};
+*/
 
 char ascii_US[] = { '?', '?', '1', '2', '3', '4', '5', '6',
     '7', '8', '9', '0', '-', '=', '?', '?', 'q', 'w', 'e', 'r', 't', 'y',
@@ -86,6 +91,8 @@ char ascii_US[] = { '?', '?', '1', '2', '3', '4', '5', '6',
 
 static char input_buffer[256];
 static bool shift_pressed;
+char* prev_input;
+size_t last_line_start = 0;
 
 
 InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
@@ -114,11 +121,23 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
                 print_char_at(0, get_cursor().x, get_cursor().y, WHITE);  // remove cursor
                 print("\n");
                 user_input(input_buffer);
-                input_buffer[0] = '\0';
+                strcpy(prev_input, input_buffer);
+                log("[KB Driver] Input Buffer: %s\n", input_buffer);
+                strclr(input_buffer);
                 break;
             
             case LSHIFT | 0x80:     // we released shift
                 shift_pressed = false;
+                break;
+            
+            case UP:
+                for (size_t i = 0; i < strlen(prev_input); i++)
+                    print_backspace();
+                print_char_at(0, 1, last_line_start, WHITE); // TODO: remove hardcoded cursor removing
+                set_cursor(2, last_line_start);
+                strclr(input_buffer);
+                strcpy(input_buffer, prev_input);
+                print(prev_input);
                 break;
 
 			default:
@@ -144,9 +163,12 @@ char getch(u8 scancode) {
 void keyboard_init() {
     kprintf("[KB Driver] Installing keyboard handler at %x to IRQ1...\n", &keyboard_handler);
 	IRQ_installHandler(1, keyboard_handler);
+    prev_input = (char*) malloc(sizeof(char) * MAX_BUFFER);
+    last_line_start = get_cursor().y;
 }
 
 void user_input(char* input) {
     lower(input);
     handle_command(input);
+    last_line_start = get_cursor().y;
 }

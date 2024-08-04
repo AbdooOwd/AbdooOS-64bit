@@ -5,6 +5,7 @@
 #include <drivers/screen.h>
 #include <drivers/tester.h>
 #include <cpu/cpu.h>
+#include <mm/pmm.h>
 
 command_t commands[] = {
     { "help", "Helps, duh?" },
@@ -61,6 +62,10 @@ void handle_command(char* command) {
     if (strsame(command, "clear")) {
         clear_screen();
         print_entry();
+    }
+
+    if (strsame(command, "random")) {
+        kprintf("%i\n", random());
     }
 
     if (strsame(command, "crashme")) {

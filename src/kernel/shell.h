@@ -5,6 +5,8 @@
 
 #include <include/types.h>
 
+#define 	MAX_BUFFER	256
+
 typedef struct {
 	char* command;
 	char* description;
