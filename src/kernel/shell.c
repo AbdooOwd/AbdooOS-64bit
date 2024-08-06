@@ -28,6 +28,9 @@ void handle_command(char* command) {
         print_color("$ ", GREEN);
         return;
     }
+
+    command = trim(command);
+
     char* full_command = malloc(sizeof(char) * MAX_BUFFER);
     strcpy(full_command, command);
     
