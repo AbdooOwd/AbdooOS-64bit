@@ -119,7 +119,7 @@ void print_char_at(char c, int x, int y, u32 color) {
         }
     }
 
-    set_cursor(x, y);
+    if(!isEditingHorizontally) set_cursor(x, y);    // for shell commands
 }
 
 void print_string_at(char* str, int x, int y, u32 color) {
@@ -187,6 +187,19 @@ void invert_char_colors(int x, int y) {
     }
 }
 
+void color_char(int x, int y, u32 color) {
+    for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
+        for (size_t xx = 0; xx < (size_t) font_dimensions.x; xx++) {
+            // Assuming we only use Black/White
+            // TODO: support any color invertion
+            if (color == WHITE)
+                set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, BLACK);
+            else
+                set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, WHITE);
+        }
+    }
+}
+
 void draw_cell(int x, int y, u32 color) {
     for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
         for (size_t xx = 0; xx < (size_t) font_dimensions.x; xx++) {
@@ -216,6 +229,10 @@ u32 get_offset(int x, int y) {
 
 Vector2 get_cursor() {
     return cursor_position;
+}
+
+void move_cursor(int x, int y) {
+    set_cursor(get_cursor().x + x, get_cursor().y + y);
 }
 
 void set_cursor(int x, int y) {

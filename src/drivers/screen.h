@@ -36,11 +36,13 @@ extern u8 cursor_delay;
 u32  get_offset(int x, int y);
 void set_cursor(int x, int y);
 Vector2 get_cursor();
+void move_cursor(int x, int y);
 void draw_cursor(int x, int y);
 void print_cursor(bool visible);
 void blink_cursor();
 
 void invert_char_colors(int x, int y);
+void color_char(int x, int y, u32 color);
 
 void set_pixel(int x, int y, u32 color);
 u32  get_pixel(int x, int y);

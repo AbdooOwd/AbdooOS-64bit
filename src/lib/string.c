@@ -142,7 +142,7 @@ char upper_char(char c) {
 char* get_split(char* str, char target, size_t index) {
     size_t len = strlen(str);
     size_t target_found = 0;
-    char* result = (char*) malloc(sizeof(char) * 16);
+    char* result = (char*) malloc(sizeof(char) * 64);
     size_t str_i = 0;
 
     for (size_t i = 0; i < len; i++) {

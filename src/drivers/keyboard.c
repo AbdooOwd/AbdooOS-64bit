@@ -104,6 +104,7 @@ static char input_buffer[256];
 static bool shift_pressed;
 char* prev_input;
 size_t last_line_start = 0;
+int input_mover = 0;
 
 
 InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
@@ -129,13 +130,16 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
 				break;
             
             case ENTER:
-                print_char_at(0, get_cursor().x, get_cursor().y, WHITE);  // remove cursor
+                if (!isEditingHorizontally) print_char_at(0, get_cursor().x, get_cursor().y, WHITE);  // remove cursor
+                invert_char_colors(get_cursor().x, get_cursor().y);
+                isEditingHorizontally = false;
                 print("\n");
                 user_input(input_buffer);
                 strcpy(prev_input, input_buffer);
                 log("[KB Driver] Input Buffer: %s\n", input_buffer);
                 strclr(input_buffer);
                 last_line_start = get_cursor().y;
+                input_mover = 0;
                 break;
             
             case LSHIFT | 0x80:     // we released shift
@@ -157,11 +161,21 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
                 // TODO: Implement that scrolly negative x stuff into cursor functions directly
                 if (get_cursor().x <= 2) break; // 2 cuz "$ "
                 isEditingHorizontally = true;
-                set_cursor(get_cursor().x - 1, get_cursor().y);
+                if (input_mover > 0) invert_char_colors(get_cursor().x, get_cursor().y);
+                move_cursor(-1, 0);
+                input_mover++;
                 invert_char_colors(get_cursor().x, get_cursor().y);
+                log("Input Mover: %i\n", input_mover);
                 break;
+            
             case RIGHT:
                 if (strlen(input_buffer) + 2 <= get_cursor().x) break;
+                isEditingHorizontally = true;
+                if (input_mover <= strlen(input_buffer)) invert_char_colors(get_cursor().x, get_cursor().y);
+                move_cursor(+1, 0);
+                if (input_mover > 0) input_mover--;
+                invert_char_colors(get_cursor().x, get_cursor().y);
+                log("Input Mover: %i\n", input_mover);
                 break;
 
 			default:
@@ -174,11 +188,21 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
                 }
 
                 if (scancode != LSHIFT) {
-				    append(input_buffer, c);
-				    kprintf("%c", c);
+                    kprintf("%c", c);
+
+                    if (input_mover == 0)
+				        append(input_buffer, c); // thats the simple way, but we can do it the HARD way
+                    // input_buffer[input_buffer_index] = c;   // YEAAAHHH! THE HARD WAAAYYYYYY
+                    // input_buffer[input_buffer_index + 1] = '\0';
+                    // input_buffer_index++;
+                    else {
+                        input_buffer[strlen(input_buffer) - input_mover] = c;
+                        invert_char_colors(get_cursor().x, get_cursor().y);
+                    }
                 }
                 iowait();
                 print_cursor(true);
+                break;
         }
 	}
 	

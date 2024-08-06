@@ -21,6 +21,10 @@ command_t commands[] = {
 };
 
 void handle_command(char* command) {
+    if (strlen(command) <= 0) {
+        print_color("$ ", GREEN);
+        return;
+    }
     char* full_command = malloc(sizeof(char) * MAX_BUFFER);
     strcpy(full_command, command);
     
@@ -97,10 +101,6 @@ void handle_command(char* command) {
     if (strsame(command, "exit")) {
         kprintf("Halting CPU\n");
         halt();
-    }
-
-    if (strsame(command, "dev")) {
-        invert_char_colors(5, 0);
     }
 
     print_color("$ ", GREEN);
