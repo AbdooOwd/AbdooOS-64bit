@@ -230,7 +230,7 @@ void* pmm_alloc(size_t size) {
 
     if (found_start && found_space) {
         void* ptr;
-        u64 ptr_base;
+        u64 ptr_base = 0;
         // step 1: set all found bits as used now
         for (size_t b = 0; b < pages_needed; b++)
             SET_BIT(*((u64*) cur_u64), b + bitmap_offsets.bit_offset);

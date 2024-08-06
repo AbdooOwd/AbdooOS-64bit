@@ -5,11 +5,11 @@
 #include <include/types.h>
 
 #define MAX_FILES_COUNT 	100
-#define MAX_FILENAME_LENGTH 100
+#define MAX_IMFS_FILENAME_LENGTH 100
 #define MAX_FILE_SIZE 		1024
 
 typedef struct {
-	char 	filename[MAX_FILENAME_LENGTH];
+	char 	filename[MAX_IMFS_FILENAME_LENGTH];
 	char	data[MAX_FILE_SIZE];
 	size_t	size;
 } FileEntry;

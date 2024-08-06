@@ -62,7 +62,7 @@ int test_imfs() {
         return -3;
     }
 
-    char le_buffer[MAX_FILENAME_LENGTH];
+    char le_buffer[MAX_IMFS_FILENAME_LENGTH];
     if (IMFS_file_read(test_filename, le_buffer, sizeof(char) * strlen(msg)) == 0) {
         kprintf("Read '%s': \"%s\"\n", test_filename, le_buffer);
     } else {

@@ -29,13 +29,13 @@ void append(char* str, char c);
 
 void strclr(char* str);
 
-int count(char* str, char target);
+size_t count(char* str, char target);
 void lower(char* str);
 void upper(char* str);
 bool char_islower(char c);
 char upper_char(char c);
 
-char** split(char* str, char target);
+// char** split(char* str, char target);
 char* get_split(char* str, char target, size_t index);
 
 #endif

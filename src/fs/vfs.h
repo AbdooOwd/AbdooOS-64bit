@@ -10,7 +10,7 @@
 
 #define DEFAULT_MAX_NAME_LENGTH	64
 
-#define MAX_FILENAME_LENGTH		128
+#define MAX_VFS_FILENAME_LENGTH	128
 #define MAX_FILE_COUNT			10
 #define MAX_FILE_SIZE			1024
 
@@ -25,7 +25,7 @@ typedef struct {
 } fs_operations_t;
 
 typedef struct {
-	char	filename[MAX_FILENAME_LENGTH];
+	char	filename[MAX_VFS_FILENAME_LENGTH];
 	void* 	data[MAX_FILE_SIZE];
 	size_t 	size;
 } file_t;

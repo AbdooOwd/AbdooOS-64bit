@@ -33,13 +33,13 @@ int IMFS_file_create(char* filename) {
 	if (imfs->count >= MAX_FILES_COUNT)
 		return -1;
 
-	if (strlen(filename) > MAX_FILENAME_LENGTH)
+	if (strlen(filename) > MAX_IMFS_FILENAME_LENGTH)
 		return -2;
 	
 	if (IMFS_file_exists(filename))
 		return -3;
 	
-	strlcpy(imfs->files[imfs->count].filename, filename, MAX_FILENAME_LENGTH);
+	strlcpy(imfs->files[imfs->count].filename, filename, MAX_IMFS_FILENAME_LENGTH);
 	imfs->files[imfs->count].size = 0;
 	imfs->count++;
 

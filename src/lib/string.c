@@ -78,7 +78,7 @@ bool has_char(char* str, char target) {
     return false;
 }
 
-int count(char* str, char target) {
+size_t count(char* str, char target) {
     size_t le_count = 0;
     for (size_t i = 0; i < strlen(str); i++) {
         if (str[i] == target) le_count++;
@@ -137,16 +137,6 @@ char upper_char(char c) {
 //         temp_len++;
 //     }
 // }
-
-char** split(char* str, char target) {
-    char result[NORMAL_SPLIT_ARRAY_SIZE][NORMAL_STRING_LENGTH];
-
-    for (size_t i = 0; i < count(str, target) + 1; i++) {
-        strcpy(result[i], get_split(str, target, i));
-    }
-
-    return result;
-}
 
 char* get_split(char* str, char target, size_t index) {
     size_t len = strlen(str);

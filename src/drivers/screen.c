@@ -217,7 +217,7 @@ void draw_cursor(int x, int y) {
 }
 
 void print_cursor(bool visible) {
-    if (get_cursor().x >= (SCREEN_WIDTH / font_dimensions.x) - 1) return;
+    if ((u64) get_cursor().x >= (SCREEN_WIDTH / font_dimensions.x) - 1) return;
 
     if (visible) print_char_at('_', cursor_position.x, cursor_position.y, WHITE);
     else print_char_at(' ', cursor_position.x, cursor_position.y, BLACK);
