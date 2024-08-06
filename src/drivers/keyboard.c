@@ -88,6 +88,14 @@ char ascii_US[] = { '?', '?', '1', '2', '3', '4', '5', '6',
         'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
         'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' ' };
 
+char shifted_US[] = { 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, '"', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0 
+};
+
 
 static char input_buffer[256];
 static bool shift_pressed;
@@ -142,7 +150,13 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
 
 			default:
                 char c = getch(scancode);
-                if (shift_pressed) c = upper_char(c);
+                if (shift_pressed) {
+                    if (shifted_US[scancode] == 0)
+                        c = upper_char(c);
+                    else
+                        c = shifted_US[scancode];
+                }
+
                 if (scancode != LSHIFT) {
 				    append(input_buffer, c);
 				    kprintf("%c", c);
