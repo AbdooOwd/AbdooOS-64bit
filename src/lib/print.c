@@ -6,6 +6,7 @@
 
 // TODO: Merge vkprintf and vlog together
 // TODO: Try to make one universal kprintf (supports optional color, position... etc)
+// TODO: Add something like RichTextLabel (edit text's style, color and all with delimiters like [color:#ffffff][/color])
 
 void kprintf_color(const char* fmt, u32 color, ...) {
     // loading optional parameters
