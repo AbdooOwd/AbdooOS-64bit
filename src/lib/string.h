@@ -39,4 +39,6 @@ char upper_char(char c);
 char* get_split(char* str, char target, size_t index);
 char* get_argStr(char* full_str, size_t index);
 
+void trim(char* str);
+
 #endif

@@ -193,3 +193,21 @@ char* get_argStr(char* full_str, size_t index) {
 
     return result;
 }
+
+
+void trim(char* str) {
+    // TODO: Replace this, not memory efficient
+    size_t len = strlen(str);
+    char* result = (char*) malloc(sizeof(char) * len);
+    bool found_real_string = false;
+
+    for (size_t i = 0; i < len; i++) {
+        if (str[i] != ' ')
+            found_real_string = true;
+        
+        if (found_real_string)
+            append(result, str[i]);
+    }
+
+    strcpy(str, result);
+}
