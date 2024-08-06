@@ -3,6 +3,7 @@
 
 #include <stdarg.h>
 #include <include/types.h>
+#include <drivers/screen.h>
 
 #define p kprintf
 
