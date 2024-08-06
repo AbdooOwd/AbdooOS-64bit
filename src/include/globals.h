@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-#define ABDOOOS_VERSION		"0.11.2"
+#define ABDOOOS_VERSION		"0.12.0"
 
 extern addr_t gdt_addr;
 extern bool use_altFont;
