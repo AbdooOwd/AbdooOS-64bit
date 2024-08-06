@@ -138,6 +138,7 @@ char upper_char(char c) {
 //     }
 // }
 
+// TODO: Optimize this, or make a split func so I don't need to scan the str everytime i need ONE element
 char* get_split(char* str, char target, size_t index) {
     size_t len = strlen(str);
     size_t target_found = 0;
@@ -166,57 +167,29 @@ char* get_split(char* str, char target, size_t index) {
     return "NaN";
 }
 
-char** gpt_split(char* str, char target) {
-    size_t target_count = count(str, target);
-	
-    char** splitten = (char**)malloc((target_count + 2) * sizeof(char*));
+char* get_argStr(char* full_str, size_t index) {
+    char* result = (char*) malloc(sizeof(char) * 64);
+    result[1] = '\0';
+    size_t dbl_quotes_count = 0;
 
-    if (!splitten) {
-        return NULL;
-    }
-    
-    size_t split_i = 0;
-    size_t start = 0;
-    size_t i = 0;
-    
-    // Iterate through the string
-    while (str[i] != '\0') {
-        if (str[i] == target) {
-            size_t part_len = i - start;
-            splitten[split_i] = (char*)malloc((part_len + 1) * sizeof(char));
-            if (!splitten[split_i]) {
-                // Handle allocation failure
-                for (size_t j = 0; j < split_i; j++) {
-                    mfree(splitten[j]);
-                }
-                mfree(splitten);
-                return NULL;
-            }
-            strlcpy(splitten[split_i], &str[start], part_len);
-            splitten[split_i][part_len] = '\0';
-            split_i++;
-            start = i + 1;
+    for (size_t i = 0; i < strlen(full_str); i++) {
+        char c = full_str[i];
+
+        // TODO: This if statement seems wrong
+        if (dbl_quotes_count >= 2 && FLOOR_DIV(dbl_quotes_count, 2) == index) {
+            break;  // we're done scanning
         }
-        i++;
-    }
-    
-    // Handle the last part
-    size_t part_len = i - start;
-    splitten[split_i] = (char*)malloc((part_len + 1) * sizeof(char));
-    if (!splitten[split_i]) {
-        // Handle allocation failure
-        for (size_t j = 0; j < split_i; j++) {
-            mfree(splitten[j]);
+
+        if (c == '"') {
+            // TODO: Add cancel ('\"')
+            dbl_quotes_count++;
         }
-        mfree(splitten);
-        return NULL;
+
+        if (dbl_quotes_count % 2 != 0) {
+            if (c == '"') continue;
+            append(result, c);
+        }
     }
-    strlcpy(splitten[split_i], &str[start], part_len);
-    splitten[split_i][part_len] = '\0';
-    split_i++;
-    
-    // Mark the end of the array
-    splitten[split_i] = NULL;
-    
-    return splitten;
+
+    return result;
 }
