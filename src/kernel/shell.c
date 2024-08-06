@@ -100,11 +100,7 @@ void handle_command(char* command) {
     }
 
     if (strsame(command, "dev")) {
-        char* test = "Abdoo is a mature professional";
-        kprintf("Testing Split with string \"%s\" with ' '\n", test);
-        for (size_t i = 0; i < count(test, ' ') + 1; i++) {
-            kprintf("[%i] > \"%s\"\n", i, get_split(test, ' ', i));
-        }
+        invert_char_colors(5, 0);
     }
 
     print_color("$ ", GREEN);

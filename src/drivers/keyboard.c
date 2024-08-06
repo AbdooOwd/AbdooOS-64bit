@@ -135,6 +135,7 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
                 strcpy(prev_input, input_buffer);
                 log("[KB Driver] Input Buffer: %s\n", input_buffer);
                 strclr(input_buffer);
+                last_line_start = get_cursor().y;
                 break;
             
             case LSHIFT | 0x80:     // we released shift
@@ -148,7 +149,19 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
                 break;
             
             case DOWN:
+                if (last_line_start > get_cursor().y + 5) break;    // safety check
                 clear_input_line();
+                break;
+            
+            case LEFT:
+                // TODO: Implement that scrolly negative x stuff into cursor functions directly
+                if (get_cursor().x <= 2) break; // 2 cuz "$ "
+                isEditingHorizontally = true;
+                set_cursor(get_cursor().x - 1, get_cursor().y);
+                invert_char_colors(get_cursor().x, get_cursor().y);
+                break;
+            case RIGHT:
+                if (strlen(input_buffer) + 2 <= get_cursor().x) break;
                 break;
 
 			default:
@@ -178,7 +191,8 @@ char getch(u8 scancode) {
 }
 
 void clear_input_line() {
-    for (size_t i = 0; i < strlen(prev_input); i++)
+    if (strlen(input_buffer) <= 0) return;
+    for (size_t i = 0; i < strlen(input_buffer); i++)
         print_backspace();
     print_char_at(0, 1, last_line_start, WHITE); // TODO: remove hardcoded cursor removing
     set_cursor(2, last_line_start);
@@ -189,6 +203,7 @@ void keyboard_init() {
     kprintf("[KB Driver] Installing keyboard handler at %x to IRQ1...\n", &keyboard_handler);
 	IRQ_installHandler(1, keyboard_handler);
     prev_input = (char*) malloc(sizeof(char) * MAX_BUFFER);
+    set_cursor(2, 2);   // TODO: Hardcoded Cursor Pos Setting
     last_line_start = get_cursor().y;
 }
 

@@ -25,6 +25,12 @@ void set_pixel(int x, int y, u32 color) {
         fb_addr[get_offset(x, y)] = color;
 }
 
+u32 get_pixel(int x, int y) {
+    if ((x >= 0 && (u64) x < framebuffer->width) && (y >= 0 && (u64) y < framebuffer->height))
+        return fb_addr[get_offset(x, y)];
+    return BLACK;
+}
+
 void scroll_pixel_line() {
     /*
         The idea: start by 1st line, clear it, save the next line (start of real iteration)
@@ -168,7 +174,18 @@ void print_backspace() {
     }
 }
 
-
+void invert_char_colors(int x, int y) {
+    for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
+        for (size_t xx = 0; xx < (size_t) font_dimensions.x; xx++) {
+            // Assuming we only use Black/White
+            // TODO: support any color invertion
+            if (get_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy) == WHITE)
+                set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, BLACK);
+            else
+                set_pixel(x * font_dimensions.x + xx, y * font_dimensions.y + yy, WHITE);
+        }
+    }
+}
 
 void draw_cell(int x, int y, u32 color) {
     for (size_t yy = 0; yy < (size_t) font_dimensions.y; yy++) {
@@ -218,6 +235,7 @@ void draw_cursor(int x, int y) {
 
 void print_cursor(bool visible) {
     if ((u64) get_cursor().x >= (SCREEN_WIDTH / font_dimensions.x) - 1) return;
+    if (isEditingHorizontally)  return;
 
     if (visible) print_char_at('_', cursor_position.x, cursor_position.y, WHITE);
     else print_char_at(' ', cursor_position.x, cursor_position.y, BLACK);
