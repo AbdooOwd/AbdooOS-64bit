@@ -233,7 +233,7 @@ void* pmm_alloc(size_t size) {
         u64 ptr_base;
         // step 1: set all found bits as used now
         for (size_t b = 0; b < pages_needed; b++)
-            SET_BIT(*((u64*) cur_u64), b);
+            SET_BIT(*((u64*) cur_u64), b + bitmap_offsets.bit_offset);
         
         // step 2: get the address
         /**
