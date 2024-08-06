@@ -123,6 +123,9 @@ void print_char_at(char c, int x, int y, u32 color) {
 }
 
 void print_string_at(char* str, int x, int y, u32 color) {
+
+    int x_start = x;
+    int y_start = y;
     
     if (x < 0 || y < 0) {
         x = get_cursor().x;
@@ -132,7 +135,7 @@ void print_string_at(char* str, int x, int y, u32 color) {
     while (*str) {
         print_char_at(*str, x, y, color);
 
-        if (*str == '\n') { y++; x = 0; }
+        if (*str == '\n') { y++; x = x_start; }
         else x++;
 
         str++;
