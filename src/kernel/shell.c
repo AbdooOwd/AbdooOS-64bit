@@ -8,6 +8,7 @@
 #include <interrupts/pit.h>
 #include <mm/pmm.h>
 #include <kernel/kernel.h>
+#include <programs/cowsay.h>
 
 command_t commands[] = {
     { "help",               "Helps, duh?" },
@@ -118,6 +119,11 @@ void handle_command(char* command) {
             SYSFETCH_X_POS + 2, get_cursor().y + 1, WHITE
         );
         print_color("\"Enjoy my piece of work!\"\n\n", GREEN);
+    }
+
+    if (strsame(command, "cowsay")) {
+        if (argc >= 2)
+            cowsay(get_argStr(full_command, 0));
     }
 
     if (strsame(command, "crashme")) {
