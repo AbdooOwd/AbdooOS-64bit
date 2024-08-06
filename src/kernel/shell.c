@@ -85,9 +85,10 @@ void handle_command(char* command) {
     if (strsame(command, "dev")) {
         char* test = "Abdoo Likes Women";
         kprintf("Testing Split with string \"%s\" with ' '\n", test);
-        char** x = split(test, ' ');
-        for (size_t i = 0; x[i] != NULL; i++) {
-            kprintf("Elem %i: %s\n", i, x[i]);
+        char** splitten = (char**) malloc(sizeof(char) * 256);
+        split(test, ' ', splitten);
+        for (size_t i = 0; splitten[i] != NULL; i++) {
+            kprintf("Elem %i: %s\n", i, splitten[i]);
         }
     }
 

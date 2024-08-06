@@ -33,6 +33,6 @@ void upper(char* str);
 bool char_islower(char c);
 char upper_char(char c);
 
-char** split(char* str, char target);
+void split(char* str, char target, char** splitten);
 
 #endif
