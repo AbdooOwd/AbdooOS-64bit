@@ -19,8 +19,11 @@
 #define BACKSPACE 		0x0E
 #define ENTER 			0x1C
 #define LSHIFT 			0x2A
+
 #define DOWN            0x50
 #define UP              0x48
+#define RIGHT           0x4D
+#define LEFT            0x4B
 
 #define SC_MAX 			80
 
@@ -139,13 +142,13 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
                 break;
             
             case UP:
-                for (size_t i = 0; i < strlen(prev_input); i++)
-                    print_backspace();
-                print_char_at(0, 1, last_line_start, WHITE); // TODO: remove hardcoded cursor removing
-                set_cursor(2, last_line_start);
-                strclr(input_buffer);
+                clear_input_line();
                 strcpy(input_buffer, prev_input);
                 print(prev_input);
+                break;
+            
+            case DOWN:
+                clear_input_line();
                 break;
 
 			default:
@@ -172,6 +175,14 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
 
 char getch(u8 scancode) {
 	return ascii_US[scancode];
+}
+
+void clear_input_line() {
+    for (size_t i = 0; i < strlen(prev_input); i++)
+        print_backspace();
+    print_char_at(0, 1, last_line_start, WHITE); // TODO: remove hardcoded cursor removing
+    set_cursor(2, last_line_start);
+    strclr(input_buffer);
 }
 
 void keyboard_init() {
