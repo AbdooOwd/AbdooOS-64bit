@@ -5,7 +5,9 @@
 #include <drivers/screen.h>
 #include <drivers/tester.h>
 #include <cpu/cpu.h>
+#include <interrupts/pit.h>
 #include <mm/pmm.h>
+#include <kernel/kernel.h>
 
 command_t commands[] = {
     { "help",               "Helps, duh?" },
@@ -16,6 +18,7 @@ command_t commands[] = {
     { "clear",              "Clears the screen."},
     { "random",             "Displays a random integer."},
     { "echo",               "Prints what's between double quotes in the first argument."},
+    { "sysfetch",           "Like Linux's 'neofetch'."},
     { "crashme",            "Crashes the system by trying to divide by zero (supposed to be harmless)."},
     { "exit",               "Halts the CPU, resulting in stopping all of its processing."}
 };
@@ -92,6 +95,25 @@ void handle_command(char* command) {
             char* text = get_argStr(full_command, 0);
             kprintf("%s\n", text);
         }
+    }
+
+    if (strsame(command, "sysfetch")) {
+        print_string_at(
+            " #### SYSFETCH ####\n", 
+            SYSFETCH_X_POS, get_cursor().y + 1, RED
+        );
+
+        print_string_at(
+            "- OS: AbdooOS\n- Bootloader: ", 
+            SYSFETCH_X_POS + 2, get_cursor().y + 1, WHITE
+        );
+
+        kprintf("%s", bootloader_info.response->name);
+        print_string_at(
+            "- Dev's Comment: ", 
+            SYSFETCH_X_POS + 2, get_cursor().y + 1, WHITE
+        );
+        print_color("\"Enjoy my piece of work!\"\n\n", GREEN);
     }
 
     if (strsame(command, "crashme")) {

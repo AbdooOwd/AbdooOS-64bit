@@ -5,7 +5,8 @@
 
 #include <include/types.h>
 
-#define 	MAX_BUFFER	256
+#define MAX_BUFFER			256
+#define	SYSFETCH_X_POS		4
 
 typedef struct {
 	char* command;
