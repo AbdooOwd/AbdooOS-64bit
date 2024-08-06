@@ -112,32 +112,70 @@ char upper_char(char c) {
 
 #include <lib/print.h>
 
-// TODO: Optimize this
-void split(char* str, char target, char** splitten) {
-    /**
-     * 1. calculate needed allocation
-     * 2. then allocate and get the split
-     */
 
-    size_t split_i = 0;
+// // TODO: Optimize this
+// void split(char* str, char target, char** splitten) {
+//     /**
+//      * 1. calculate needed allocation
+//      * 2. then allocate and get the split
+//      */
+// 
+//     size_t split_i = 0;
+//     size_t len = strlen(str);
+//     size_t temp_len = 0;
+// 
+//     for (size_t i = 0; i < len; i++) {
+//         char c = str[i];
+// 
+//         if (c == target) {
+//             append((char*) ((u64) splitten + temp_len), '\0');
+//             temp_len++;
+//             split_i++;
+//             continue;
+//         }
+//         append((char*) ((u64) splitten + temp_len), c); // get address of next char
+//         temp_len++;
+//     }
+// }
+
+char** split(char* str, char target) {
+    char result[NORMAL_SPLIT_ARRAY_SIZE][NORMAL_STRING_LENGTH];
+
+    for (size_t i = 0; i < count(str, target) + 1; i++) {
+        strcpy(result[i], get_split(str, target, i));
+    }
+
+    return result;
+}
+
+char* get_split(char* str, char target, size_t index) {
+    kprintf("NEW CHECK\n");
     size_t len = strlen(str);
-    size_t temp_len = 0;
+    size_t target_found = 0;
+    char* result = (char*) malloc(sizeof(char) * 16);
+    size_t str_i = 0;
 
     for (size_t i = 0; i < len; i++) {
         char c = str[i];
 
-        if (c == target) {
-            append((char*) ((u64) splitten + temp_len), '\0');
-            temp_len++;
-            split_i++;
-            log("[string > split] Split%i: \"%s\"\n", split_i, );
+        if (target_found == index) {
+            result[str_i] = c;
+            str_i++;
+        }
+
+        if (c == target || str[i + 1] == 0) {
+            target_found++;
+
+            if (target_found == index + 1) {
+                result[str_i + 1] = '\0';
+                return result;
+            }
             continue;
         }
-        append((char*) ((u64) splitten + temp_len), c); // get address of next char
-        temp_len++;
     }
-}
 
+    return "NaN";
+}
 
 char** gpt_split(char* str, char target) {
     size_t target_count = count(str, target);

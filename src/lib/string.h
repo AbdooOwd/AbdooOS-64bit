@@ -5,7 +5,9 @@
 
 #include <include/types.h>
 
-#define DEFAULT_MAX_STRING_LENGTH 128
+#define DEFAULT_MAX_STRING_LENGTH 	128
+#define NORMAL_STRING_LENGTH		32
+#define NORMAL_SPLIT_ARRAY_SIZE		8
 
 
 void int_to_ascii(int n, char* str);
@@ -33,6 +35,7 @@ void upper(char* str);
 bool char_islower(char c);
 char upper_char(char c);
 
-void split(char* str, char target, char** splitten);
+char** split(char* str, char target);
+char* get_split(char* str, char target, size_t index);
 
 #endif
