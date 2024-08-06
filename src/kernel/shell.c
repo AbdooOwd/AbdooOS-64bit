@@ -129,7 +129,7 @@ void handle_command(char* command) {
     if (strsame(command, "dev")) {
         char* teso = "    YOU E4T MY BARBER    ";
         kprintf("OG String: \"%s\"\n", teso);
-        trim(teso);
+        teso = trim(teso);
         kprintf("Trimmed String: \"%s\"\n", teso);
     }
 

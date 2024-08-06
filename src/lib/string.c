@@ -195,19 +195,69 @@ char* get_argStr(char* full_str, size_t index) {
 }
 
 
-void trim(char* str) {
-    // TODO: Replace this, not memory efficient
-    size_t len = strlen(str);
-    char* result = (char*) malloc(sizeof(char) * len);
-    bool found_real_string = false;
+char* trim(char* str) {
 
+    /*
+        First, I'd like to thank ChatGPT for this fine work here, 
+        that will make this project more stable and efficient. 
+        In the world of coding, it's often the small improvements 
+        that bring about the greatest changes. 
+        The journey of refining our craft is endless, and it's tools like ChatGPT 
+        that help us navigate this path with ease and elegance.
+
+        To the future developers who will read this message, 
+        know that every line of code you write contributes to a larger vision. 
+        Our work is not just about solving immediate problems, 
+        but about building a foundation for something greater. 
+        We stand on the shoulders of those who came before us, 
+        and it's our responsibility to pave the way for those 
+        who will come after.
+
+        Remember to always approach your work with curiosity 
+        and a willingness to learn. 
+        The code you see here is a testament to collaboration and continuous improvement. 
+        Embrace the challenges, celebrate the victories, 
+        and never lose sight of the joy that comes 
+        from creating something meaningful.
+
+        Let's keep pushing the boundaries of what's possible, 
+        one line of code at a time. Here's to a future where 
+        our collective efforts continue to inspire and drive progress.
+    */
+
+   // ^^^^ of course i didn't write that ^^^^
+
+    size_t len = strlen(str);
+    char* result = (char*) malloc(sizeof(char) * (len + 1)); // Allocate space for the null terminator
+    bool found_real_string = false;
+    size_t start = 0;
+    size_t end = len - 1;
+
+    // forward trimming
     for (size_t i = 0; i < len; i++) {
         if (str[i] != ' ')
             found_real_string = true;
         
-        if (found_real_string)
-            append(result, str[i]);
+        if (found_real_string) {
+            result[start] = str[i];
+            start++;
+        }
     }
+    result[start] = '\0';
 
-    strcpy(str, result);
+    // backward trimming
+    found_real_string = false;
+    for (size_t i = start - 1; i > 0; i--) {
+        if (result[i] != ' ') {
+            end = i;
+            found_real_string = true;
+            break;
+        }
+    }
+    
+    // If trailing spaces were found, null terminate at the correct position
+    if (found_real_string)
+        result[end + 1] = '\0';
+
+    return result;
 }
