@@ -20,6 +20,15 @@ command_t commands[] = {
 };
 
 void handle_command(char* command) {
+    char* full_command = malloc(sizeof(char) * MAX_BUFFER);
+    strcpy(full_command, command);
+    
+    command = get_split(command, ' ', 0);
+    lower(command);
+
+    size_t argc = count(full_command, ' ') + 1;
+    // TODO: if user adds useless spaces at end/start of string, they are counted anyways
+
 	if (strsame(command, "help"))
         for (size_t cmd = 0; cmd < sizeof(commands) / sizeof(command_t); cmd++)
             kprintf(" - %s: %s\n", commands[cmd].command, commands[cmd].description);
@@ -71,6 +80,13 @@ void handle_command(char* command) {
 
     if (strsame(command, "random")) {
         kprintf("%i\n", random());
+    }
+
+    if (strsame(command, "echo")) {
+        if (argc >= 2) {
+            char* text = get_argStr(full_command, 0);
+            kprintf("%s\n", text);
+        }
     }
 
     if (strsame(command, "crashme")) {

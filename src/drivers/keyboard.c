@@ -182,7 +182,6 @@ void keyboard_init() {
 }
 
 void user_input(char* input) {
-    lower(input);
     handle_command(input);
     last_line_start = get_cursor().y;
 }
