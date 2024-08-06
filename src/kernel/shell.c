@@ -98,6 +98,7 @@ void handle_command(char* command) {
     }
 
     if (strsame(command, "sysfetch")) {
+        // TODO: Make this simpler
         print_string_at(
             " #### SYSFETCH ####\n", 
             SYSFETCH_X_POS, get_cursor().y + 1, RED
