@@ -106,7 +106,7 @@ void handle_command(char* command) {
 
         print_string_at(
             "- OS: AbdooOS\n- Bootloader: ", 
-            SYSFETCH_X_POS + 2, get_cursor().y + 1, WHITE
+            SYSFETCH_X_POS + 2, get_cursor().y, WHITE
         );
 
         kprintf("%s", bootloader_info.response->name);
