@@ -152,7 +152,11 @@ void* pmm_alloc(size_t size) {
     size_t continued_free_bits = 0;
     // TODO: replace bit_start_offset with those dividing technics like used in the framebuffer (more efficient)
     // size_t bit_start_offset[3] = {0, 0,};    // 1: u64 index - 2: bit offset - 3: entry
-    bitmap_offset_t bitmap_offsets;
+    bitmap_offset_t bitmap_offsets = {
+        .bit_offset = 0,
+        .entry_index = 0,
+        .u64_index = 0
+    };  // bad practice (setting everything to 0), we don't know ANYTHING about our offsets!
     bool found_start = false;
 
     u64 cur_u64 = (u64) bitmap; // base of current u64
