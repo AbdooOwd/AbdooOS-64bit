@@ -131,15 +131,23 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
             
             case ENTER:
                 if (!isEditingHorizontally) print_char_at(0, get_cursor().x, get_cursor().y, WHITE);  // remove cursor
-                invert_char_colors(get_cursor().x, get_cursor().y);
+                if(isEditingHorizontally) {
+                    invert_char_colors(get_cursor().x, get_cursor().y);
+                    print_char_at(0, (2 + strlen(input_buffer)) % (SCREEN_WIDTH / 8), get_cursor().y, WHITE);
+                }
+                
                 isEditingHorizontally = false;
+
                 print("\n");
-                user_input(input_buffer);
-                strcpy(prev_input, input_buffer);
                 log("[KB Driver] Input Buffer: %s\n", input_buffer);
+                user_input(input_buffer);
+
+                strcpy(prev_input, input_buffer);
                 strclr(input_buffer);
+
                 last_line_start = get_cursor().y;
                 input_mover = 0;
+
                 break;
             
             case LSHIFT | 0x80:     // we released shift
