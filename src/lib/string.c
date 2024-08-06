@@ -149,7 +149,6 @@ char** split(char* str, char target) {
 }
 
 char* get_split(char* str, char target, size_t index) {
-    kprintf("NEW CHECK\n");
     size_t len = strlen(str);
     size_t target_found = 0;
     char* result = (char*) malloc(sizeof(char) * 16);
@@ -158,7 +157,7 @@ char* get_split(char* str, char target, size_t index) {
     for (size_t i = 0; i < len; i++) {
         char c = str[i];
 
-        if (target_found == index) {
+        if (target_found == index && c != target) {
             result[str_i] = c;
             str_i++;
         }
