@@ -4,12 +4,33 @@
 #include "util/util.h"
 #include <kernel/io.h>
 
+// TODO: Merge vkprintf and vlog together
+// TODO: Try to make one universal kprintf (supports optional color, position... etc)
+
 void kprintf_color(const char* fmt, u32 color, ...) {
     // loading optional parameters
     va_list args;
     va_start(args, color);
 
-    vkprintf(fmt, color, args);
+    vkprintf(fmt, color, -1, -1, args);
+
+    va_end(args);
+}
+
+void kprint_color_at(const char* fmt, int x, int y, u32 color, ...) {
+    va_list args;
+    va_start(args, color);
+
+    vkprintf(fmt, color, x, y, args);
+
+    va_end(args);
+}
+
+void kprintf_at(const char* fmt, int x, int y, ...) {
+    va_list args;
+    va_start(args, y);
+
+    vkprintf(fmt, WHITE, x, y, args);
 
     va_end(args);
 }
@@ -18,12 +39,12 @@ void kprintf(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
 
-    vkprintf(fmt, WHITE, args);
+    vkprintf(fmt, WHITE, -1, -1, args);
 
     va_end(args);
 }
 
-void vkprintf(const char* fmt, u32 color, va_list args) {
+void vkprintf(const char* fmt, u32 color, int x, int y, va_list args) {
     char buffer[MAX_STRING_FORMATTER_BUFFER_SIZE] = {0};
 
     int i = 0;
@@ -39,7 +60,7 @@ void vkprintf(const char* fmt, u32 color, va_list args) {
 
         fmt++;
     }
-    print_color(buffer, color);
+    print_string_at(buffer, x, y, color);
 }
 
 void log(const char* fmt, ...) {
