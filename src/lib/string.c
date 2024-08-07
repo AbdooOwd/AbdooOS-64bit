@@ -110,34 +110,6 @@ char upper_char(char c) {
     return char_islower(c) ? (c - 'a' + 'A') : c;
 }
 
-#include <lib/print.h>
-
-
-// // TODO: Optimize this
-// void split(char* str, char target, char** splitten) {
-//     /**
-//      * 1. calculate needed allocation
-//      * 2. then allocate and get the split
-//      */
-// 
-//     size_t split_i = 0;
-//     size_t len = strlen(str);
-//     size_t temp_len = 0;
-// 
-//     for (size_t i = 0; i < len; i++) {
-//         char c = str[i];
-// 
-//         if (c == target) {
-//             append((char*) ((u64) splitten + temp_len), '\0');
-//             temp_len++;
-//             split_i++;
-//             continue;
-//         }
-//         append((char*) ((u64) splitten + temp_len), c); // get address of next char
-//         temp_len++;
-//     }
-// }
-
 // TODO: Optimize this, or make a split func so I don't need to scan the str everytime i need ONE element
 char* get_split(char* str, char target, size_t index) {
     size_t len = strlen(str);
