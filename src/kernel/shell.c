@@ -1,6 +1,7 @@
 #include "shell.h"
 #include <lib/string.h>
 #include <lib/print.h>
+#include <lib/formatter.h>
 #include <include/globals.h>
 #include <drivers/screen.h>
 #include <drivers/tester.h>
@@ -91,7 +92,14 @@ void handle_command(char* command) {
     }
 
     if (strsame(command, "random")) {
-        kprintf("%i\n", random());
+        if (argc < 2) kprintf("%i\n", random());
+        else kprintf(
+            "%i\n", 
+            rand_range(
+                ascii_to_int(get_split(full_command, ' ', 1)), 
+                ascii_to_int(get_split(full_command, ' ', 2))
+            )
+        );
     }
 
     if (strsame(command, "echo")) {
