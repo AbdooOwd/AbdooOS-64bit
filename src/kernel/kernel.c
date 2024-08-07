@@ -6,6 +6,7 @@
 #include <lib/print.h>
 #include <lib/mem.h>
 #include "hal/hal.h"
+#include "shell.h"
 
 volatile struct limine_bootloader_info_request bootloader_info = {
     .id = LIMINE_BOOTLOADER_INFO_REQUEST,
@@ -28,6 +29,8 @@ void kernel_init() {
     }
 
     print("Booted AbdooOS Successfully!\n");
+
+    shell_init();
 
     kernel_main();
 }

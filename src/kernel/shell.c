@@ -25,15 +25,19 @@ command_t commands[] = {
     { "exit",               "Halts the CPU, resulting in stopping all of its processing."}
 };
 
+char* full_command;
+
+void shell_init() {
+    full_command = malloc(sizeof(char) * MAX_BUFFER);
+}
+
 void handle_command(char* command) {
     if (strlen(command) <= 0) {
         print_color("$ ", GREEN);
         return;
     }
 
-    command = trim(command);
-
-    char* full_command = malloc(sizeof(char) * MAX_BUFFER);
+    trim(command);
     strcpy(full_command, command);
     
     command = get_split(command, ' ', 0);
@@ -144,10 +148,7 @@ void handle_command(char* command) {
     }
 
     if (strsame(command, "dev")) {
-        char* teso = "    YOU E4T MY BARBER    ";
-        kprintf("OG String: \"%s\"\n", teso);
-        teso = trim(teso);
-        kprintf("Trimmed String: \"%s\"\n", teso);
+        
     }
 
     print_color("$ ", GREEN);

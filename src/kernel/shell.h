@@ -13,6 +13,7 @@ typedef struct {
 	char* description;
 } command_t;
 
+void shell_init();
 void handle_command(char* command);
 
 #endif

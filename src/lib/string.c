@@ -195,7 +195,7 @@ char* get_argStr(char* full_str, size_t index) {
 }
 
 
-char* trim(char* str) {
+void trim(char* str) {
 
     /*
         First, I'd like to thank ChatGPT for this fine work here, 
@@ -228,36 +228,23 @@ char* trim(char* str) {
    // ^^^^ of course i didn't write that ^^^^
 
     size_t len = strlen(str);
-    char* result = (char*) malloc(sizeof(char) * (len + 1)); // Allocate space for the null terminator
-    bool found_real_string = false;
     size_t start = 0;
     size_t end = len - 1;
+    size_t index = 0;
 
-    // forward trimming
-    for (size_t i = 0; i < len; i++) {
-        if (str[i] != ' ')
-            found_real_string = true;
-        
-        if (found_real_string) {
-            result[start] = str[i];
-            start++;
-        }
+    // Forward trimming
+    while (start < len && str[start] == ' ') {
+        start++;
     }
-    result[start] = '\0';
 
-    // backward trimming
-    found_real_string = false;
-    for (size_t i = start - 1; i > 0; i--) {
-        if (result[i] != ' ') {
-            end = i;
-            found_real_string = true;
-            break;
-        }
+    // Backward trimming
+    while (end > start && str[end] == ' ') {
+        end--;
     }
-    
-    // If trailing spaces were found, null terminate at the correct position
-    if (found_real_string)
-        result[end + 1] = '\0';
 
-    return result;
+    // Shift the trimmed string to the start of the original string
+    for (size_t i = start; i <= end; i++) {
+        str[index++] = str[i];
+    }
+    str[index] = '\0'; // Null-terminate the trimmed string
 }
