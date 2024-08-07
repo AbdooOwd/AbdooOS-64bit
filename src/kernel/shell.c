@@ -95,6 +95,9 @@ void handle_command(char* input) {
         print_entry();
     }
 
+    // TODO: !!! EMERGENCY !!! THIS RANDOM FUNCTION USES TOO MUCH ALLOCATION
+    // when using 'get_split' two times for a few bytes, it allocates 2 pages or
+    // 8,192 bytes!!!!! only for a few bytes!!!
     if (strsame(command, "random")) {
         if (argc < 2) kprintf("%i\n", random());
         else kprintf(
