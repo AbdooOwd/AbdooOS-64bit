@@ -15,6 +15,22 @@ void int_to_ascii(int n, char* str) {
     reverse(str);
 }
 
+int ascii_to_int(char *str) {
+    /* Ripped from https://stackoverflow.com/a/35331825 */
+    int res = 0; // Initialize result
+
+    // Iterate through all characters of input string and
+    // update result
+    for (int i = 0; str[i] != '\0'; ++i) {
+        if (str[i]> '9' || str[i]<'0')
+            return -1;
+        res = res*10 + str[i] - '0';
+    }
+
+    // return result.
+    return res;
+}
+
 void hex_to_ascii(int n, char* str) {
     append(str, '0');
     append(str, 'x');

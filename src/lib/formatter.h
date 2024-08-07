@@ -11,6 +11,7 @@
 
 void int_to_ascii(int n, char* str);
 void hex_to_ascii(int n, char* str);
+int ascii_to_int(char *str);
 int format_handler(char format, char buffer[], int buffer_offset, va_list args);
 
 #endif
