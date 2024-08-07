@@ -4,7 +4,7 @@
 #include <drivers/screen.h> // for cursor manipulation
 
 u64 ticks = 0;
-u64 seconds = 0;
+u16 seconds = 0;    // maximum of 18 hours = 65,536 sec
 u32 freq = 1;
 
 InterruptRegisters* PIT_handler(InterruptRegisters* regs) {

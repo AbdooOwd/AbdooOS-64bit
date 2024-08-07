@@ -35,8 +35,8 @@ static volatile struct limine_hhdm_response* hhdm;
  */
 u64** bitmap;       
 u64* bitmap_sizes;	// measured in bytes
-u64 free_entry_count;
-u64 full_bitmap_size;   // measured in bytes
+u32 free_entry_count;
+u32 full_bitmap_size;   // measured in bytes
 
 // TODO: Have a data structure to store the free entry index and its actual index in the memmap (+ some info)
 // TODO: Optimize

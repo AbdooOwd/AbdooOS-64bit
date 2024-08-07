@@ -7,7 +7,7 @@
 #include "idt.h"
 
 extern u64 ticks;
-extern u64 seconds;
+extern u16 seconds;
 
 void PIT_init();
 InterruptRegisters* PIT_handler(InterruptRegisters* regs);

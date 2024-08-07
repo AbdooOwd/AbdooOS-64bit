@@ -103,7 +103,7 @@ char shifted_US[] = {
 static char input_buffer[256];
 static bool shift_pressed;
 char* prev_input;
-size_t last_line_start = 0;
+u8 last_line_start = 0;
 int input_mover = 0;
 
 
