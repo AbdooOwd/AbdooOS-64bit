@@ -25,25 +25,25 @@ command_t commands[] = {
     { "exit",               "Halts the CPU, resulting in stopping all of its processing."}
 };
 
-char* full_command;
+// char* full_command;
+char command[MAX_BUFFER];
 
 void shell_init() {
-    full_command = malloc(sizeof(char) * MAX_BUFFER);
+    // full_command = malloc(sizeof(char) * MAX_BUFFER);
 }
 
-void handle_command(char* command) {
-    if (strlen(command) <= 0) {
+void handle_command(char* input) {
+    if (strlen(input) <= 0) {
         print_color("$ ", GREEN);
         return;
     }
 
-    trim(command);
-    strcpy(full_command, command);
+    trim(input);
     
-    command = get_split(command, ' ', 0);
+    get_split_buffer(input, ' ', 0, command);
     lower(command);
 
-    size_t argc = count(full_command, ' ') + 1;
+    size_t argc = count(input, ' ') + 1;
     // TODO: if user adds useless spaces at end/start of string, they are counted anyways
 
 	if (strsame(command, "help"))
@@ -100,15 +100,15 @@ void handle_command(char* command) {
         else kprintf(
             "%i\n", 
             rand_range(
-                ascii_to_int(get_split(full_command, ' ', 1)), 
-                ascii_to_int(get_split(full_command, ' ', 2))
+                ascii_to_int(get_split(input, ' ', 1)), 
+                ascii_to_int(get_split(input, ' ', 2))
             )
         );
     }
 
     if (strsame(command, "echo")) {
         if (argc >= 2) {
-            char* text = get_argStr(full_command, 0);
+            char* text = get_argStr(input, 0);
             kprintf("%s\n", text);
         }
     }
@@ -135,7 +135,7 @@ void handle_command(char* command) {
 
     if (strsame(command, "cowsay")) {
         if (argc >= 2)
-            cowsay(get_argStr(full_command, 0));
+            cowsay(get_argStr(input, 0));
     }
 
     if (strsame(command, "crashme")) {
