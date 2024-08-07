@@ -37,6 +37,7 @@ char upper_char(char c);
 
 // char** split(char* str, char target);
 char* get_split(char* str, char target, size_t index);
+void get_split_buffer(char* str, char target, size_t index, char* buffer);
 char* get_argStr(char* full_str, size_t index);
 
 void trim(char* str);

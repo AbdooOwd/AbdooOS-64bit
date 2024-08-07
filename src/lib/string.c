@@ -167,6 +167,33 @@ char* get_split(char* str, char target, size_t index) {
     return "NaN";
 }
 
+void get_split_buffer(char* str, char target, size_t index, char* buffer) {
+    size_t len = strlen(str);
+    size_t target_found = 0;
+    size_t str_i = 0;
+
+    for (size_t i = 0; i < len; i++) {
+        char c = str[i];
+
+        if (target_found == index && c != target) {
+            buffer[str_i] = c;
+            str_i++;
+        }
+
+        if (c == target || str[i + 1] == 0) {
+            target_found++;
+
+            if (target_found == index + 1) {
+                buffer[str_i + 1] = '\0';
+                return;
+            }
+            continue;
+        }
+    }
+
+    return;
+}
+
 char* get_argStr(char* full_str, size_t index) {
     char* result = (char*) malloc(sizeof(char) * 64);
     result[1] = '\0';
