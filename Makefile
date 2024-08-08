@@ -9,6 +9,7 @@ override BUILD_DIR	:= bin
 override SRC_DIR	:= src
 
 override IMAGE_NAME := image.iso
+override FS_IMAGE	:= fs_image.poop
 
 # Convenience macro to reliably declare user overridable variables.
 define DEFAULT_VAR =
@@ -108,8 +109,16 @@ os-image: $(BUILD_DIR)/$(IMAGE_NAME)
 
 
 $(BUILD_DIR)/$(IMAGE_NAME): always kernel
-	# The following line was missing a leading tab
 	make -C limine
+
+	# stolen from AbdooOS-32bit
+	# 64MB
+	# dd if=/dev/zero of=$(FS_IMAGE) bs=512 count=15625
+	# mkfs.fat -F 32 -n "ABOS" $@
+	# dd if=$(BUILD_DIR)/stage1.bin of=$@ bs=512 count=1 conv=notrunc
+	# mcopy -i $@ $(BUILD_DIR)/stage2.bin "::STAGE2.SYS"
+	# mcopy -i $@ $(ROOTFS_DIR)/test.txt	"::test.txt"
+	# mcopy -i $@ $(BUILD_DIR)/kernel.bin	"::KERNEL.SYS"
 
 	# Create a directory which will be our ISO root.
 	mkdir -p $(BUILD_DIR)/iso_root
