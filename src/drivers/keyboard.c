@@ -12,6 +12,8 @@
 #include <cpu/cpu.h>
 #include <mm/pmm.h>
 
+#define HORIZONTAL_EDITING  0
+
 
 #define KBD_DATA_PORT 	0x60
 #define KBD_STATUS_PORT KBD_DATA_PORT + 4	// 0x64
@@ -165,6 +167,8 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
                 clear_input_line();
                 break;
             
+            #if HORIZONTAL_EDITING
+
             case LEFT:
                 // TODO: Implement that scrolly negative x stuff into cursor functions directly
                 if (get_cursor().x <= 2) break; // 2 cuz "$ "
@@ -185,6 +189,8 @@ InterruptRegisters* keyboard_handler(InterruptRegisters* regs) {
                 invert_char_colors(get_cursor().x, get_cursor().y);
                 log("Input Mover: %i\n", input_mover);
                 break;
+            
+            #endif
 
 			default:
                 char c = getch(scancode);
