@@ -151,7 +151,6 @@ void* pmm_alloc(size_t size) {
 
     size_t continued_free_bits = 0;
     // TODO: replace bit_start_offset with those dividing technics like used in the framebuffer (more efficient)
-    // size_t bit_start_offset[3] = {0, 0,};    // 1: u64 index - 2: bit offset - 3: entry
     bitmap_offset_t bitmap_offsets = {
         .bit_offset = 0,
         .entry_index = 0,
@@ -163,6 +162,7 @@ void* pmm_alloc(size_t size) {
 
     log("[PMM] Need %i free pages\n", pages_needed);
 
+    // TODO: Make allocation reach other U64s
     for (size_t i = 0; i < free_entry_count; i++) {
         if (found_space) break;
         
@@ -182,7 +182,7 @@ void* pmm_alloc(size_t size) {
          */
 
         for (size_t u64_i = 0; u64_i < bitmap_sizes[i] / sizeof(u64); u64_i++) {
-            
+            // log("[PMM] U64 Index: %i\n", u64_i);
 
             for (size_t j = 0; j != i; j++)
                 cur_u64 += bitmap_sizes[j]; // find cur entry base
@@ -209,6 +209,7 @@ void* pmm_alloc(size_t size) {
                     break;
                 }
                 
+                // if bit is 0 (page is free)
                 if (!TEST_BIT(*((u64*) cur_u64), b)) {
                     if (!found_start) {
                         bitmap_offsets.u64_index = u64_i;

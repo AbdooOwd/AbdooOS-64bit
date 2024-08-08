@@ -151,7 +151,7 @@ void handle_command(char* input) {
     }
 
     if (strsame(command, "dev")) {
-        
+        malloc(PAGE_SIZE * 16);
     }
 
     print_color("$ ", GREEN);
