@@ -271,3 +271,15 @@ void print_entry() {
     kprintf(" - - - AbdooOS %s | %s Bootloader Version %s - - -\n\n", ABDOOOS_VERSION, 
         bootloader_info.response->name, bootloader_info.response->version);
 }
+
+void GUI_init() {
+    for (u16 yyy = SCREEN_HEIGHT - TASKBAR_HEIGHT; yyy < SCREEN_HEIGHT; yyy++)
+        for (u16 xxx = 0; xxx < SCREEN_WIDTH; xxx++)
+            if (yyy == SCREEN_HEIGHT - TASKBAR_HEIGHT)
+                set_pixel(xxx, yyy, WHITE);
+            else
+                if (xxx % TASKBAR_ICON_WIDTH == 0)
+                    set_pixel(xxx, yyy, WHITE);
+                else
+                    set_pixel(xxx, yyy, BLACK);
+}

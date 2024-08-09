@@ -21,6 +21,7 @@ command_t commands[] = {
     { "random",             "Displays a random integer."},
     { "echo",               "Prints what's between double quotes in the first argument."},
     { "sysfetch",           "Like Linux's 'neofetch'."},
+    { "gui",                "Enters the GUI mode of the OS." },
     { "crashme",            "Crashes the system by trying to divide by zero (supposed to be harmless)."},
     { "exit",               "Halts the CPU, resulting in stopping all of its processing."}
 };
@@ -134,6 +135,10 @@ void handle_command(char* input) {
             SYSFETCH_X_POS + 2, get_cursor().y + 1, WHITE
         );
         print_color("\"Enjoy my piece of work!\"\n\n", GREEN);
+    }
+
+    if (strsame(command, "gui")) {
+        GUI_init();
     }
 
     if (strsame(command, "cowsay")) {

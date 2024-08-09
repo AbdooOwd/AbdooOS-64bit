@@ -18,6 +18,9 @@ extern volatile u32* fb_addr;
 #define SCREEN_WIDTH    framebuffer->width
 #define SCREEN_HEIGHT   framebuffer->height
 
+#define TASKBAR_HEIGHT		25
+#define TASKBAR_ICON_WIDTH	25
+
 #define WHITE   0xffffff
 #define BLACK   0x0
 #define RED     0xff0000
@@ -61,5 +64,7 @@ void print_string_at(char* str, int x, int y, u32 color);
 void print_backspace();
 
 void print_entry();
+
+void GUI_init();
 
 #endif
